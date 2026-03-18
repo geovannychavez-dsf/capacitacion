@@ -7,9 +7,18 @@ describe('UsersController', () => {
   let controller: UsersController;
 
   beforeEach(async () => {
+    const mockUserRepo = {
+      find: jest.fn().mockResolvedValue([]),
+    };
     const module: TestingModule = await Test.createTestingModule({
       controllers: [UsersController],
-      providers: [usuariosService],
+      providers: [
+        usuariosService,
+        {
+          provide: 'USER_REPOSITORY',
+          useValue: mockUserRepo,
+        },
+      ],
     })
       .overrideGuard(HeaderGuard)
       .useValue({ canActivate: jest.fn(() => false) })

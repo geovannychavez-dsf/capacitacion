@@ -1,5 +1,6 @@
-import { IsString, IsEmail, IsBoolean, IsDate } from 'class-validator';
+import { IsString, IsEmail, IsDate, MaxLength } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
 export class CreateUserDto {
   @ApiProperty({
     example: 'Pedro Lopez',
@@ -11,11 +12,11 @@ export class CreateUserDto {
   name: string;
   @ApiProperty({
     description: 'Fecha de nacimiento del usuario',
-    example: '2000-03-17T11:32:18.137Z',
-    default: '{{{$timestamp}}}',
+    default: '1995-06-15',
     required: true,
     type: Date,
   })
+  @Type(() => Date)
   @IsDate()
   birthdate: Date;
 
@@ -45,14 +46,14 @@ export class CreateUserDto {
   email: string;
 
   @ApiProperty({
-    example: true,
-    default: true,
-    description: 'id unico del usuario',
+    description: 'Constraseña del usuario',
+    example: '#@123456@j@$',
+    type: String,
     required: true,
-    type: Boolean,
   })
-  @IsBoolean()
-  isActivo: boolean;
+  @IsString()
+  @MaxLength(6)
+  password: string;
 
   @ApiProperty({
     example: 10,

@@ -1,18 +1,25 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { usuariosService } from './usuarios.service';
+import { Test, TestingModule } from "@nestjs/testing";
+import { usuariosService } from "./usuarios.service";
 
-describe('usuariosService', () => {
+describe("usuariosService", () => {
   let service: usuariosService;
+
+  const mockUserRepo = {
+    find: jest.fn().mockResolvedValue([]),
+  };
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [usuariosService],
+      providers: [
+        usuariosService,
+        { provide: "USER_REPOSITORY", useValue: mockUserRepo },
+      ],
     }).compile();
 
     service = module.get<usuariosService>(usuariosService);
   });
 
-  it('should be defined', () => {
+  it("should be defined", () => {
     expect(service).toBeDefined();
   });
 });

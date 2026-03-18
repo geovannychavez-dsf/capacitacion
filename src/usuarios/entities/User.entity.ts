@@ -1,32 +1,35 @@
+import { Order } from "src/order/entities/order.entity";
 import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
-} from 'typeorm';
+} from "typeorm";
 
-@Entity()
+@Entity({ name: "User" })
 export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ length: 500 })
+  @Column({ length: 100 })
   name: string;
 
-  @Column('text')
+  @Column("text")
   email: string;
 
-  @Column('boolean')
+  @Column()
   emailVerified: boolean;
 
-  @Column('text')
+  @Column("text")
   estatus: string;
 
   @Column()
   password: string;
 
-  @Column('datetime')
+  @Column("datetime")
   birthdate: Date;
 
   @CreateDateColumn()
@@ -34,4 +37,8 @@ export class User {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @OneToMany(() => Order, (order) => order.user)
+  @JoinColumn()
+  order: Order[];
 }

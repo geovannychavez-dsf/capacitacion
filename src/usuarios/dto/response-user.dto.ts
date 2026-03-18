@@ -36,14 +36,6 @@ export class ResponseUserDto {
   email: string;
 
   @ApiProperty({
-    example: true,
-    default: true,
-    description: 'id unico del usuario',
-    type: Boolean,
-  })
-  isActivo: boolean;
-
-  @ApiProperty({
     example: 10,
     description: 'id unico del usuario',
     type: Number,
