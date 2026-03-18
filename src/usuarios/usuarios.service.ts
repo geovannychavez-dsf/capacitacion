@@ -57,8 +57,8 @@ export class usuariosService {
   }
   async findUserByEmailAndName(name:string,email:string):Promise<ResponseUserDto[]>{
     const users = await this.userRepository.createQueryBuilder("User")
-      .where("User.name like %:name", { name })
-      .orWhere("User.email like  %:email", { email })
+      .where("User.name like :name", { name : `%${name}%` })
+      .orWhere("User.email like  :email", { email: `%${email}%` })
       .getMany()
     return users.map(user => ({
       id: user.id,
