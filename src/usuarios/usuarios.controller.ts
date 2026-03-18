@@ -18,9 +18,9 @@ import {
   getSchemaPath,
 } from '@nestjs/swagger';
 import { usuariosService } from './usuarios.service';
-import { UpdateUserDocs } from 'src/decoradores/Usuario/update-user.docs';
-import { PostUserDocs } from 'src/decoradores/Usuario/post-user.docs';
-import { GetUserDocs } from 'src/decoradores/Usuario/get-user.docs';
+import { UpdateUserDocs } from 'src/decoradores/usuario/update-user.docs';
+import { PostUserDocs } from 'src/decoradores/usuario/post-user.docs';
+import { GetUserDocs } from 'src/decoradores/usuario/get-user.docs';
 import { ResponseUserDto } from './dto/response-user.dto';
 
 @ApiTags('usuarios')

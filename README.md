@@ -30,19 +30,27 @@ prisma.config.ts
 
 ```
 src/
-├── users/
+├── usuarios/
 │   ├── dto/
 │   │   ├── create-user.dto.ts
 │   │   └── update-user.dto.ts
+│   │   └── response-user.dto.ts
 │   ├── providers/
 │   │   └── user.providers.ts
 │   ├── repository/
 │   │   └── user.repository.ts
 │   ├── entities/
-│   │   └── user.entity.ts
-│   ├── users.controller.ts
-│   ├── users.service.ts
-│   └── users.module.ts
+│   │   └── User.entity.ts
+│   ├── usuarios.controller.ts
+│   ├── usuarios.service.ts
+│   └── usuarios.module.ts
+├── decoradores/
+│   ├── usuario/
+│   │   ├── get-user.docs.ts
+│   │   ├── post-user.docs.ts
+│   │   ├── update-user.docs.ts
+├── header/
+│   └── header.guard.ts
 ├── prisma/
 │   └── prisma.service.ts
 ├── app.module.ts
@@ -59,6 +67,10 @@ npx prisma db push
 ## RUTA SWAGGER 
  /docs
  /docs/v2
+
+## CLAVE AUTENTICACIÓN BASICA 
+USER: admin
+PASS: admin
 
 # development
 $ npm run start
