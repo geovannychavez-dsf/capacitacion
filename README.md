@@ -11,11 +11,45 @@ npm install @prisma/client @prisma/adapter-mssql dotenv
 
 ```
 ## ARCHIVO DE CONFIGURACION PRISMA 
-en la carpeta prisma el squema de las tablas
-|__prisma
-   |__schema.prisma
+
+## ESTRUCTURA DE CARPETAS PRISMA
+
+En la raíz del proyecto está la carpeta `prisma` con la siguiente estructura:
+
+```
+prisma/
+└─── schema.prisma
+```
+
+El archivo `schema.prisma` contiene el esquema de todas las tablas de la base de datos.
+
 En la raiz del proyecto esta el archivo de configuracion basica de  prisma 
 prisma.config.ts
+
+## ESTRUCTURA BASE DEL PROYECTO 
+
+```
+src/
+├── users/
+│   ├── dto/
+│   │   ├── create-user.dto.ts
+│   │   └── update-user.dto.ts
+│   ├── providers/
+│   │   └── user.providers.ts
+│   ├── repository/
+│   │   └── user.repository.ts
+│   ├── entities/
+│   │   └── user.entity.ts
+│   ├── users.controller.ts
+│   ├── users.service.ts
+│   └── users.module.ts
+├── prisma/
+│   └── prisma.service.ts
+├── app.module.ts
+└── main.ts
+```
+
+
 
 ## GENERAR ESQUEMA EN BASE A LA ULTIMA MIGRACION
 ```bash
