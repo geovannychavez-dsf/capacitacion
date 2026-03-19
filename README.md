@@ -3,6 +3,11 @@
 
 ```bash
 DATABASE_URL="sqlserver://SERVER;database=DBAConsulta;user=USER;password=PASSWORD;encrypt=true;trustServerCertificate=true"
+HOSTDB=''
+USERDB='s'
+PASS=''
+DATABASE=''
+PORT=
 ```
 ## INSTALACION DEPENDENCIA Y MIRGRACION CON PRISMA 
 ```bash
