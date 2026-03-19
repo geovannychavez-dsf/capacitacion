@@ -1,9 +1,9 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { RequestInterceptorInterceptor } from './request-interceptor/request-interceptor.interceptor';
 import { VersioningType } from '@nestjs/common';
-import { HeaderGuard } from './header/header.guard';
-import { SwaggerConsfig } from './config/swagger.confg';
+import { swaggerConsfig } from './config/swagger.confg';
+import { RequestInterceptorInterceptor } from './common/interceptor/request-interceptor/request-interceptor.interceptor';
+import { HeaderGuard } from './common/guard/header/header-guard';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -14,13 +14,13 @@ async function bootstrap() {
     type: VersioningType.URI,
     defaultVersion: '1',
   });
-  SwaggerConsfig({
+  swaggerConsfig({
     title: 'Documento practico Usuarios',
     description: 'API practica de Usuarios',
     version: '1.0',
     app,
   });
-  SwaggerConsfig({
+  swaggerConsfig({
     title: 'Documento practico Usuarios V2',
     description: 'API practica de Usuarios',
     version: '2.0',

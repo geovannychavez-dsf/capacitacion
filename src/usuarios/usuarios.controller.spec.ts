@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UsersController } from './usuarios.controller';
-import { usuariosService } from './usuarios.service';
-import { HeaderGuard } from 'src/header/header.guard';
+import { UsuariosService } from './usuarios.service';
+import { HeaderGuard } from 'src/common/guard/header/header-guard';
 
 describe('UsersController', () => {
   let controller: UsersController;
@@ -13,11 +13,12 @@ describe('UsersController', () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [UsersController],
       providers: [
-        usuariosService,
+        UsuariosService,
         {
           provide: 'USER_REPOSITORY',
           useValue: mockUserRepo,
         },
+        { provide: 'DATA_SOURCE', useValue: {} },
       ],
     })
       .overrideGuard(HeaderGuard)

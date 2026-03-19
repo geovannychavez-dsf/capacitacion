@@ -81,3 +81,5 @@ $ npm run start:dev
 # production mode
 $ npm run start:prod
 ```
+
+kebab-case: Archivos, carpetas, endPoints

@@ -6,12 +6,7 @@ interface ISwaggerConfigOptions {
   version: string;
   app: INestApplication;
 }
-export function SwaggerConsfig({
-  title,
-  description,
-  version,
-  app,
-}: ISwaggerConfigOptions): void {
+export function swaggerConsfig({ title, description, version, app }: ISwaggerConfigOptions): void {
   const config = new DocumentBuilder()
     .setTitle(title)
     .setDescription(description)

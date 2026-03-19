@@ -1,13 +1,13 @@
 import { Module } from '@nestjs/common';
 import { UsersController } from './usuarios.controller';
-import { usuariosService } from './usuarios.service';
-import { HeaderGuard } from 'src/header/header.guard';
-import { userProviders } from './providers/user.providers';
+import { UsuariosService } from './usuarios.service';
+import { userProviders } from './providers/user-providers';
 import { DatabaseModule } from 'src/config/database/database.module';
+import { HeaderGuard } from 'src/common/guard/header/header-guard';
 
 @Module({
   imports: [DatabaseModule],
   controllers: [UsersController],
-  providers: [usuariosService, HeaderGuard, ...userProviders],
+  providers: [UsuariosService, HeaderGuard, ...userProviders],
 })
 export class UsuariosModule {}

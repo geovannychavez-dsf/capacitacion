@@ -1,9 +1,4 @@
-import {
-  applyDecorators,
-  UseGuards,
-  UsePipes,
-  ValidationPipe,
-} from '@nestjs/common';
+import { applyDecorators, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiBasicAuth,
@@ -14,14 +9,15 @@ import {
   ApiUnauthorizedResponse,
   getSchemaPath,
 } from '@nestjs/swagger';
-import { HeaderGuard } from 'src/header/header.guard';
+import { HeaderGuard } from 'src/common/guard/header/header-guard';
+import { ResponseOrderDto } from 'src/order/dto/respose-order.dto';
 import { CreateUserDto } from 'src/usuarios/dto/create-user.dto';
-export function UpdateUserDocs() {
+export function updateUserDocs() {
   return applyDecorators(
     UseGuards(HeaderGuard),
     ApiOperation({
-      summary: 'Actualiza Usuario',
-      description: 'Este endpoint Actualiza un usuario en especifico por id.',
+      summary: 'Actualiza Orden',
+      description: 'Este endpoint Actualiza una orden en especifico por id.',
     }),
     UsePipes(new ValidationPipe()),
     ApiBasicAuth(),
@@ -30,13 +26,13 @@ export function UpdateUserDocs() {
       type: String,
     }),
     ApiOkResponse({
-      description: 'Usuario Actualizado',
+      description: 'Orden Actualizada correctamente',
       schema: {
         type: 'object',
         properties: {
           status: { type: 'boolean', example: true },
           data: {
-            $ref: getSchemaPath(CreateUserDto),
+            $ref: getSchemaPath(ResponseOrderDto),
           },
           message: { type: 'string', example: 'Operacion exitosa' },
         },
@@ -51,7 +47,7 @@ export function UpdateUserDocs() {
           statusCode: { type: 'number', example: 400 },
           message: {
             type: 'array',
-            example: ['El formato del correo electrónico no es válido'],
+            example: ['El formato de la descripción no es válido'],
           },
           error: { type: 'string', example: 'Bad Request' },
         },

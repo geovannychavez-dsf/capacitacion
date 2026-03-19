@@ -1,4 +1,4 @@
-import { Order } from "src/order/entities/order.entity";
+import { Order } from 'src/order/entities/order-entity';
 import {
   Column,
   CreateDateColumn,
@@ -7,9 +7,9 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
-} from "typeorm";
+} from 'typeorm';
 
-@Entity({ name: "User" })
+@Entity({ name: 'User' })
 export class User {
   @PrimaryGeneratedColumn()
   id: number;
@@ -17,19 +17,19 @@ export class User {
   @Column({ length: 100 })
   name: string;
 
-  @Column("text")
+  @Column('text')
   email: string;
 
   @Column()
   emailVerified: boolean;
 
-  @Column("text")
+  @Column('text')
   estatus: string;
 
   @Column()
   password: string;
 
-  @Column("datetime")
+  @Column('datetime')
   birthdate: Date;
 
   @CreateDateColumn()

@@ -1,35 +1,45 @@
-import { applyDecorators, UsePipes, ValidationPipe } from '@nestjs/common';
+import { applyDecorators, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiBasicAuth,
-  ApiCreatedResponse,
+  ApiBody,
+  ApiOkResponse,
   ApiOperation,
+  ApiParam,
   ApiUnauthorizedResponse,
+  getSchemaPath,
 } from '@nestjs/swagger';
-export function PostUserDocs() {
+import { HeaderGuard } from 'src/common/guard/header/header-guard';
+import { CreateUserDto } from 'src/usuarios/dto/create-user.dto';
+export function updateUserDocs() {
   return applyDecorators(
-    UsePipes(new ValidationPipe()),
+    UseGuards(HeaderGuard),
     ApiOperation({
-      summary: 'Crear Usuario',
-      description: 'Este endpoint se encarga de la creación del usuario.',
+      summary: 'Actualiza Usuario',
+      description: 'Este endpoint Actualiza un usuario en especifico por id.',
     }),
+    UsePipes(new ValidationPipe()),
     ApiBasicAuth(),
-    ApiCreatedResponse({
-      description: 'Usuario creado correctamente',
+    ApiParam({
+      name: 'id',
+      type: String,
+    }),
+    ApiOkResponse({
+      description: 'Usuario Actualizado',
       schema: {
         type: 'object',
         properties: {
           status: { type: 'boolean', example: true },
           data: {
-            type: 'boolean',
-            example: true,
+            $ref: getSchemaPath(CreateUserDto),
           },
           message: { type: 'string', example: 'Operacion exitosa' },
         },
       },
     }),
+    ApiBody({ type: CreateUserDto }),
     ApiBadRequestResponse({
-      description: 'Error de validación en el cuerpo de la petición',
+      description: 'Error de validación en el body',
       schema: {
         type: 'object',
         properties: {

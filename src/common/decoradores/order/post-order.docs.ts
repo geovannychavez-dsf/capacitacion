@@ -6,7 +6,7 @@ import {
   ApiOperation,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
-export function PostOrderDocs() {
+export function postOrderDocs() {
   return applyDecorators(
     UsePipes(new ValidationPipe()),
     ApiOperation({

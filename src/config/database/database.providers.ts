@@ -1,11 +1,11 @@
-import { DataSource } from "typeorm";
+import { DataSource } from 'typeorm';
 
 export const databaseProviders = [
   {
-    provide: "DATA_SOURCE",
+    provide: 'DATA_SOURCE',
     useFactory: async () => {
       const dataSource = new DataSource({
-        type: "mssql",
+        type: 'mssql',
         host: process.env.HOSTDB,
         username: process.env.USERDB,
         password: process.env.PASS,
@@ -16,8 +16,8 @@ export const databaseProviders = [
           encrypt: false,
           trustServerCertificate: true,
         },
-        entities: ["dist/**/*.entity{.ts,.js}"],
-        migrations: ["dist/migrations/*{.ts,.js}"],
+        entities: ['dist/**/*.entity{.ts,.js}'],
+        migrations: ['dist/migrations/*{.ts,.js}'],
         subscribers: [],
       });
 

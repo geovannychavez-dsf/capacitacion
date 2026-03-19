@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
-import { Order } from './entities/order.entity';
+import { Order } from './entities/order-entity';
 import { Repository } from 'typeorm';
 import { ResponseOrderDto } from './dto/respose-order.dto';
 
