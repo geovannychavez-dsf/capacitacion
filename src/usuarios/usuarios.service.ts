@@ -6,8 +6,8 @@ import { ResponseUserDto } from './dto/response-user.dto';
 import { User } from './entities/user-entity';
 import { Repository } from 'typeorm';
 import { DataSource } from 'typeorm';
-import { Order } from 'src/order/entities/order-entity';
 import { CreateOrderDto } from 'src/order/dto/create-order.dto';
+import { Order } from './entities/order-entity';
 
 @Injectable()
 export class UsuariosService {
@@ -21,10 +21,18 @@ export class UsuariosService {
    * @param createLuneDto
    * @returns boolean
    */
-  async createUser(createLuneDto: CreateUserDto): Promise<boolean> {
-    const exitEmail = await this.userRepository.findOne({ where: { email: createLuneDto.email } });
+  async createUser(userDto: CreateUserDto): Promise<boolean> {
+    const exitEmail = await this.userRepository.findOne({ where: { email: userDto.email } });
     if (exitEmail) return false;
-    await this.userRepository.save(createLuneDto);
+    await this.userRepository.save({
+      email: userDto.email,
+      name: userDto.name,
+      birthdate: userDto.birthdate,
+      emailVerified: userDto.emailVerified,
+      estatus: userDto.estatus,
+      password: userDto.password,
+      updatedAt: new Date(),
+    });
     return true;
   }
   /**

@@ -21,7 +21,7 @@ model User {
   emailVerified Boolean  @default(false)
   estatus       String   @default("active")
   createdAt     DateTime @default(now())
-  updatedAt     DateTime @default(now()) @updatedAt
+  updatedAt     DateTime @default(now()) @updatedAt()
 
   perfils Perfil[]
   order   Order[]

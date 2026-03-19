@@ -1,3 +1,5 @@
+import { Order } from 'src/usuarios/entities/order-entity';
+import { User } from 'src/usuarios/entities/user-entity';
 import { DataSource } from 'typeorm';
 
 export const databaseProviders = [
@@ -16,7 +18,7 @@ export const databaseProviders = [
           encrypt: false,
           trustServerCertificate: true,
         },
-        entities: ['dist/**/*.entity{.ts,.js}'],
+        entities: [User, Order],
         migrations: ['dist/migrations/*{.ts,.js}'],
         subscribers: [],
       });

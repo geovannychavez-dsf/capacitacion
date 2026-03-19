@@ -7,7 +7,7 @@ import { HeaderGuard } from './common/guard/header/header-guard';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  app.setGlobalPrefix('api');
+  app.setGlobalPrefix('api/v1');
   app.useGlobalInterceptors(new RequestInterceptorInterceptor());
   app.useGlobalGuards(new HeaderGuard());
   app.enableVersioning({
@@ -18,12 +18,6 @@ async function bootstrap() {
     title: 'Documento practico Usuarios',
     description: 'API practica de Usuarios',
     version: '1.0',
-    app,
-  });
-  swaggerConsfig({
-    title: 'Documento practico Usuarios V2',
-    description: 'API practica de Usuarios',
-    version: '2.0',
     app,
   });
   await app.listen(process.env.PORT ?? 3001);
