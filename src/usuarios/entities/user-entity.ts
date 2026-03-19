@@ -2,7 +2,6 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  JoinColumn,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -39,6 +38,5 @@ export class User {
   updatedAt: Date;
 
   @OneToMany(() => Order, (order) => order.user)
-  @JoinColumn()
   order: Order[];
 }

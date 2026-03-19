@@ -23,9 +23,9 @@ export class UsuariosService {
    * @returns boolean
    */
   async createUser(userDto: CreateUserDto): Promise<boolean> {
-    const exitEmail = await this.userRepository.findOne({ where: { email: userDto.email } });
-    if (exitEmail) return false;
-    await this.userRepository.save({
+    const hasEmailUser = await this.userRepository.findOne({ where: { email: userDto.email } });
+    if (hasEmailUser) return false;
+    const user = await this.userRepository.save({
       email: userDto.email,
       name: userDto.name,
       birthdate: userDto.birthdate,
@@ -34,7 +34,8 @@ export class UsuariosService {
       password: userDto.password,
       updatedAt: new Date(),
     });
-    return true;
+    if (user.id) return true;
+    return false;
   }
   /**
    * Obtener lista de usuarios
@@ -58,16 +59,17 @@ export class UsuariosService {
         birthdate: true,
         emailVerified: true,
         estatus: true,
-      }, where: { id } });
+      }, where: { id }
+    });
   }
   /**
    * Actualiza datos de un usuario
    * @param id identificador unico del usuario
-   * @param updateLuneDto datos a actualizar
+   * @param user datos a actualizar
    * @returns CreateUserDto
    */
-  async updateUser(id: number, updateLuneDto: UpdateUserDto): Promise<ResponseUserDto> {
-    return await this.userRepository.update({ id }, updateLuneDto).then(() => this.findUser(id));
+  async updateUser(id: number, user: UpdateUserDto): Promise<ResponseUserDto> {
+    return await this.userRepository.update({ id }, user).then(() => this.findUser(id));
   }
   async findUserByEmailAndName(name: string, email: string): Promise<ResponseUserDto[]> {
     const users = await this.userRepository.createQueryBuilder("User")
@@ -76,12 +78,12 @@ export class UsuariosService {
       .getMany()
     return this.adaptadorUser(users);
   }
-  async crearUsuarioConOrden({ user, order }: { user: CreateUserDto, order: CreateOrderDto }): Promise<CreateOrderDto> {
+  async createUserWithOrder({ user, order }: { user: CreateUserDto, order: CreateOrderDto }): Promise<CreateOrderDto> {
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.connect();
     await queryRunner.startTransaction();
     try {
-      const newUser = await queryRunner.manager.save(User, user);
+      const newUser = await queryRunner.manager.save(User, { ...user, updatedAt: new Date() });
       const newOrder = await queryRunner.manager.save(Order, { ...order, user: newUser });
       await queryRunner.commitTransaction();
       return newOrder;

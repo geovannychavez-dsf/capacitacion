@@ -1,6 +1,7 @@
 import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
 import { Request } from 'express';
 import { Observable } from 'rxjs';
+import { PASSWORD_ADMIN, USERNAME_ADMIN } from 'src/common/types/token-orm';
 
 @Injectable()
 export class HeaderGuard implements CanActivate {
@@ -19,7 +20,7 @@ export class HeaderGuard implements CanActivate {
       const decoded = Buffer.from(credentials, 'base64').toString('utf-8');
       const [username, password] = decoded.split(':');
 
-      if (username === 'admin' && password === 'admin') {
+      if (username === USERNAME_ADMIN && password === PASSWORD_ADMIN) {
         return true;
       }
     }

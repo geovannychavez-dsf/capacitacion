@@ -3,6 +3,7 @@ import {
   ApiBadRequestResponse,
   ApiBasicAuth,
   ApiBody,
+  ApiInternalServerErrorResponse,
   ApiOkResponse,
   ApiOperation,
   ApiParam,
@@ -63,6 +64,16 @@ export function updateUserDocs() {
             example: 'Credenciales incorrectas',
           },
           error: { type: 'string', example: 'Unauthorized' },
+        },
+      },
+    }),
+    ApiInternalServerErrorResponse({
+      description: 'Error interno del servidor',
+      schema: {
+        example: {
+          statusCode: 500,
+          message: 'Error interno del servidor',
+          error: 'Internal Server Error',
         },
       },
     }),

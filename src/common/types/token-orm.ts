@@ -4,3 +4,6 @@ export const TOKENSORM = {
   ORDER_REPOSITORY: 'ORDER_REPOSITORY',
   DATA_SOURCE: 'DATA_SOURCE',
 };
+
+export const USERNAME_ADMIN = 'admin';
+export const PASSWORD_ADMIN = 'admin';

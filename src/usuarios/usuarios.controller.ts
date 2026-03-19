@@ -93,8 +93,8 @@ export class UsersController {
   @getUserDocs()
   @Get('search/:name/:email')
   @ApiOperation({
-    summary: 'Obtener Usuario',
-    description: 'Este endpoint Buscar un usuario en especifico por id.',
+    summary: 'Obtener usuario Usuario',
+    description: 'Este endpoint Buscar un usuario en especifico por email y name.',
   })
   @ApiOkResponse({
     description: 'Usuario creado correctamente',
@@ -109,7 +109,6 @@ export class UsersController {
         message: { type: 'string', example: 'Operacion exitosa' },
       },
     },
-    type: [ResponseUserDto],
   })
   findUserByEmailAndName(
     @Param('name') name: string,
@@ -117,11 +116,11 @@ export class UsersController {
   ): Promise<ResponseUserDto[]> {
     return this.userService.findUserByEmailAndName(name, email);
   }
-  @Post('crear-con-orden')
+  @Post('crear-user-orden')
   @ApiBody({ type: UserOrderDto })
-  crearUsuarioConOrden(
+  createUsuarioWithOrden(
     @Body() data: { user: CreateUserDto; order: CreateOrderDto },
   ): Promise<CreateOrderDto> {
-    return this.userService.crearUsuarioConOrden(data);
+    return this.userService.createUserWithOrder(data);
   }
 }

@@ -12,7 +12,7 @@ CREATE TABLE [dbo].[User] (
     [emailVerified] BIT NOT NULL CONSTRAINT [User_emailVerified_df] DEFAULT 0,
     [estatus] NVARCHAR(1000) NOT NULL CONSTRAINT [User_estatus_df] DEFAULT 'active',
     [createdAt] DATETIME2 NOT NULL CONSTRAINT [User_createdAt_df] DEFAULT CURRENT_TIMESTAMP,
-    [updatedAt] DATETIME2 NOT NULL,
+    [updatedAt] DATETIME2 CONSTRAINT [User_updatedAt_df] DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT [User_pkey] PRIMARY KEY CLUSTERED ([id]),
     CONSTRAINT [User_email_key] UNIQUE NONCLUSTERED ([email])
 );
@@ -24,26 +24,24 @@ CREATE TABLE [dbo].[Perfil] (
     [bio] NVARCHAR(1000),
     [avatarUrl] NVARCHAR(1000),
     [createdAt] DATETIME2 NOT NULL CONSTRAINT [Perfil_createdAt_df] DEFAULT CURRENT_TIMESTAMP,
-    [updatedAt] DATETIME2 NOT NULL,
+    [updatedAt] DATETIME2 CONSTRAINT [Perfil_updatedAt_df] DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT [Perfil_pkey] PRIMARY KEY CLUSTERED ([id]),
     CONSTRAINT [Perfil_userId_key] UNIQUE NONCLUSTERED ([userId])
 );
 
 -- CreateTable
-CREATE TABLE [dbo].[Post] (
+CREATE TABLE [dbo].[Order] (
     [id] INT NOT NULL IDENTITY(1,1),
-    [title] NVARCHAR(1000) NOT NULL,
-    [content] NVARCHAR(1000),
-    [published] BIT CONSTRAINT [Post_published_df] DEFAULT 0,
-    [authorId] INT,
-    CONSTRAINT [Post_pkey] PRIMARY KEY CLUSTERED ([id])
+    [description] NVARCHAR(1000) NOT NULL,
+    [valor] FLOAT(53) NOT NULL,
+    [authorId] INT NOT NULL,
+    [createdAt] DATETIME2 NOT NULL CONSTRAINT [Order_createdAt_df] DEFAULT CURRENT_TIMESTAMP,
+    [updatedAt] DATETIME2 CONSTRAINT [Order_updatedAt_df] DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT [Order_pkey] PRIMARY KEY CLUSTERED ([id])
 );
 
 -- AddForeignKey
-ALTER TABLE [dbo].[Perfil] ADD CONSTRAINT [Perfil_userId_fkey] FOREIGN KEY ([userId]) REFERENCES [dbo].[User]([id]) ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE [dbo].[Post] ADD CONSTRAINT [Post_authorId_fkey] FOREIGN KEY ([authorId]) REFERENCES [dbo].[User]([id]) ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE [dbo].[Order] ADD CONSTRAINT [Order_authorId_fkey] FOREIGN KEY ([authorId]) REFERENCES [dbo].[User]([id]) ON DELETE CASCADE ON UPDATE CASCADE;
 
 COMMIT TRAN;
 

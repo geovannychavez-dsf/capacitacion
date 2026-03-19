@@ -21,9 +21,6 @@ export class Order {
   @Column('float')
   valor: Double;
 
-  @Column()
-  authorId: number;
-
   @CreateDateColumn()
   createdAt: Date;
 
@@ -31,6 +28,9 @@ export class Order {
   updatedAt: Date;
 
   @ManyToOne(() => User, (user) => user.order)
-  @JoinColumn()
+  @JoinColumn({ name: 'authorId' })
   user: User;
+
+  @Column()
+  authorId: number;
 }
