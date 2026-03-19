@@ -1,14 +1,23 @@
-import { Controller, Get, Post, Body, Put, Param, ParseIntPipe, Version } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
-import { ApiOkResponse, ApiOperation, ApiParam, ApiTags, getSchemaPath } from '@nestjs/swagger';
+import { Controller, Get, Post, Body, Put, Param, ParseIntPipe } from '@nestjs/common';
+import { CreateUserDto } from './dto/user/create-user.dto';
+import { UpdateUserDto } from './dto/user/update-user.dto';
+import {
+  ApiBody,
+  ApiOkResponse,
+  ApiOperation,
+  ApiParam,
+  ApiTags,
+  getSchemaPath,
+} from '@nestjs/swagger';
 import { UsuariosService } from './usuarios.service';
-import { ResponseUserDto } from './dto/response-user.dto';
+import { ResponseUserDto } from './dto/user/response-user.dto';
 import { getUserDocs, postUserDocs, updateUserDocs } from 'src/common/decoradores/usuario';
+import { CreateOrderDto } from './dto/order/create-order.dto';
+import { UserOrderDto } from './dto/user/user-order.dto';
 
 @ApiTags('usuarios')
-@Controller('usuario')
 @Controller({
+  path: 'usuario',
   version: '1',
 })
 export class UsersController {
@@ -40,7 +49,6 @@ export class UsersController {
   })
   @getUserDocs()
   @Get()
-  @Version('1')
   async findUsers(): Promise<ResponseUserDto[]> {
     return await this.userService.findusuarios();
   }
@@ -75,8 +83,6 @@ export class UsersController {
 
   @updateUserDocs()
   @Put(':id')
-  @Version('1')
-  @Version('2')
   updateUser(
     @Param('id') id: string,
     @Body() updateUserDto: UpdateUserDto,
@@ -84,11 +90,38 @@ export class UsersController {
     return this.userService.updateUser(+id, updateUserDto);
   }
 
-  @Get([':name', ':email'])
+  @getUserDocs()
+  @Get('search/:name/:email')
+  @ApiOperation({
+    summary: 'Obtener Usuario',
+    description: 'Este endpoint Buscar un usuario en especifico por id.',
+  })
+  @ApiOkResponse({
+    description: 'Usuario creado correctamente',
+    schema: {
+      type: 'object',
+      properties: {
+        status: { type: 'boolean', example: true },
+        data: {
+          type: 'array',
+          items: { $ref: getSchemaPath(ResponseUserDto) },
+        },
+        message: { type: 'string', example: 'Operacion exitosa' },
+      },
+    },
+    type: [ResponseUserDto],
+  })
   findUserByEmailAndName(
     @Param('name') name: string,
     @Param('email') email: string,
   ): Promise<ResponseUserDto[]> {
     return this.userService.findUserByEmailAndName(name, email);
+  }
+  @Post('crear-con-orden')
+  @ApiBody({ type: UserOrderDto })
+  crearUsuarioConOrden(
+    @Body() data: { user: CreateUserDto; order: CreateOrderDto },
+  ): Promise<CreateOrderDto> {
+    return this.userService.crearUsuarioConOrden(data);
   }
 }

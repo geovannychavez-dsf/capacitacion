@@ -23,7 +23,7 @@ export class CreateOrderDto {
   @ApiProperty({
     example: 1,
     description: 'Usuario al que pertenece la orden',
-    required: true,
+    readOnly: true,
     type: Number,
   })
   authorId: number;

@@ -10,8 +10,8 @@ import {
   getSchemaPath,
 } from '@nestjs/swagger';
 import { HeaderGuard } from 'src/common/guard/header/header-guard';
-import { ResponseOrderDto } from 'src/order/dto/respose-order.dto';
-import { CreateUserDto } from 'src/usuarios/dto/create-user.dto';
+import { ResponseOrderDto } from 'src/usuarios/dto/order/respose-order.dto';
+import { CreateUserDto } from 'src/usuarios/dto/user/create-user.dto';
 export function updateUserDocs() {
   return applyDecorators(
     UseGuards(HeaderGuard),

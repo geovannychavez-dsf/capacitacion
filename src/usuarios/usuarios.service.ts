@@ -1,19 +1,20 @@
 /* eslint-disable prettier/prettier */
 import { Inject, Injectable } from '@nestjs/common';
-import { UpdateUserDto } from './dto/update-user.dto';
-import { CreateUserDto } from './dto/create-user.dto';
-import { ResponseUserDto } from './dto/response-user.dto';
+import { UpdateUserDto } from './dto/user/update-user.dto';
+import { CreateUserDto } from './dto/user/create-user.dto';
+import { ResponseUserDto } from './dto/user/response-user.dto';
 import { User } from './entities/user-entity';
 import { Repository } from 'typeorm';
 import { DataSource } from 'typeorm';
-import { CreateOrderDto } from 'src/order/dto/create-order.dto';
 import { Order } from './entities/order-entity';
+import { CreateOrderDto } from './dto/order/create-order.dto';
+import { TOKENSORM } from 'src/common/types/token-orm';
 
 @Injectable()
 export class UsuariosService {
   constructor(
-    @Inject('USER_REPOSITORY') private userRepository: Repository<User>,
-    @Inject('DATA_SOURCE') private dataSource: DataSource,
+    @Inject(TOKENSORM.USER_REPOSITORY) private userRepository: Repository<User>,
+    @Inject(TOKENSORM.DATA_SOURCE) private dataSource: DataSource,
   ) { }
   usuarios: CreateUserDto[] = [];
   /**
@@ -41,14 +42,7 @@ export class UsuariosService {
    */
   async findusuarios(): Promise<ResponseUserDto[]> {
     const users = await this.userRepository.find();
-    return users.map(user => ({
-      id: user.id,
-      email: user.email,
-      name: user.name,
-      birthdate: new Date(user.birthdate),
-      emailVerified: user.emailVerified,
-      estatus: user.estatus,
-    }));
+    return this.adaptadorUser(users);
   }
   /**
    * Obtener usuario especifico
@@ -56,7 +50,15 @@ export class UsuariosService {
    * @returns CreateUserDto
    */
   async findUser(id: number): Promise<ResponseUserDto> {
-    return await this.userRepository.findOne({ where: { id } });
+    return await this.userRepository.findOne({
+      select: {
+        id: true,
+        email: true,
+        name: true,
+        birthdate: true,
+        emailVerified: true,
+        estatus: true,
+      }, where: { id } });
   }
   /**
    * Actualiza datos de un usuario
@@ -67,24 +69,17 @@ export class UsuariosService {
   async updateUser(id: number, updateLuneDto: UpdateUserDto): Promise<ResponseUserDto> {
     return await this.userRepository.update({ id }, updateLuneDto).then(() => this.findUser(id));
   }
-  async findUserByEmailAndName(name:string,email:string):Promise<ResponseUserDto[]>{
+  async findUserByEmailAndName(name: string, email: string): Promise<ResponseUserDto[]> {
     const users = await this.userRepository.createQueryBuilder("User")
-      .where("User.name like :name", { name : `%${name}%` })
+      .where("User.name like :name", { name: `%${name}%` })
       .orWhere("User.email like  :email", { email: `%${email}%` })
       .getMany()
-    return users.map(user => ({
-      id: user.id,
-      email: user.email,
-      name: user.name,
-      birthdate: new Date(user.birthdate),
-      emailVerified: user.emailVerified,
-      estatus: user.estatus,
-    }));
+    return this.adaptadorUser(users);
   }
   async crearUsuarioConOrden({ user, order }: { user: CreateUserDto, order: CreateOrderDto }): Promise<CreateOrderDto> {
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.connect();
-    await queryRunner.startTransaction(); 
+    await queryRunner.startTransaction();
     try {
       const newUser = await queryRunner.manager.save(User, user);
       const newOrder = await queryRunner.manager.save(Order, { ...order, user: newUser });
@@ -98,5 +93,16 @@ export class UsuariosService {
     finally {
       await queryRunner.release();
     }
+  }
+  private adaptadorUser(usuarios: User[]): ResponseUserDto[] {
+    return usuarios.map(user => ({
+      id: user.id,
+      email: user.email,
+      name: user.name,
+      birthdate: new Date(user.birthdate),
+      emailVerified: Boolean(user.emailVerified),
+      estatus: user.estatus,
+    }));
+
   }
 }
