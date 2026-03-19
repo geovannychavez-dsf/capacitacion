@@ -11,7 +11,8 @@ export const databaseProviders = [
         host: process.env.HOSTDB,
         username: process.env.USERDB,
         password: process.env.PASS,
-        database: process.env.DATABASE,
+        database: process.env.DATABASE
+        ,
         synchronize: false,
         logging: true,
         options: {

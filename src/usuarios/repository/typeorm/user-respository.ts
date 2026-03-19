@@ -9,7 +9,7 @@ import { Order } from 'src/usuarios/entities/order-entity';
 import { UpdateUserDto } from 'src/usuarios/dto/user/update-user.dto';
 
 @Injectable()
-export class UserRepository implements IUserrepository {
+export class UserRepository implements IUserrepository  {
   constructor(
     @Inject(TOKENSORM.USER_REPOSITORY) private readonly userRepository: Repository<User>,
     @Inject(TOKENSORM.ORDER_REPOSITORY) private readonly orderRepository: Repository<Order>,

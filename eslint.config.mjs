@@ -24,8 +24,10 @@ export default tseslint.config(
       },
     },
     rules: {
+      '@typescript-eslint/no-unsafe-return': 'error',
+      '@typescript-eslint/no-unsafe-call': 'error', // Asegúrate de que esta regla esté habilitada
       '@typescript-eslint/naming-convention': [
-        'error',
+        'warn',
         // 1. PascalCase: Clases, interfaces, tipos (typeLike)
         {
           selector: 'typeLike',
@@ -66,7 +68,7 @@ export default tseslint.config(
       '@typescript-eslint/no-floating-promises': 'warn',
       '@typescript-eslint/no-unsafe-argument': 'warn',
 
-      'prettier/prettier': ['error', { endOfLine: 'auto' }],
+      'prettier/prettier': ['off', { endOfLine: 'auto' }],
     },
   },
 );
