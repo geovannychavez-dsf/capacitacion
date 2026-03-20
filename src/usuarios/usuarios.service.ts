@@ -4,36 +4,30 @@ import { UpdateUserDto } from './dto/user/update-user.dto';
 import { CreateUserDto } from './dto/user/create-user.dto';
 import { ResponseUserDto } from './dto/user/response-user.dto';
 import { User } from './entities/user-entity';
-import { Repository } from 'typeorm';
-import { DataSource } from 'typeorm';
-import { Order } from './entities/order-entity';
+import { IUserrepository, IUsertransactionPrismarepository } from './repository/user-repository.interface';
+import { TOKENSORM } from 'src/common/types/type-orm';
 import { CreateOrderDto } from './dto/order/create-order.dto';
-import { TOKENSORM } from 'src/common/types/token-orm';
+import { ResponseOrderDto } from './dto/order/respose-order.dto';
+import { Order } from './entities/order-entity';
 
 @Injectable()
 export class UsuariosService {
   constructor(
-    @Inject(TOKENSORM.USER_REPOSITORY) private userRepository: Repository<User>,
-    @Inject(TOKENSORM.DATA_SOURCE) private dataSource: DataSource,
+    @Inject(TOKENSORM.USER_SERVICE_REPOSITORY)
+    private readonly userRepository: IUserrepository,
+    @Inject(TOKENSORM.USER_TRANSACTION)
+    private readonly userTransactionRepository: IUsertransactionPrismarepository
   ) { }
-  usuarios: CreateUserDto[] = [];
   /**
    * Crear usuario
    * @param createLuneDto
    * @returns boolean
    */
   async createUser(userDto: CreateUserDto): Promise<boolean> {
-    const hasEmailUser = await this.userRepository.findOne({ where: { email: userDto.email } });
-    if (hasEmailUser) return false;
-    const user = await this.userRepository.save({
-      email: userDto.email,
-      name: userDto.name,
-      birthdate: userDto.birthdate,
-      emailVerified: userDto.emailVerified,
-      estatus: userDto.estatus,
-      password: userDto.password,
-      updatedAt: new Date(),
-    });
+    const hasEmailandName = await this.userRepository.findUserByEmailAndName({ name: userDto.name, email: userDto.email });
+    let hasEmailandNameFlag = new Set(hasEmailandName);
+    if (hasEmailandNameFlag.size > 0) return false;
+    const user = await this.userRepository.createUser(userDto);
     if (user.id) return true;
     return false;
   }
@@ -42,7 +36,7 @@ export class UsuariosService {
    * @returns ResponseUserDto[]
    */
   async findusuarios(): Promise<ResponseUserDto[]> {
-    const users = await this.userRepository.find();
+    const users = await this.userRepository.findAllUsers();
     return this.adaptadorUser(users);
   }
   /**
@@ -51,16 +45,7 @@ export class UsuariosService {
    * @returns CreateUserDto
    */
   async findUser(id: number): Promise<ResponseUserDto> {
-    return await this.userRepository.findOne({
-      select: {
-        id: true,
-        email: true,
-        name: true,
-        birthdate: true,
-        emailVerified: true,
-        estatus: true,
-      }, where: { id }
-    });
+    return await this.userRepository.findByIdUser(id);
   }
   /**
    * Actualiza datos de un usuario
@@ -69,32 +54,31 @@ export class UsuariosService {
    * @returns CreateUserDto
    */
   async updateUser(id: number, user: UpdateUserDto): Promise<ResponseUserDto> {
-    return await this.userRepository.update({ id }, user).then(() => this.findUser(id));
+    return await this.userRepository.updateUser(id, user).then(() => this.findUser(id));
   }
   async findUserByEmailAndName(name: string, email: string): Promise<ResponseUserDto[]> {
-    const users = await this.userRepository.createQueryBuilder("User")
-      .where("User.name like :name", { name: `%${name}%` })
-      .orWhere("User.email like  :email", { email: `%${email}%` })
-      .getMany()
+    const users = await this.userRepository.findUserByEmailAndName({ name, email });
     return this.adaptadorUser(users);
   }
-  async createUserWithOrder({ user, order }: { user: CreateUserDto, order: CreateOrderDto }): Promise<CreateOrderDto> {
-    const queryRunner = this.dataSource.createQueryRunner();
-    await queryRunner.connect();
-    await queryRunner.startTransaction();
-    try {
-      const newUser = await queryRunner.manager.save(User, { ...user, updatedAt: new Date() });
-      const newOrder = await queryRunner.manager.save(Order, { ...order, user: newUser });
-      await queryRunner.commitTransaction();
-      return newOrder;
+  async createUserWithOrder(userDto: CreateUserDto, orderDto: CreateOrderDto): Promise<ResponseOrderDto> {
+    return await this.userTransactionRepository.execute(async (manager) => {
+      const user = await manager.user.create({ data: { ...userDto, birthdate: new Date(userDto.birthdate) } }) as unknown as User;
+
+      if (user.id) {
+        const order = await manager.order.create({
+          data: {
+            ...orderDto,
+            authorId: user.id,
+          }
+        }) as unknown as Order;
+        return order;
+      }
+      throw new Error('Error al crear el usuario');
+
+
+
     }
-    catch (err) {
-      await queryRunner.rollbackTransaction();
-      throw err;
-    }
-    finally {
-      await queryRunner.release();
-    }
+    );
   }
   private adaptadorUser(usuarios: User[]): ResponseUserDto[] {
     return usuarios.map(user => ({
@@ -105,6 +89,7 @@ export class UsuariosService {
       emailVerified: Boolean(user.emailVerified),
       estatus: user.estatus,
     }));
+
 
   }
 }

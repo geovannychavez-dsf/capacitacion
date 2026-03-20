@@ -1,14 +1,16 @@
-import { IUsertransactionrepository } from '../user-repository.interface';
-import { TOKENSORM } from 'src/common/types/token-orm';
-import { Inject, Injectable } from '@nestjs/common';
-import { PrismaClient } from '@prisma/client';
+import { Injectable } from '@nestjs/common';
+import { IUsertransactionPrismarepository } from '../user-repository.interface';
+import { PrismaService } from 'src/config/prisma/prisma.service';
+import { PrismaTransactionManager } from 'src/common/types/type-orm';
+
 
 @Injectable()
-export class UserTransactionRepository implements IUsertransactionrepository {
-  constructor(@Inject(TOKENSORM.USER_TRANSACTION) private readonly dataSource: PrismaClient) {}
-  execute<T>(work: () => Promise<T>): Promise<T> {
-    return this.dataSource.transaction(async () => {
-      return await work();
+export class UserTransactionRepository implements IUsertransactionPrismarepository {
+  constructor(private readonly prisma: PrismaService) {}
+
+  async execute<T>(work: (manager: PrismaTransactionManager) => Promise<T>): Promise<T> {
+    return await this.prisma.$transaction(async (manager) => {
+      return await work(manager);
     });
   }
 }

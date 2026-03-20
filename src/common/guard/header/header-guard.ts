@@ -1,7 +1,7 @@
 import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
 import { Request } from 'express';
 import { Observable } from 'rxjs';
-import { PASSWORD_ADMIN, USERNAME_ADMIN } from 'src/common/types/token-orm';
+import { PASSWORD_ADMIN, USERNAME_ADMIN } from 'src/common/types/type-orm';
 
 @Injectable()
 export class HeaderGuard implements CanActivate {

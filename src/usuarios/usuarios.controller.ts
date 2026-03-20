@@ -2,6 +2,7 @@ import { Controller, Get, Post, Body, Put, Param, ParseIntPipe } from '@nestjs/c
 import { CreateUserDto } from './dto/user/create-user.dto';
 import { UpdateUserDto } from './dto/user/update-user.dto';
 import {
+  ApiBasicAuth,
   ApiBody,
   ApiOkResponse,
   ApiOperation,
@@ -14,6 +15,7 @@ import { ResponseUserDto } from './dto/user/response-user.dto';
 import { getUserDocs, postUserDocs, updateUserDocs } from 'src/common/decoradores/usuario';
 import { CreateOrderDto } from './dto/order/create-order.dto';
 import { UserOrderDto } from './dto/user/user-order.dto';
+import { ResponseOrderDto } from './dto/order/respose-order.dto';
 
 @ApiTags('usuarios')
 @Controller({
@@ -21,7 +23,7 @@ import { UserOrderDto } from './dto/user/user-order.dto';
   version: '1',
 })
 export class UsersController {
-  constructor(private readonly userService: UsuariosService) {}
+  constructor(private readonly userService: UsuariosService) { }
   @postUserDocs()
   @Post()
   createUser(@Body() CreateUserDto: CreateUserDto): Promise<boolean> {
@@ -92,6 +94,7 @@ export class UsersController {
 
   @getUserDocs()
   @Get('search/:name/:email')
+  @ApiBasicAuth()
   @ApiOperation({
     summary: 'Obtener usuario Usuario',
     description: 'Este endpoint Buscar un usuario en especifico por email y name.',
@@ -116,11 +119,25 @@ export class UsersController {
   ): Promise<ResponseUserDto[]> {
     return this.userService.findUserByEmailAndName(name, email);
   }
-  @Post('crear-user-orden')
+  @postUserDocs()
   @ApiBody({ type: UserOrderDto })
+  @ApiOkResponse({
+    description: 'Orsern creada correctamente',
+    schema: {
+      type: 'object',
+      properties: {
+        status: { type: 'boolean', example: true },
+        data: {
+          $ref: getSchemaPath(CreateOrderDto),
+        },
+        message: { type: 'string', example: 'Operacion exitosa' },
+      },
+    },
+  })
+  @Post('crear-user-orden')
   createUsuarioWithOrden(
     @Body() data: { user: CreateUserDto; order: CreateOrderDto },
-  ): Promise<CreateOrderDto> {
-    return this.userService.createUserWithOrder(data);
+  ): Promise<ResponseOrderDto> {
+    return this.userService.createUserWithOrder(data.user, data.order);
   }
 }

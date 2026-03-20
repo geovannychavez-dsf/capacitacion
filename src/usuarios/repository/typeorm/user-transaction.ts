@@ -1,14 +1,13 @@
-import { Inject, Injectable } from '@nestjs/common';
+import {  Injectable } from '@nestjs/common';
 import { IUsertransactionrepository } from '../user-repository.interface';
-import { DataSource } from 'typeorm';
-import { TOKENSORM } from 'src/common/types/token-orm';
+import { DataSource, EntityManager } from 'typeorm';
 
 @Injectable()
 export class UserTransactionRepository implements IUsertransactionrepository {
-  constructor(@Inject(TOKENSORM.USER_TRANSACTION) private readonly dataSource: DataSource) {}
-  execute<T>(work: () => Promise<T>): Promise<T> {
-    return this.dataSource.transaction(async () => {
-      return await work();
+  constructor(private readonly dataSource: DataSource) { }
+  execute<T>(work: (manager: EntityManager) => Promise<T>): Promise<T> {
+    return this.dataSource.transaction(async (manager) => {
+      return await work(manager);
     });
   }
 }
