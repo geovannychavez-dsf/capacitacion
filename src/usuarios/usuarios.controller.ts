@@ -26,8 +26,8 @@ export class UsersController {
   constructor(private readonly userService: UsuariosService) { }
   @postUserDocs()
   @Post()
-  createUser(@Body() CreateUserDto: CreateUserDto): Promise<boolean> {
-    return this.userService.createUser(CreateUserDto);
+ async  createUser(@Body() CreateUserDto: CreateUserDto): Promise<boolean> {
+    return await this.userService.createUser(CreateUserDto);
   }
 
   @ApiOperation({
@@ -77,9 +77,9 @@ export class UsersController {
   @ApiParam({
     example: 10,
     name: 'id',
-    type: String,
+    type: Number,
   })
-  findUser(@Param('id') id: ParseIntPipe): Promise<ResponseUserDto> {
+  findUser(@Param('id',ParseIntPipe) id: number): Promise<ResponseUserDto> {
     return this.userService.findUser(+id);
   }
 

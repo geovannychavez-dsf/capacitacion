@@ -6,12 +6,14 @@ import { RequestInterceptorInterceptor } from './common/interceptor/request-inte
 import { HeaderGuard } from './common/guard/header/header-guard';
 import { ConfigService } from '@nestjs/config';
 import { TOKENSENV } from './common/types/type-orm';
+import { ValidationPipe } from 'class-validator'
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const config = app.get(ConfigService);
   app.setGlobalPrefix('api/v1');
   app.useGlobalInterceptors(new RequestInterceptorInterceptor());
   app.useGlobalGuards(new HeaderGuard());
+  app.useGlobalPipes(new ValidationPipe());
   app.enableVersioning({
     type: VersioningType.URI,
     defaultVersion: '1',

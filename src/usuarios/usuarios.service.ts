@@ -42,7 +42,7 @@ export class UsuariosService {
   /**
    * Obtener usuario especifico
    * @param id identificador de usuario
-   * @returns CreateUserDto
+   * @returns { CreateUserDto } 
    */
   async findUser(id: number): Promise<ResponseUserDto> {
     return await this.userRepository.findByIdUser(id);
@@ -51,7 +51,7 @@ export class UsuariosService {
    * Actualiza datos de un usuario
    * @param id identificador unico del usuario
    * @param user datos a actualizar
-   * @returns CreateUserDto
+   * @returns ResponseUserDto
    */
   async updateUser(id: number, user: UpdateUserDto): Promise<ResponseUserDto> {
     return await this.userRepository.updateUser(id, user).then(() => this.findUser(id));
