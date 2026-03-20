@@ -1,4 +1,4 @@
-/* eslint-disable prettier/prettier */
+ 
 import { Inject, Injectable } from '@nestjs/common';
 import { UpdateUserDto } from './dto/user/update-user.dto';
 import { CreateUserDto } from './dto/user/create-user.dto';
@@ -25,7 +25,7 @@ export class UsuariosService {
    */
   async createUser(userDto: CreateUserDto): Promise<boolean> {
     const hasEmailandName = await this.userRepository.findUserByEmailAndName({ name: userDto.name, email: userDto.email });
-    let hasEmailandNameFlag = new Set(hasEmailandName);
+    const hasEmailandNameFlag = new Set(hasEmailandName);
     if (hasEmailandNameFlag.size > 0) return false;
     const user = await this.userRepository.createUser(userDto);
     if (user.id) return true;
