@@ -13,8 +13,15 @@ PORT=
 ```bash
 npm install prisma @types/node @types/mssql --save-dev
 npm install @prisma/client @prisma/adapter-mssql dotenv
-
 ```
+
+## ACTUALIZAR BASE DE DATOS CON EL ESQUEMA PRISMA 
+```bash
+npx prisma db push
+npx prisma generate --generate client 
+```
+
+
 ## ARCHIVO DE CONFIGURACION PRISMA 
 
 ## ESTRUCTURA DE CARPETAS PRISMA

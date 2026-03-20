@@ -14,7 +14,6 @@ export const databaseProviders = [
         username: config.get(TOKENSENV.USERDB),
         password: config.get(TOKENSENV.PASS),
         database: config.get(TOKENSENV.DATABASE),
-        port: 1433,
         synchronize: false,
         logging: true,
         options: {

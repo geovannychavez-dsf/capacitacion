@@ -14,7 +14,6 @@ export class PrismaService implements OnModuleInit {
       user: this.config.get(TOKENSENV.USERDB),
       password: this.config.get(TOKENSENV.PASS),
       database: this.config.get(TOKENSENV.DATABASE),
-      port: 1433,
       options: {
         encrypt: false,
         trustServerCertificate: true,
