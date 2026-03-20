@@ -1,12 +1,11 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { VersioningType } from '@nestjs/common';
+import { ValidationPipe, VersioningType } from '@nestjs/common';
 import { swaggerConsfig } from './config/swagger/swagger.confg';
 import { RequestInterceptorInterceptor } from './common/interceptor/request-interceptor/request-interceptor.interceptor';
 import { HeaderGuard } from './common/guard/header/header-guard';
 import { ConfigService } from '@nestjs/config';
 import { TOKENSENV } from './common/types/type-orm';
-import { ValidationPipe } from 'class-validator'
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const config = app.get(ConfigService);

@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { IUserrepository } from '../user-repository.interface';
 import { User } from 'src/usuarios/entities/user-entity';
 import { CreateUserDto } from 'src/usuarios/dto/user/create-user.dto';
-import { DataSource, Repository } from 'typeorm';
+import { Repository, DataSource } from 'typeorm';
 import { CreateOrderDto } from 'src/usuarios/dto/order/create-order.dto';
 import { Order } from 'src/usuarios/entities/order-entity';
 import { UpdateUserDto } from 'src/usuarios/dto/user/update-user.dto';
@@ -20,8 +20,8 @@ export class UserRepository implements IUserrepository {
     });
   }
 
-  async createOrder(data: CreateOrderDto): Promise<CreateOrderDto> {
-    return await this.orderRepository.save(data);
+  async createOrder(user: CreateOrderDto): Promise<CreateOrderDto> {
+    return await this.orderRepository.save(user);
   }
 
   async findAllUsers(): Promise<User[]> {
@@ -32,12 +32,12 @@ export class UserRepository implements IUserrepository {
     return await this.userRepository.findOne({ where: { id } });
   }
 
-  async createUser(data: CreateUserDto): Promise<User> {
-    return await this.userRepository.save(data);
+  async createUser(user: CreateUserDto): Promise<User> {
+    return await this.userRepository.save(user);
   }
 
-  async updateUser(id: number, data: UpdateUserDto): Promise<User> {
-    return await this.userRepository.update({ id }, data).then(() => this.findByIdUser(id));
+  async updateUser(id: number, user: UpdateUserDto): Promise<User> {
+    return await this.userRepository.update({ id }, user).then(() => this.findByIdUser(id));
   }
 
   async findUserByEmailAndName({ name, email }: { name: string; email: string }): Promise<User[]> {
