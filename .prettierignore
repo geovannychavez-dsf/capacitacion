@@ -1,0 +1,12 @@
+node_modules
+dist
+coverage
+*.log
+package-lock.json
+.env
+.env.*
+settings.json
+vite.confing.ts
+/src/vite-env.d.ts
+tsconfig.json
+vite.config.ts

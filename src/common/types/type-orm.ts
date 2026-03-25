@@ -18,5 +18,8 @@ export const TOKENSENV = {
 export const USERNAME_ADMIN = 'admin';
 export const PASSWORD_ADMIN = 'admin';
 
-
+export const JWT_CONFIG = {
+  SECRET: process.env.JWT_SECRET,
+  EXPIRE: process.env.JWT_EXPIRES_IN,
+};
 export type PrismaTransactionManager = Omit<PrismaClient, '$connect' | '$disconnect' | '$on' | '$use' | '$extends' | '$transaction'>;

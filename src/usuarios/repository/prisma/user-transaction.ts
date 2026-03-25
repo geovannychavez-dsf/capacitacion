@@ -9,7 +9,7 @@ export class UserTransactionRepository implements IUsertransactionPrismareposito
   constructor(private readonly prisma: PrismaService) {}
 
   async execute<T>(work: (manager: PrismaTransactionManager) => Promise<T>): Promise<T> {
-    return await this.prisma.$transaction(async (manager) => {
+    return await this.prisma.$transaction(async (manager: PrismaTransactionManager) => {
       return await work(manager);
     });
   }

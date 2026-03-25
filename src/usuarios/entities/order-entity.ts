@@ -27,7 +27,7 @@ export class Order {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @ManyToOne(() => User, (user) => user.order)
+  @ManyToOne(() => User, (user: User) => user.order)
   @JoinColumn({ name: 'authorId' })
   user: User;
 

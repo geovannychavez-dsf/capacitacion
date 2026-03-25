@@ -20,7 +20,6 @@ import { ResponseOrderDto } from './dto/order/respose-order.dto';
 @ApiTags('usuarios')
 @Controller({
   path: 'usuario',
-  version: '1',
 })
 export class UsersController {
   constructor(private readonly userService: UsuariosService) { }

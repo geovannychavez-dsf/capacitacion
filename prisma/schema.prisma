@@ -37,3 +37,13 @@ model Order {
   createdAt   DateTime  @default(now())
   updatedAt   DateTime? @default(now()) @updatedAt()
 }
+
+model Characters {
+  id         Int        @id @default(autoincrement())
+  name       String  @unique
+  status     String
+  species    String
+  type       String?
+  gender     String
+  image      String
+  }

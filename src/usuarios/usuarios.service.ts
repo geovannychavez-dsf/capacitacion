@@ -1,14 +1,15 @@
- 
+
 import { Inject, Injectable } from '@nestjs/common';
 import { UpdateUserDto } from './dto/user/update-user.dto';
 import { CreateUserDto } from './dto/user/create-user.dto';
 import { ResponseUserDto } from './dto/user/response-user.dto';
 import { User } from './entities/user-entity';
 import { IUserrepository, IUsertransactionPrismarepository } from './repository/user-repository.interface';
-import { TOKENSORM } from 'src/common/types/type-orm';
+import { PrismaTransactionManager, TOKENSORM } from 'src/common/types/type-orm';
 import { CreateOrderDto } from './dto/order/create-order.dto';
 import { ResponseOrderDto } from './dto/order/respose-order.dto';
 import { Order } from './entities/order-entity';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsuariosService {
@@ -26,9 +27,10 @@ export class UsuariosService {
   async createUser(userDto: CreateUserDto): Promise<boolean> {
     const hasEmailandName = await this.userRepository.findUserByEmailAndName({ name: userDto.name, email: userDto.email });
     const hasEmailandNameFlag = new Set(hasEmailandName);
-    if (hasEmailandNameFlag.size > 0) return false;
+    if (hasEmailandNameFlag.size > 0) { return false; }
+    userDto.password = await bcrypt.hash(userDto.password, 10);
     const user = await this.userRepository.createUser(userDto);
-    if (user.id) return true;
+    if (user.id) { return true; }
     return false;
   }
   /**
@@ -61,7 +63,7 @@ export class UsuariosService {
     return this.adaptadorUser(users);
   }
   async createUserWithOrder(userDto: CreateUserDto, orderDto: CreateOrderDto): Promise<ResponseOrderDto> {
-    return await this.userTransactionRepository.execute(async (manager) => {
+    return await this.userTransactionRepository.execute(async (manager: PrismaTransactionManager) => {
       const user = await manager.user.create({ data: { ...userDto, birthdate: new Date(userDto.birthdate) } }) as unknown as User;
 
       if (user.id) {
@@ -81,7 +83,7 @@ export class UsuariosService {
     );
   }
   private adaptadorUser(usuarios: User[]): ResponseUserDto[] {
-    return usuarios.map(user => ({
+    return usuarios.map((user: User) => ({
       id: user.id,
       email: user.email,
       name: user.name,
