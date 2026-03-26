@@ -1,7 +1,6 @@
 import { applyDecorators, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
-  ApiBasicAuth,
   ApiBody,
   ApiOkResponse,
   ApiOperation,
@@ -20,7 +19,7 @@ export function updateUserDocs() {
       description: 'Este endpoint Actualiza una orden en especifico por id.',
     }),
     UsePipes(new ValidationPipe()),
-    ApiBasicAuth(),
+
     ApiParam({
       name: 'id',
       type: String,

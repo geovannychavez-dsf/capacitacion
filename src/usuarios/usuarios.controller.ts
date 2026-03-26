@@ -1,8 +1,8 @@
-import { Controller, Get, Post, Body, Put, Param, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Put, Param, ParseIntPipe, UseGuards } from '@nestjs/common';
 import { CreateUserDto } from './dto/user/create-user.dto';
 import { UpdateUserDto } from './dto/user/update-user.dto';
 import {
-  ApiBasicAuth,
+
   ApiBody,
   ApiOkResponse,
   ApiOperation,
@@ -16,16 +16,18 @@ import { getUserDocs, postUserDocs, updateUserDocs } from 'src/common/decoradore
 import { CreateOrderDto } from './dto/order/create-order.dto';
 import { UserOrderDto } from './dto/user/user-order.dto';
 import { ResponseOrderDto } from './dto/order/respose-order.dto';
+import { GuardGuardJWT } from 'src/modules/auth/guard/guard.guard';
 
 @ApiTags('usuarios')
 @Controller({
   path: 'usuario',
 })
+  @UseGuards(GuardGuardJWT)
 export class UsersController {
   constructor(private readonly userService: UsuariosService) { }
   @postUserDocs()
   @Post()
- async  createUser(@Body() CreateUserDto: CreateUserDto): Promise<boolean> {
+  async createUser(@Body() CreateUserDto: CreateUserDto): Promise<boolean> {
     return await this.userService.createUser(CreateUserDto);
   }
 
@@ -78,7 +80,7 @@ export class UsersController {
     name: 'id',
     type: Number,
   })
-  findUser(@Param('id',ParseIntPipe) id: number): Promise<ResponseUserDto> {
+  findUser(@Param('id', ParseIntPipe) id: number): Promise<ResponseUserDto> {
     return this.userService.findUser(+id);
   }
 
@@ -93,7 +95,6 @@ export class UsersController {
 
   @getUserDocs()
   @Get('search/:name/:email')
-  @ApiBasicAuth()
   @ApiOperation({
     summary: 'Obtener usuario Usuario',
     description: 'Este endpoint Buscar un usuario en especifico por email y name.',

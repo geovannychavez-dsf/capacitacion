@@ -1,231 +1,123 @@
+# NestJS con soporte para Prisma y TypeORM.
 
-## Variables de entorno bd
+## Desarrollo
+
+### Instalación
 
 ```bash
-DATABASE_URL="sqlserver://SERVER;database=DBAConsulta;user=USER;password=PASSWORD;encrypt=true;trustServerCertificate=true"
-HOSTDB=''
-USERDB='s'
-PASS=''
-DATABASE=''
-PORT=3001
-```
-## INSTALACION DEPENDENCIA Y MIRGRACION CON PRISMA 
-```bash
+npm install
+# Dependencias específicas de Prisma si son necesarias
 npm install prisma @types/node @types/mssql --save-dev
 npm install @prisma/client @prisma/adapter-mssql dotenv
 ```
 
+### Ejecución de la aplicación
 
-## ARCHIVO DE CONFIGURACION PRISMA 
-
-## ESTRUCTURA DE CARPETAS PRISMA
-
-En la raíz del proyecto está la carpeta `prisma` con la siguiente estructura:
-
-```
-prisma/
-└─── schema.prisma
-```
-
-## ACTUALIZACIONES - ESTRCUTURA DE CARPETAS  PROVAIDER Y REPOSITORY PRISMA 
-
-```src/
-├── config/
-│   ├── database/
-│   │   ├── database.module.ts
-│   │   └── database.providers.ts
-│   ├── prisma/
-│   │   ├── prisma.module.ts
-│   │   └── prisma.service.ts
-│   └── swagger/
-│       └── swagger.confg.ts
-```
-
-
-##  CAMBIOS DE PROVIDER Y REPOSITORY PRISMA Y TYPEORM 
-
-```
-src/
-├── usuarios/
-│   ├── usuarios.controller.spec.ts
-│   ├── usuarios.controller.ts
-│   ├── usuarios.module.ts
-│   ├── usuarios.service.spec.ts
-│   └── usuarios.service.ts
-├── providers/
-│   ├── user-prisma.providers.ts
-│   └── user-providers.ts
-└── repository/
-    ├── user-repository.interface.ts
-    ├── prisma/
-    │   ├── user-respository.ts
-    │   └── user-transaction.ts
-    └── typeorm/
-        ├── user-respository.ts
-        └── user-transaction.ts
-```
-
-## GENENRAR EL PRISMA CLIENTE 
 ```bash
-npx prisma generate --generate client 
+# desarrollo
+$ npm run start
+
+# modo watch (observación)
+$ npm run start:dev
+
+# modo producción
+$ npm run start:prod
 ```
 
-## GENARAR ACTUALIZAR BASE DE DATOS CON EL ESQUEMA PRISMA 
+## Variables de Entorno
+
+Crea un archivo `.env` en el directorio raíz con las siguientes variables:
+
+### Configuración de JWT
 ```bash
+JWT_EXPIRES_IN='1h'
+REFRESH_EXPIRES_IN=1d
+JWT_SECRET='tu_secreto_jwt'
+REFRESH_SECRET='tu_secreto_refresh'
+```
+
+### Configuración de la Base de Datos
+```bash
+DATABASE_URL="sqlserver://SERVER;database=DBAConsulta;user=USUARIO;password=CONTRASEÑA"
+HOSTDB='localhost'
+USERDB='usuario'
+PASS='contraseña'
+DATABASE='nombre_bd'
+PORT=3001
+```
+
+### APIs Externas
+```bash
+RICKMORTY_URL='https://rickandmortyapi.com/api/characters'
+```
+
+## Base de Datos (Prisma)
+
+### Comandos Esenciales
+
+```bash
+# Actualizar esquema y subir cambios a la BD (sin migraciones)
 npx prisma db push
+
+# Generar el Cliente de Prisma
+npx prisma generate
+
+# Resetear la base de datos (elimina todos los datos y aplica el esquema)
+npx prisma migrate reset
+
+# Crear una nueva migración y aplicarla
+npx prisma migrate dev
 ```
 
-## AL GENERAR EL PRISMA CLIENTE SE CREA UNA CARPETA EN LA RAIZ DEL PROYECTO LLAMADA `node_modules/.prisma/client` CON LOS ARCHIVOS DE CONFIGURACION Y EL CLIENTE DE PRISMA
-EN CASO DE NO SE CREAR LA CARPETA O EL CLIENTE DE PRISMA ES PORQUE HAY UN ERROR EN EL ARCHIVO `schema.prisma` O EN LA CONFIGURACION DE PRISMA
+### Estructura y Configuración
 
+El esquema de Prisma se encuentra en `prisma/schema.prisma`.
+La configuración también está presente en `prisma.config.ts` en la raíz.
 
-## CAMBIAR EN PARA PRISMA 
-``` UBICACION DE LA INYECCION DE DEPENDENCIA EN EL SERVICE
-src/
-├── usuarios/
-│   └── usuarios.service.ts
-│   ├── usuarios.module.ts
-├── providers/
-│   ├── user-prisma.providers.ts
+Al generar el cliente, este se ubicará en `node_modules/.prisma/client`. Si no se crea, verifica si hay errores en `schema.prisma`.
 
- 
- ```
-## CAMBIAR EN PARA TYORMM
-``` UBICACION DE LA INYECCION DE DEPENDENCIA EN EL SERVICE 
- ```
- src/
-├── usuarios/
-│   └── usuarios.service.ts
-│   ├── usuarios.module.ts
-├── providers/
-│   └── user-providers.ts
- private readonly userTransactionRepository: IUsertransactionPrismarepository
+## Arquitectura del Proyecto
 
+### Configuración del Módulo Prisma
 
- @Module({
-  imports: [DatabaseModule,PrismaModule],
+Ubicado en `src/config/prisma/`:
+- `prisma.module.ts`
+- `prisma.service.ts`
+
+### Cambio de Repositorio y Proveedor
+
+El proyecto permite alternar entre repositorios de Prisma y TypeORM.
+
+#### Usando Prisma
+En `usuarios.module.ts`:
+```typescript
+@Module({
+  imports: [DatabaseModule, PrismaModule],
   controllers: [UsersController],
   providers: [UsuariosService, HeaderGuard, ...userPrismaProviders],
 })
+```
+En `usuarios.service.ts`:
+```typescript
+private readonly userTransactionRepository: IUsertransactionPrismarepository
+```
 
-  ```
-
-
-## PARA TYPEORM 
- ```
- private readonly userTransactionRepository: IUsertransactionrepository
-
-│   ├── usuarios.module.ts
- @Module({
-  imports: [DatabaseModule,PrismaModule],
+#### Usando TypeORM
+En `usuarios.module.ts`:
+```typescript
+@Module({
+  imports: [DatabaseModule, PrismaModule],
   controllers: [UsersController],
   providers: [UsuariosService, HeaderGuard, ...userProviders],
 })
-
+```
+En `usuarios.service.ts`:
+```typescript
+private readonly userTransactionRepository: IUsertransactionrepository
 ```
 
+## Documentación de la API
 
-El archivo `schema.prisma` contiene el esquema de todas las tablas de la base de datos.
+El proyecto utiliza Swagger para la documentación de la API.
 
-En la raiz del proyecto esta el archivo de configuracion basica de  prisma 
-prisma.config.ts
-
-## ESTRUCTURA BASE DEL PROYECTO 
-
-```
-src/
-├── app.controller.ts
-├── app.module.ts
-├── app.service.ts
-├── main.ts
-├── common/
-│   ├── decoradores/
-│   │   ├── order/
-│   │   │   ├── get-order.docs.ts
-│   │   │   ├── index.ts
-│   │   │   ├── post-order.docs.ts
-│   │   │   └── update-order.docs.ts
-│   │   └── usuario/
-│   │       ├── get-user.docs.ts
-│   │       ├── index.ts
-│   │       ├── post-user.docs.ts
-│   │       └── update-user.docs.ts
-│   ├── guard/
-│   │   └── header/
-│   │       ├── header-guard.spec.ts
-│   │       └── header-guard.ts
-│   ├── interceptor/
-│   │   └── request-interceptor/
-│   │       ├── request-interceptor.interceptor.spec.ts
-│   │       └── request-interceptor.interceptor.ts
-│   ├── middelaware/
-│   │   └── middelware-cors/
-│   │       ├── middelware-cors.middleware.spec.ts
-│   │       └── middelware-cors.middleware.ts
-│   └── types/
-│       └── type-orm.ts
-├── config/
-│   ├── database/
-│   │   ├── database.module.ts
-│   │   └── database.providers.ts
-│   ├── prisma/
-│   │   ├── prisma.module.ts
-│   │   └── prisma.service.ts
-│   └── swagger/
-│       └── swagger.confg.ts
-└── modules/
-    └── usuarios/
-        ├── usuarios.controller.spec.ts
-        ├── usuarios.controller.ts
-        ├── usuarios.module.ts
-        ├── usuarios.service.spec.ts
-        ├── usuarios.service.ts
-        ├── aplication/
-        ├── dto/
-        │   ├── order/
-        │   │   ├── create-order.dto.ts
-        │   │   ├── respose-order.dto.ts
-        │   │   └── update-order.dto.ts
-        │   └── user/
-        │       ├── create-user.dto.ts
-        │       ├── response-user.dto.ts
-        │       ├── update-user.dto.ts
-        │       └── user-order.dto.ts
-        ├── entities/
-        │   ├── order-entity.ts
-        │   └── user-entity.ts
-        ├── providers/
-        │   ├── user-prisma.providers.ts
-        │   └── user-providers.ts
-        └── repository/
-            ├── user-repository.interface.ts
-            ├── prisma/
-            │   ├── user-respository.ts
-            │   └── user-transaction.ts
-            └── typeorm/
-                ├── user-respository.ts
-                └── user-transaction.ts
-```
-
-
-## GENERAR ESQUEMA EN BASE A LA ULTIMA MIGRACION
-```bash
-npx prisma db push 
-```
-
-## RUTA SWAGGER 
- /docs
- /docs/v2
-
-## CLAVE AUTENTICACIÓN BASICA 
-USER: admin
-PASS: admin
-
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+- **URLs:** `/docs` o `/docs/v2`

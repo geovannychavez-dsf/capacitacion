@@ -1,7 +1,6 @@
 import { applyDecorators, UsePipes, ValidationPipe } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
-  ApiBasicAuth,
   ApiCreatedResponse,
   ApiOperation,
   ApiUnauthorizedResponse,
@@ -13,7 +12,6 @@ export function postOrderDocs() {
       summary: 'Crear Orden',
       description: 'Este endpoint se encarga de la creación de la orden.',
     }),
-    ApiBasicAuth(),
     ApiCreatedResponse({
       description: 'Orden creada correctamente',
       schema: {

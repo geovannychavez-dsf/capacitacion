@@ -21,7 +21,7 @@ export class CharactersService {
     constructor(
         private readonly config: ConfigService,
         private readonly httpService: HttpService,
-        @Inject(TOKENSORM.CHARACTER_SERVICE_REPOSITORY)
+        @Inject(TOKENSORM.CHARACTER_REPOSITORY)
         private readonly characterRepo: ICharactersInterface,
     ) { }
     async sync(): Promise<Characters[]> {
@@ -56,6 +56,7 @@ export class CharactersService {
 
             return charcater;
         } catch (error) {
+            console.log(error);
             if (error instanceof HttpException) {
                 throw error;
             }

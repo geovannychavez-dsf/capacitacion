@@ -6,6 +6,7 @@ import { RequestInterceptorInterceptor } from './common/interceptor/request-inte
 import { ConfigService } from '@nestjs/config';
 import { TOKENSENV } from './common/types/type-orm';
 import * as cookieParser from 'cookie-parser';
+import { HttpExceptionFilter } from './common/exception/http-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -19,6 +20,7 @@ async function bootstrap() {
       transform: true,
     }),
   );
+  app.useGlobalFilters(new HttpExceptionFilter());
   app.enableVersioning({ type: VersioningType.URI });
   swaggerConsfig({
     title: 'Documento practico Usuarios',

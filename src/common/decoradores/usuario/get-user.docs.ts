@@ -1,6 +1,6 @@
 import { applyDecorators, UsePipes, ValidationPipe } from '@nestjs/common';
 import {
-  ApiBasicAuth,
+  ApiBearerAuth,
   ApiInternalServerErrorResponse,
   ApiNotFoundResponse,
   ApiUnauthorizedResponse,
@@ -8,7 +8,7 @@ import {
 export function getUserDocs() {
   return applyDecorators(
     UsePipes(new ValidationPipe()),
-    ApiBasicAuth(),
+    ApiBearerAuth(),
     ApiUnauthorizedResponse({
       description: 'No tiene autorización',
       schema: {

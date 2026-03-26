@@ -10,7 +10,7 @@ export function loginTokenDecorator() {
         ApiExtraModels(ResponseAuthDto, RequestAuthDto),
         ApiSecurity('none'),
         ApiOperation({
-            summary: 'Login',
+            summary: 'Login users endpoint',
             description: 'Este endpoint realiza el login de un usuario',
         }),
         ApiBody({ type: RequestAuthDto }),
@@ -19,7 +19,7 @@ export function loginTokenDecorator() {
             schema: {
                 type: 'object',
                 properties: {
-                    token: { type: 'string', example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...' },
+                    token: { type: 'string', example: 'eyJhR5cCI6IkpXVCJ9...' },
                     refreshToken: { type: 'string', example: '1d' }
                 },
             }
@@ -30,7 +30,6 @@ export function loginTokenDecorator() {
                 example: {
                     statusCode: 401,
                     message: 'Credenciales incorrectas',
-                    error: 'Unauthorized',
                 },
             }
         }),
@@ -41,7 +40,6 @@ export function loginTokenDecorator() {
                 example: {
                     statusCode: 500,
                     message: 'Error interno del servidor',
-                    error: 'Internal Server Error',
                 },
             },
         }),

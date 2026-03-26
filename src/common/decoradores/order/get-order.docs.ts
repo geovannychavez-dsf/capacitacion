@@ -1,9 +1,8 @@
 import { applyDecorators, UsePipes, ValidationPipe } from '@nestjs/common';
-import { ApiBasicAuth, ApiNotFoundResponse, ApiUnauthorizedResponse } from '@nestjs/swagger';
+import { ApiNotFoundResponse, ApiUnauthorizedResponse } from '@nestjs/swagger';
 export function getOrderDocs() {
   return applyDecorators(
     UsePipes(new ValidationPipe()),
-    ApiBasicAuth(),
     ApiUnauthorizedResponse({
       description: 'No tiene autorización',
       schema: {

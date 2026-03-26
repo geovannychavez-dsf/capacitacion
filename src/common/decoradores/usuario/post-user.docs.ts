@@ -1,7 +1,7 @@
 import { applyDecorators, UsePipes, ValidationPipe } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
-  ApiBasicAuth,
+  ApiBearerAuth,
   ApiCreatedResponse,
   ApiInternalServerErrorResponse,
   ApiOperation,
@@ -14,7 +14,7 @@ export function postUserDocs() {
       summary: 'Crear Usuario',
       description: 'Este endpoint se encarga de la creación del usuario.',
     }),
-    ApiBasicAuth(),
+    ApiBearerAuth(),
     ApiCreatedResponse({
       description: 'Usuario creado correctamente',
       schema: {

@@ -1,0 +1,7 @@
+commit_msg=$(cat "$1")
+pattern="^(feat|fix|docs|style|refactor|test|chore)(\(.+\))?: .+"
+
+if [[ ! $commit_msg =~ $pattern ]]; then
+  echo " Error: El mensaje no sigue la convención (ej: feat: add login)"
+  exit 1
+fi

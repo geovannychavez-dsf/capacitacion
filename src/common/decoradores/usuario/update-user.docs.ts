@@ -1,7 +1,8 @@
 import { applyDecorators, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
-  ApiBasicAuth,
+
+  ApiBearerAuth,
   ApiBody,
   ApiInternalServerErrorResponse,
   ApiOkResponse,
@@ -15,12 +16,12 @@ import { CreateUserDto } from 'src/usuarios/dto/user/create-user.dto';
 export function updateUserDocs() {
   return applyDecorators(
     UseGuards(HeaderGuard),
+    ApiBearerAuth(),
     ApiOperation({
       summary: 'Actualiza Usuario',
       description: 'Este endpoint Actualiza un usuario en especifico por id.',
     }),
     UsePipes(new ValidationPipe()),
-    ApiBasicAuth(),
     ApiParam({
       name: 'id',
       type: String,
