@@ -31,8 +31,8 @@ export class UserRepository implements IUserrepository {
     return await this.prisma.user.findMany({
       where: {
         OR: [
-          { name: { contains: name } },
-          { email: { contains: email } },
+          { name: { equals: name } },
+          { email: { equals: email } },
         ],
       },
     }) as unknown as User[];

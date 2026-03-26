@@ -6,7 +6,7 @@ import tseslint from 'typescript-eslint';
 
 export default tseslint.config(
   {
-    ignores: ['eslint.config.mjs'],
+    ignores: ['eslint.config.mjs', 'dist', 'node_modules', 'prisma', 'src/migrations'],
   },
   eslint.configs.recommended,
   ...tseslint.configs.recommendedTypeChecked,
@@ -25,39 +25,25 @@ export default tseslint.config(
     },
     rules: {
       '@typescript-eslint/no-unsafe-return': 'error',
-      '@typescript-eslint/no-unsafe-call': 'error', // Asegúrate de que esta regla esté habilitada
+      '@typescript-eslint/no-unsafe-call': 'error', 
       '@typescript-eslint/naming-convention': [
-        'warn',
-        // 1. PascalCase: Clases, interfaces, tipos (typeLike)
+        'error',
         {
           selector: 'typeLike',
           format: ['PascalCase'],
         },
-        // 2. camelCase: Funciones y Métodos
         {
           selector: ['function', 'method'],
           format: ['camelCase'],
         },
-        // 3. UPPER_CASE: Constantes (variables con modificador 'const')
         {
           selector: 'variable',
           modifiers: ['const'],
-          format: ['UPPER_CASE'],
+          format: ['camelCase', 'UPPER_CASE'],
         },
-        // 4. UPPER_CASE: Enums y sus miembros
         {
           selector: ['enum', 'enumMember'],
           format: ['UPPER_CASE'],
-        },
-        // 5. camelCase: Variables (que no sean constantes)
-        {
-          selector: 'variable',
-          format: ['camelCase'],
-          // Excluimos las que ya capturamos como constantes arriba
-          filter: {
-            regex: '^[A-Z_]+$',
-            match: false,
-          },
         },
       ],
     },

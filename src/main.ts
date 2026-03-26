@@ -12,14 +12,13 @@ async function bootstrap() {
   app.setGlobalPrefix('api/v1');
   app.useGlobalInterceptors(new RequestInterceptorInterceptor());
   app.useGlobalGuards(new HeaderGuard());
-  app.useGlobalPipes(new ValidationPipe({
-    whitelist: true,
-    transform: true
-  }));
-  app.enableVersioning({
-    type: VersioningType.URI,
-    defaultVersion: '1',
-  });
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      transform: true,
+    }),
+  );
+  app.enableVersioning({ type: VersioningType.URI });
   swaggerConsfig({
     title: 'Documento practico Usuarios',
     description: 'API practica de Usuarios',

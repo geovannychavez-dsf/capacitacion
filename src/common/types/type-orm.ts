@@ -19,7 +19,14 @@ export const USERNAME_ADMIN = 'admin';
 export const PASSWORD_ADMIN = 'admin';
 
 export const JWT_CONFIG = {
-  SECRET: process.env.JWT_SECRET,
-  EXPIRE: process.env.JWT_EXPIRES_IN,
+  SECRET: 'JWT_SECRET',
+  EXPIRE: 'JWT_EXPIRES_IN',
+  REFRESH_SECRET: 'JWT_REFRESH_SECRET',
+  REFRESH_EXPIRES_IN: 'REFRESH_EXPIRES_IN',
+  REFRESH_NAME: 'refreshToken',
 };
+export const ONE_SECOND = 1000;
+export const ONE_MINUTE = 60 * ONE_SECOND;
+export const ONE_HOUR = 60 * ONE_MINUTE;
+export const ONE_DAY = 24 * ONE_HOUR;
 export type PrismaTransactionManager = Omit<PrismaClient, '$connect' | '$disconnect' | '$on' | '$use' | '$extends' | '$transaction'>;
