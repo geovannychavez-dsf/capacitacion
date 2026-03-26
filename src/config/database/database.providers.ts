@@ -3,6 +3,7 @@ import { User } from 'src/usuarios/entities/user-entity';
 import { DataSource } from 'typeorm';
 import { ConfigService } from '@nestjs/config';
 import { TOKENSENV } from 'src/common/types/type-orm';
+import { Characters } from 'src/modules/characters/entity/characters';
 export const databaseProviders = [
   {
     provide: 'DATA_SOURCE',
@@ -20,7 +21,7 @@ export const databaseProviders = [
           encrypt: false,
           trustServerCertificate: true,
         },
-        entities: [User, Order],
+        entities: [User, Order, Characters],
         migrations: ['dist/migrations/*{.ts,.js}'],
         subscribers: [],
       });

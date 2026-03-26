@@ -8,6 +8,7 @@ import { CharactersModule } from './modules/characters/characters.module';
   imports: [
     ConfigModule.forRoot({ envFilePath: '.env', isGlobal: true }),
     UsuariosModule,
+    CharactersModule,
     AuthModule,
     CharactersModule,
   ],

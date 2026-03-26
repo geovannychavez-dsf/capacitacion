@@ -11,6 +11,12 @@ export function swaggerConsfig({ title, description, version, app }: ISwaggerCon
     .setTitle(title)
     .setDescription(description)
     .setVersion(version)
+    .addBearerAuth({
+      type: 'http',
+      scheme: 'bearer',
+      bearerFormat: 'JWT',
+      description: 'Ingresa tu token JWT',
+    })
     .build();
   const documentFactory = () => SwaggerModule.createDocument(app, config);
   return SwaggerModule.setup('docs', app, documentFactory);

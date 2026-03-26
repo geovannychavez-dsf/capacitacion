@@ -39,11 +39,13 @@ model Order {
 }
 
 model Characters {
-  id         Int        @id @default(autoincrement())
-  name       String  @unique
-  status     String
-  species    String
-  type       String?
-  gender     String
-  image      String
-  }
+  id        Int       @id @default(autoincrement())
+  name      String    @unique
+  status    String
+  species   String
+  type      String?
+  gender    String
+  image     String
+  createdAt DateTime?  @default(now())
+  updatedAt DateTime? @default(now()) @updatedAt()
+}

@@ -8,19 +8,20 @@ export class GuardGuardJWT implements CanActivate {
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest<Request>();
-
     const token = this.extractTokenFromHeader(request);
 
-    if (token) {
-      try {
-        const userVerification = await this.jwtService.verifyAsync<Record<string, unknown>>(token);
-        request['user'] = userVerification;
-      } catch {
-        throw new UnauthorizedException('Credenciales incorrectas');
-      }
+    if (!token) {
+      throw new UnauthorizedException('Credenciales incorrectas');
     }
-    throw new UnauthorizedException('Credenciales incorrectas');
+    try {
+      await this.jwtService.verifyAsync<Record<string, unknown>>(token);
+
+      return true;
+    } catch {
+      throw new UnauthorizedException('Credenciales incorrectas');
+    }
   }
+
   private extractTokenFromHeader(request: Request): string | undefined {
     const [type, token] = request.headers.authorization?.split(' ') ?? [];
     return type === 'Bearer' ? token : undefined;
