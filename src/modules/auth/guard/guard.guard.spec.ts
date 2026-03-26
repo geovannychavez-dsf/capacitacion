@@ -1,7 +1,7 @@
-import { GuardGuard } from './guard.guard';
+import { GuardGuardJWT } from './guard.guard';
 
 describe('GuardGuard', () => {
   it('should be defined', () => {
-    expect(new GuardGuard()).toBeDefined();
+    expect(new GuardGuardJWT()).toBeDefined();
   });
 });

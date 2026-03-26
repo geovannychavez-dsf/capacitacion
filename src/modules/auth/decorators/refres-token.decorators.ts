@@ -1,19 +1,13 @@
-import { applyDecorators, UsePipes, ValidationPipe } from '@nestjs/common';
-import { ApiBody, ApiExtraModels, ApiInternalServerErrorResponse, ApiOkResponse, ApiOperation, ApiSecurity, ApiUnauthorizedResponse } from '@nestjs/swagger';
-import { ResponseAuthDto } from '../dtos/response-auth.dto';
-import { RequestAuthDto } from '../dtos/request-auth.dto';
+import { applyDecorators, UsePipes, ValidationPipe } from "@nestjs/common";
+import { ApiCookieAuth, ApiInternalServerErrorResponse, ApiOkResponse, ApiOperation, ApiResponse, ApiUnauthorizedResponse } from "@nestjs/swagger";
+import { JWT_CONFIG } from "src/common/types/type-orm";
 
-
-export function postSwaggerDocs() {
+export function refresTokenDecorator() {
     return applyDecorators(
         UsePipes(new ValidationPipe()),
-        ApiExtraModels(ResponseAuthDto, RequestAuthDto),
-        ApiSecurity('none'),
-        ApiOperation({
-            summary: 'Login',
-            description: 'Este endpoint realiza el login de un usuario',
-        }),
-        ApiBody({ type: RequestAuthDto }),
+        ApiOperation({ summary: 'Refresca el access token usando el refresh token en cookie' }),
+        ApiResponse({ status: 200, description: 'Devuelve un nuevo access token' }),
+        ApiCookieAuth(JWT_CONFIG.REFRESH_NAME),
         ApiOkResponse({
             description: 'Login exitoso',
             schema: {

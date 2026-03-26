@@ -3,15 +3,16 @@ import { AppModule } from './app.module';
 import { ValidationPipe, VersioningType } from '@nestjs/common';
 import { swaggerConsfig } from './config/swagger/swagger.confg';
 import { RequestInterceptorInterceptor } from './common/interceptor/request-interceptor/request-interceptor.interceptor';
-
 import { ConfigService } from '@nestjs/config';
 import { TOKENSENV } from './common/types/type-orm';
+import * as cookieParser from 'cookie-parser';
+
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const config = app.get(ConfigService);
   app.setGlobalPrefix('api/v1');
   app.useGlobalInterceptors(new RequestInterceptorInterceptor());
-
+  app.use(cookieParser());
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
