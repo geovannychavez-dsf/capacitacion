@@ -18,7 +18,7 @@ export const TOKENSENV = {
   PORT: 'PORT',
 };
 export const USERNAME_ADMIN = 'admin';
-export const PASSWORD_ADMIN = 'admin';
+export const PASSWORD_ADMIN = USERNAME_ADMIN;
 
 export const JWT_CONFIG = {
   SECRET: 'JWT_SECRET',

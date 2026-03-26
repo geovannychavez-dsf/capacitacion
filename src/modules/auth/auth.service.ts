@@ -17,7 +17,7 @@ export class AuthService {
   constructor(
     @Inject(TOKENSORM.USER_SERVICE_REPOSITORY)
     private readonly userRepository: IUserrepository,
-    private jwtService: JwtService,
+    private readonly jwtService: JwtService,
     private readonly config: ConfigService,
   ) { }
 
@@ -49,7 +49,7 @@ export class AuthService {
         secret: this.config.get(JWT_CONFIG.REFRESH_SECRET),
       });
       if (verifyrefreshtoken)
-        return { token: await this.jwtService.signAsync(verifyrefreshtoken), refreshToken: token };
+        return { token: await this.jwtService.signAsync({ email: verifyrefreshtoken.email, usuario: verifyrefreshtoken.usuario }), refreshToken: token };
 
       throw new UnauthorizedException('Credenciales incorrectas');
     } catch (error: unknown) {

@@ -2,46 +2,41 @@ import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards } from '@nes
 import { CharactersService } from './characters.service';
 import { ApiBearerAuth, ApiResponse } from '@nestjs/swagger';
 import { GuardGuardJWT } from '../auth/guard/guard.guard';
-import { ResponseCharactersDto } from './dtos/response-characters.dto';
+import { ResponseCharactersDto } from './dtos';
+import { postCharcterDecorator, putCharacterDecorator } from './decorator';
 
 @Controller('characters')
 @UseGuards(GuardGuardJWT)
 export class CharactersController {
     constructor(private readonly charactersService: CharactersService) { }
 
-
-    @Get('sync')
     @ApiBearerAuth()
     @ApiResponse({ status: 200, description: 'Return all characters' })
     @Get('sync')
-    getAllCharacters() {
-        return this.charactersService.sync();
+    async getAllCharacters(): Promise<ResponseCharactersDto[]> {
+        return await this.charactersService.sync();
     }
-
-
     @Post()
-    @ApiBearerAuth()
-    @ApiResponse({ status: 200, description: 'Create one character' })
-    create(@Body() character: Partial<ResponseCharactersDto>) {
-        return this.charactersService.createCharacter(character);
+    @postCharcterDecorator()
+    async create(@Body() character: Partial<ResponseCharactersDto>): Promise<ResponseCharactersDto> {
+        return await this.charactersService.createCharacter(character);
     }
     @Get()
     @ApiBearerAuth()
     @ApiResponse({ status: 200, description: 'Return all characters' })
-    findAll() {
-        return this.charactersService.findAllCharacters();
+    async findAll(): Promise<ResponseCharactersDto[]> {
+        return await this.charactersService.findAllCharacters();
     }
 
     @Get(':id')
     @ApiBearerAuth()
     @ApiResponse({ status: 200, description: 'Return one character' })
-    findOne(@Param('id') id: number) {
-        return this.charactersService.findByIdCharacter(id);
+    async findOne(@Param('id') id: number): Promise<ResponseCharactersDto> {
+        return await this.charactersService.findByIdCharacter(id);
     }
 
     @Put(':id')
-    @ApiBearerAuth()
-    @ApiResponse({ status: 200, description: 'Update one character' })
+    @putCharacterDecorator()
     update(@Param('id') id: number, @Body() character: Partial<ResponseCharactersDto>) {
         return this.charactersService.updateCharacter(id, character);
     }
@@ -50,8 +45,8 @@ export class CharactersController {
     @Delete(':id')
     @ApiBearerAuth()
     @ApiResponse({ status: 200, description: 'Delete one character' })
-    delete(@Param('id') id: number) {
-        return this.charactersService.deleteCharacter(id);
+    async delete(@Param('id') id: number): Promise<ResponseCharactersDto[]> {
+        return await this.charactersService.deleteCharacter(id);
     }
 
 }

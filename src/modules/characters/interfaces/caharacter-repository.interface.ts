@@ -1,7 +1,7 @@
 import { Characters } from "../entity/characters";
 
 
-export interface ICharactersInterface {
+export interface CharactersInterface {
     findAllCharacters(): Promise<Characters[]>;
 
     findByNameCharacter(name: string): Promise<Characters>;

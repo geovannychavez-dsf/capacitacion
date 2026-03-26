@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Res } from '@nestjs/common';
+import { Body, Controller, Post, Req, Res } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { ResponseAuthDto } from './dtos/response-auth.dto';
 import { RequestAuthDto } from './dtos/request-auth.dto';
@@ -20,8 +20,6 @@ export class AuthController {
     @loginTokenDecorator()
     @Post('login')
     async login(@Body() { email, password }: RequestAuthDto, @Res({ passthrough: true }) res: Response): Promise<ResponseAuthDto> {
-
-
         const { token, refreshToken } = await this.authService.validateUser(email, password);
         res.cookie(JWT_CONFIG.REFRESH_NAME, refreshToken, {
             httpOnly: true,
@@ -32,9 +30,8 @@ export class AuthController {
     }
     @refresTokenDecorator()
     @Post('refresh')
-    async refreshToken(@Res({ passthrough: true }) req: Request): Promise<ResponseAuthDto> {
-        console.log(req.cookies);
-        const refreshToken = (req.cookies as CookieMap)[JWT_CONFIG.REFRESH_NAME]
+    async refreshToken(@Req() request: Request): Promise<ResponseAuthDto> {
+        const refreshToken = (request.cookies as CookieMap)[JWT_CONFIG.REFRESH_NAME]
         return await this.authService.refreshToken(refreshToken);
     }
 }

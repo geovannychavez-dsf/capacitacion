@@ -9,12 +9,13 @@ import {
 } from '@nestjs/common';
 import { firstValueFrom } from 'rxjs';
 import {
-    ICharactersInterface,
+    CharactersInterface,
     RickAndMortyResponse,
 } from './interfaces/caharacter-repository.interface';
 import { JWT_CONFIG, TOKENSORM } from 'src/common/types/type-orm';
 import { ConfigService } from '@nestjs/config';
 import { Characters } from './entity/characters';
+import { ResponseCharactersDto } from './dtos';
 
 @Injectable()
 export class CharactersService {
@@ -22,9 +23,9 @@ export class CharactersService {
         private readonly config: ConfigService,
         private readonly httpService: HttpService,
         @Inject(TOKENSORM.CHARACTER_REPOSITORY)
-        private readonly characterRepo: ICharactersInterface,
+        private readonly characterRepo: CharactersInterface,
     ) { }
-    async sync(): Promise<Characters[]> {
+    async sync(): Promise<ResponseCharactersDto[]> {
         try {
             const { data } = await firstValueFrom(
                 this.httpService.get<RickAndMortyResponse>(this.config.get(JWT_CONFIG.RICKMORTY_URL)),
@@ -50,20 +51,19 @@ export class CharactersService {
             throw new InternalServerErrorException('Hubo un error por favor intente mas tarde');
         }
     }
-    async findAllCharacters(): Promise<Characters[]> {
+    async findAllCharacters(): Promise<ResponseCharactersDto[]> {
         try {
             const charcater = await this.characterRepo.findAllCharacters();
 
             return charcater;
         } catch (error) {
-            console.log(error);
             if (error instanceof HttpException) {
                 throw error;
             }
             throw new InternalServerErrorException('Hubo un error por favor intente mas tarde');
         }
     }
-    async findByIdCharacter(id: number): Promise<Characters> {
+    async findByIdCharacter(id: number): Promise<ResponseCharactersDto> {
         try {
             const character = await this.characterRepo.findByIdCharacter(id);
             return character;
@@ -74,7 +74,7 @@ export class CharactersService {
             throw new InternalServerErrorException('Hubo un error por favor intente mas tarde');
         }
     }
-    async deleteCharacter(id: number): Promise<Characters[]> {
+    async deleteCharacter(id: number): Promise<ResponseCharactersDto[]> {
         try {
             const character = await this.characterRepo.findByIdCharacter(id);
             if (!character) throw new NotFoundException('Personaje no encontrado');
@@ -86,7 +86,7 @@ export class CharactersService {
             throw new InternalServerErrorException('Hubo un error por favor intente mas tarde');
         }
     }
-    async updateCharacter(id: number, character: Partial<Characters>): Promise<Characters> {
+    async updateCharacter(id: number, character: Partial<Characters>): Promise<ResponseCharactersDto> {
         try {
             const characterById = await this.characterRepo.findByIdCharacter(id);
             if (!characterById) throw new NotFoundException('Personaje no encontrado');
