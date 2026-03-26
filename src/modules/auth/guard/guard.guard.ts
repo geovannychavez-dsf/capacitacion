@@ -3,7 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
 
 @Injectable()
-export class GuardGuard implements CanActivate {
+export class GuardGuardJWT implements CanActivate {
   constructor(private jwtService: JwtService) { }
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -13,8 +13,8 @@ export class GuardGuard implements CanActivate {
 
     if (token) {
       try {
-        const payload = await this.jwtService.verifyAsync<Record<string, unknown>>(token);
-        request['user'] = payload;
+        const userVerification = await this.jwtService.verifyAsync<Record<string, unknown>>(token);
+        request['user'] = userVerification;
       } catch {
         throw new UnauthorizedException('Credenciales incorrectas');
       }

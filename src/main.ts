@@ -3,7 +3,7 @@ import { AppModule } from './app.module';
 import { ValidationPipe, VersioningType } from '@nestjs/common';
 import { swaggerConsfig } from './config/swagger/swagger.confg';
 import { RequestInterceptorInterceptor } from './common/interceptor/request-interceptor/request-interceptor.interceptor';
-import { HeaderGuard } from './common/guard/header/header-guard';
+
 import { ConfigService } from '@nestjs/config';
 import { TOKENSENV } from './common/types/type-orm';
 async function bootstrap() {
@@ -11,7 +11,7 @@ async function bootstrap() {
   const config = app.get(ConfigService);
   app.setGlobalPrefix('api/v1');
   app.useGlobalInterceptors(new RequestInterceptorInterceptor());
-  app.useGlobalGuards(new HeaderGuard());
+
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,

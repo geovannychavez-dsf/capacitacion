@@ -18,8 +18,9 @@ export class AuthController {
     ) { }
     @postSwaggerDocs()
     @Post('login')
-    async login(@Body() loginDto: RequestAuthDto, @Res({ passthrough: true }) res: Response): Promise<ResponseAuthDto> {
-        const { email, password } = loginDto;
+    async login(@Body() { email, password }: RequestAuthDto, @Res({ passthrough: true }) res: Response): Promise<ResponseAuthDto> {
+
+
         const { token, refreshToken } = await this.authService.validateUser(email, password);
         res.cookie(JWT_CONFIG.REFRESH_NAME, refreshToken, {
             httpOnly: true,

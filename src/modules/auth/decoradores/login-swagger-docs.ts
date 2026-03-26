@@ -1,5 +1,5 @@
 import { applyDecorators, UsePipes, ValidationPipe } from '@nestjs/common';
-import { ApiBody, ApiExtraModels, ApiInternalServerErrorResponse, ApiOkResponse, ApiOperation, ApiUnauthorizedResponse } from '@nestjs/swagger';
+import { ApiBody, ApiExtraModels, ApiInternalServerErrorResponse, ApiOkResponse, ApiOperation, ApiSecurity, ApiUnauthorizedResponse } from '@nestjs/swagger';
 import { ResponseAuthDto } from '../dtos/response-auth.dto';
 import { RequestAuthDto } from '../dtos/request-auth.dto';
 
@@ -8,6 +8,7 @@ export function postSwaggerDocs() {
     return applyDecorators(
         UsePipes(new ValidationPipe()),
         ApiExtraModels(ResponseAuthDto, RequestAuthDto),
+        ApiSecurity('none'),
         ApiOperation({
             summary: 'Login',
             description: 'Este endpoint realiza el login de un usuario',
