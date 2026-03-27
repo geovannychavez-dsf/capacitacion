@@ -12,8 +12,8 @@ export class UserRepository implements IUserrepository {
   constructor(
     private readonly userRepository: Repository<User>,
     private readonly orderRepository: Repository<Order>,
-    private readonly dataSource: DataSource
-  ) { }
+    private readonly dataSource: DataSource,
+  ) {}
   async execute<T>(work: () => Promise<T>): Promise<T> {
     return this.dataSource.transaction(async () => {
       return await work();

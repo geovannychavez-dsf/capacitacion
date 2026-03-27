@@ -2,7 +2,6 @@ import { Controller, Get, Post, Body, Put, Param, ParseIntPipe, UseGuards } from
 import { CreateUserDto } from './dto/user/create-user.dto';
 import { UpdateUserDto } from './dto/user/update-user.dto';
 import {
-
   ApiBody,
   ApiOkResponse,
   ApiOperation,
@@ -22,9 +21,9 @@ import { GuardGuardJWT } from 'src/modules/auth/guard/guard.guard';
 @Controller({
   path: 'usuario',
 })
-  @UseGuards(GuardGuardJWT)
+@UseGuards(GuardGuardJWT)
 export class UsersController {
-  constructor(private readonly userService: UsuariosService) { }
+  constructor(private readonly userService: UsuariosService) {}
   @postUserDocs()
   @Post()
   async createUser(@Body() CreateUserDto: CreateUserDto): Promise<boolean> {

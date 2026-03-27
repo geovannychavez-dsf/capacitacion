@@ -7,7 +7,7 @@ import { TOKENSENV } from 'src/common/types/type-orm';
 @Injectable()
 export class PrismaService implements OnModuleInit {
   private client: PrismaClient;
-  constructor(private readonly config: ConfigService) { }
+  constructor(private readonly config: ConfigService) {}
   async onModuleInit(): Promise<void> {
     const adapter = new PrismaMssql({
       server: this.config.get(TOKENSENV.HOSTDB),
@@ -24,11 +24,24 @@ export class PrismaService implements OnModuleInit {
     await this.client.$connect();
   }
 
-  get user() { return this.client.user; }
-  get order() { return this.client.order; }
-  get perfil() { return this.client.perfil; }
+  get user() {
+    return this.client.user;
+  }
+  get order() {
+    return this.client.order;
+  }
+  get perfil() {
+    return this.client.perfil;
+  }
 
-  $transaction<T>(fn: (prisma: Omit<PrismaClient, '$transaction' | '$connect' | '$disconnect' | '$on' | '$use' | '$extends'>) => Promise<T>): Promise<T> {
+  $transaction<T>(
+    fn: (
+      prisma: Omit<
+        PrismaClient,
+        '$transaction' | '$connect' | '$disconnect' | '$on' | '$use' | '$extends'
+      >,
+    ) => Promise<T>,
+  ): Promise<T> {
     return this.client.$transaction(fn);
   }
 }

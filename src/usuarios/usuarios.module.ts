@@ -16,12 +16,14 @@ import { GuardGuardJWT } from 'src/modules/auth/guard/guard.guard';
       inject: [ConfigService],
       useFactory: (config: ConfigService) => ({
         secret: config.get(JWT_CONFIG.SECRET),
-        signOptions: { expiresIn: config.get(JWT_CONFIG.EXPIRE,) },
-      })
+        signOptions: { expiresIn: config.get(JWT_CONFIG.EXPIRE) },
+      }),
     }),
-    DatabaseModule, PrismaModule],
+    DatabaseModule,
+    PrismaModule,
+  ],
   controllers: [UsersController],
   providers: [UsuariosService, HeaderGuard, GuardGuardJWT, ...userPrismaProviders],
   exports: [GuardGuardJWT],
 })
-export class UsuariosModule { }
+export class UsuariosModule {}

@@ -10,15 +10,19 @@ import { ConfigService } from '@nestjs/config';
 import { JWT_CONFIG } from 'src/common/types/type-orm';
 
 @Module({
-  imports: [JwtModule.registerAsync({
-    inject: [ConfigService],
-    useFactory: (config: ConfigService) => ({
-      secret: config.get(JWT_CONFIG.SECRET),
-      signOptions: { expiresIn: config.get(JWT_CONFIG.EXPIRE,) },
-    })
-  }), DatabaseModule, HttpModule],
+  imports: [
+    JwtModule.registerAsync({
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => ({
+        secret: config.get(JWT_CONFIG.SECRET),
+        signOptions: { expiresIn: config.get(JWT_CONFIG.EXPIRE) },
+      }),
+    }),
+    DatabaseModule,
+    HttpModule,
+  ],
   providers: [CharactersService, GuardGuardJWT, ...characterProviders],
   controllers: [CharactersController],
-  exports: [GuardGuardJWT]
+  exports: [GuardGuardJWT],
 })
-export class CharactersModule { }
+export class CharactersModule {}

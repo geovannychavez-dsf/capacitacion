@@ -8,37 +8,38 @@ import { PrismaService } from 'src/config/prisma/prisma.service';
 
 @Injectable()
 export class UserRepository implements IUserrepository {
-  constructor(private readonly prisma: PrismaService) { }
+  constructor(private readonly prisma: PrismaService) {}
 
   async findAllUsers(): Promise<User[]> {
-    return await this.prisma.user.findMany() as unknown as User[];
+    return (await this.prisma.user.findMany()) as unknown as User[];
   }
 
   async findByIdUser(id: number): Promise<User> {
-    return await this.prisma.user.findUnique({ where: { id } }) as unknown as Promise<User>;
+    return (await this.prisma.user.findUnique({ where: { id } })) as unknown as Promise<User>;
   }
 
   async createUser(user: CreateUserDto): Promise<User> {
-    return await this.prisma.user.create({ data: { ...user, birthdate: new Date(user.birthdate) } }) as User;
+    return (await this.prisma.user.create({
+      data: { ...user, birthdate: new Date(user.birthdate) },
+    })) as User;
   }
 
   async updateUser(id: number, user: UpdateUserDto): Promise<User> {
-    
-    return await this.prisma.user.update({ where: { id }, data: { ...user ,birthdate: new Date(user.birthdate) } }) as unknown as User;
+    return (await this.prisma.user.update({
+      where: { id },
+      data: { ...user, birthdate: new Date(user.birthdate) },
+    })) as unknown as User;
   }
 
   async findUserByEmailAndName({ name, email }: { name: string; email: string }): Promise<User[]> {
-    return await this.prisma.user.findMany({
+    return (await this.prisma.user.findMany({
       where: {
-        OR: [
-          { name: { equals: name } },
-          { email: { equals: email } },
-        ],
+        OR: [{ name: { equals: name } }, { email: { equals: email } }],
       },
-    }) as unknown as User[];
+    })) as unknown as User[];
   }
 
   async createOrder(user: CreateOrderDto): Promise<CreateOrderDto> {
-    return await this.prisma.order.create({ data: { ...user } }) as unknown as CreateOrderDto;
+    return (await this.prisma.order.create({ data: { ...user } })) as unknown as CreateOrderDto;
   }
 }

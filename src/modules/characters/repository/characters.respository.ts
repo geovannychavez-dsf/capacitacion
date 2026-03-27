@@ -6,7 +6,7 @@ import { DeepPartial, Repository } from 'typeorm';
 
 @Injectable()
 export class CharactersRepository implements CharactersInterface {
-  constructor(private readonly characterRepo: Repository<Characters>) { }
+  constructor(private readonly characterRepo: Repository<Characters>) {}
   async createCharacter(character: Partial<Characters>): Promise<Characters> {
     return await this.characterRepo.save(character);
   }
@@ -39,13 +39,16 @@ export class CharactersRepository implements CharactersInterface {
       image: character.image,
     }));
     const charactersToSave = charactersData.filter(
-      (character) => !charactersDatabase.some((charactersdb) => charactersdb.name === character.name),
+      (character) =>
+        !charactersDatabase.some((charactersdb) => charactersdb.name === character.name),
     );
     const savedCharacters = await this.characterRepo.save(charactersToSave);
     return [...charactersDatabase, ...savedCharacters];
   }
   async updateCharacter(id: number, character: Partial<Characters>): Promise<Characters> {
-    return await this.characterRepo.update({ id }, character).then(() => this.findByIdCharacter(id));
+    return await this.characterRepo
+      .update({ id }, character)
+      .then(() => this.findByIdCharacter(id));
   }
   async deleteCharacter(id: number): Promise<Characters[]> {
     return await this.characterRepo.delete({ id }).then(() => this.characterRepo.find());

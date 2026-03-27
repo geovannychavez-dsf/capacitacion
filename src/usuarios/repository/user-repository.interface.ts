@@ -18,7 +18,6 @@ export interface IUsertransactionrepository {
   execute<T>(work: (manager: EntityManager) => Promise<T>): Promise<T>;
 }
 
-
 export interface IUsertransactionPrismarepository {
   execute<T>(work: (manager: PrismaTransactionManager) => Promise<T>): Promise<T>;
 }

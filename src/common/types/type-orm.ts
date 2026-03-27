@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from '@prisma/client';
 
 export const TOKENSORM = {
   USER_TRANSACTION: 'USER_TRANSACTION',
@@ -32,4 +32,7 @@ export const ONE_SECOND = 1000;
 export const ONE_MINUTE = 60 * ONE_SECOND;
 export const ONE_HOUR = 60 * ONE_MINUTE;
 export const ONE_DAY = 24 * ONE_HOUR;
-export type PrismaTransactionManager = Omit<PrismaClient, '$connect' | '$disconnect' | '$on' | '$use' | '$extends' | '$transaction'>;
+export type PrismaTransactionManager = Omit<
+  PrismaClient,
+  '$connect' | '$disconnect' | '$on' | '$use' | '$extends' | '$transaction'
+>;

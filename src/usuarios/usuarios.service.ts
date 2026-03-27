@@ -1,10 +1,12 @@
-
 import { Inject, Injectable } from '@nestjs/common';
 import { UpdateUserDto } from './dto/user/update-user.dto';
 import { CreateUserDto } from './dto/user/create-user.dto';
 import { ResponseUserDto } from './dto/user/response-user.dto';
 import { User } from './entities/user-entity';
-import { IUserrepository, IUsertransactionPrismarepository } from './repository/user-repository.interface';
+import {
+  IUserrepository,
+  IUsertransactionPrismarepository,
+} from './repository/user-repository.interface';
 import { PrismaTransactionManager, TOKENSORM } from 'src/common/types/type-orm';
 import { CreateOrderDto } from './dto/order/create-order.dto';
 import { ResponseOrderDto } from './dto/order/respose-order.dto';
@@ -17,20 +19,27 @@ export class UsuariosService {
     @Inject(TOKENSORM.USER_SERVICE_REPOSITORY)
     private readonly userRepository: IUserrepository,
     @Inject(TOKENSORM.USER_TRANSACTION)
-    private readonly userTransactionRepository: IUsertransactionPrismarepository
-  ) { }
+    private readonly userTransactionRepository: IUsertransactionPrismarepository,
+  ) {}
   /**
    * Crear usuario
    * @param createLuneDto
    * @returns boolean
    */
   async createUser(userDto: CreateUserDto): Promise<boolean> {
-    const hasEmailandName = await this.userRepository.findUserByEmailAndName({ name: userDto.name, email: userDto.email });
+    const hasEmailandName = await this.userRepository.findUserByEmailAndName({
+      name: userDto.name,
+      email: userDto.email,
+    });
     const hasEmailandNameFlag = new Set(hasEmailandName);
-    if (hasEmailandNameFlag.size > 0) { return false; }
+    if (hasEmailandNameFlag.size > 0) {
+      return false;
+    }
     userDto.password = await bcrypt.hash(userDto.password, 10);
     const user = await this.userRepository.createUser(userDto);
-    if (user.id) { return true; }
+    if (user.id) {
+      return true;
+    }
     return false;
   }
   /**
@@ -44,7 +53,7 @@ export class UsuariosService {
   /**
    * Obtener usuario especifico
    * @param id identificador de usuario
-   * @returns { CreateUserDto } 
+   * @returns { CreateUserDto }
    */
   async findUser(id: number): Promise<ResponseUserDto> {
     return await this.userRepository.findByIdUser(id);
@@ -62,24 +71,27 @@ export class UsuariosService {
     const users = await this.userRepository.findUserByEmailAndName({ name, email });
     return this.adaptadorUser(users);
   }
-  async createUserWithOrder(userDto: CreateUserDto, orderDto: CreateOrderDto): Promise<ResponseOrderDto> {
-    return await this.userTransactionRepository.execute(async (manager: PrismaTransactionManager) => {
-      const user = await manager.user.create({ data: { ...userDto, birthdate: new Date(userDto.birthdate) } }) as unknown as User;
+  async createUserWithOrder(
+    userDto: CreateUserDto,
+    orderDto: CreateOrderDto,
+  ): Promise<ResponseOrderDto> {
+    return await this.userTransactionRepository.execute(
+      async (manager: PrismaTransactionManager) => {
+        const user = (await manager.user.create({
+          data: { ...userDto, birthdate: new Date(userDto.birthdate) },
+        })) as unknown as User;
 
-      if (user.id) {
-        const order = await manager.order.create({
-          data: {
-            ...orderDto,
-            authorId: user.id,
-          }
-        }) as unknown as Order;
-        return order;
-      }
-      throw new Error('Error al crear el usuario');
-
-
-
-    }
+        if (user.id) {
+          const order = (await manager.order.create({
+            data: {
+              ...orderDto,
+              authorId: user.id,
+            },
+          })) as unknown as Order;
+          return order;
+        }
+        throw new Error('Error al crear el usuario');
+      },
     );
   }
   private adaptadorUser(usuarios: User[]): ResponseUserDto[] {
@@ -91,7 +103,5 @@ export class UsuariosService {
       emailVerified: Boolean(user.emailVerified),
       estatus: user.estatus,
     }));
-
-
   }
 }

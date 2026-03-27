@@ -20,6 +20,11 @@ async function bootstrap() {
       transform: true,
     }),
   );
+    app.enableCors({
+    origin: '*',
+    methods: 'GET,POST,PUT,DELETE',
+    allowedHeaders: 'Content-Type',
+  });
   app.useGlobalFilters(new HttpExceptionFilter());
   app.enableVersioning({ type: VersioningType.URI });
   swaggerConsfig({

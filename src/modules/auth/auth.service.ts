@@ -19,7 +19,7 @@ export class AuthService {
     private readonly userRepository: IUserrepository,
     private readonly jwtService: JwtService,
     private readonly config: ConfigService,
-  ) { }
+  ) {}
 
   async validateUser(email: string, password: string): Promise<ResponseAuthDto> {
     try {
@@ -49,7 +49,13 @@ export class AuthService {
         secret: this.config.get(JWT_CONFIG.REFRESH_SECRET),
       });
       if (verifyrefreshtoken)
-        return { token: await this.jwtService.signAsync({ email: verifyrefreshtoken.email, usuario: verifyrefreshtoken.usuario }), refreshToken: token };
+        return {
+          token: await this.jwtService.signAsync({
+            email: verifyrefreshtoken.email,
+            usuario: verifyrefreshtoken.usuario,
+          }),
+          refreshToken: token,
+        };
 
       throw new UnauthorizedException('Credenciales incorrectas');
     } catch (error: unknown) {

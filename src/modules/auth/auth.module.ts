@@ -13,12 +13,12 @@ import { JWT_CONFIG } from 'src/common/types/type-orm';
       inject: [ConfigService],
       useFactory: (config: ConfigService) => ({
         secret: config.get(JWT_CONFIG.SECRET),
-        signOptions: { expiresIn: config.get(JWT_CONFIG.EXPIRE,) },
-      })
+        signOptions: { expiresIn: config.get(JWT_CONFIG.EXPIRE) },
+      }),
     }),
-    PrismaModule
+    PrismaModule,
   ],
   controllers: [AuthController],
   providers: [AuthService, ...userPrismaProviders],
 })
-export class AuthModule { }
+export class AuthModule {}

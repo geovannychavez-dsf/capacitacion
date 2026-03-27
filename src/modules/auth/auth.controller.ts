@@ -11,27 +11,31 @@ import { loginTokenDecorator, refresTokenDecorator } from './decorators';
 
 @ApiTags('auth')
 @Controller({
-    path: 'auth',
+  path: 'auth',
 })
 export class AuthController {
-    constructor(private readonly authService: AuthService,
-        private readonly config: ConfigService
-    ) { }
-    @loginTokenDecorator()
-    @Post('login')
-    async login(@Body() { email, password }: RequestAuthDto, @Res({ passthrough: true }) res: Response): Promise<ResponseAuthDto> {
-        const { token, refreshToken } = await this.authService.validateUser(email, password);
-        res.cookie(JWT_CONFIG.REFRESH_NAME, refreshToken, {
-            httpOnly: true,
-            sameSite: 'strict',
-            maxAge: ONE_DAY,
-        });
-        return { token, refreshToken: this.config.get(JWT_CONFIG.REFRESH_EXPIRES_IN,) };
-    }
-    @refresTokenDecorator()
-    @Post('refresh')
-    async refreshToken(@Req() request: Request): Promise<ResponseAuthDto> {
-        const refreshToken = (request.cookies as CookieMap)[JWT_CONFIG.REFRESH_NAME]
-        return await this.authService.refreshToken(refreshToken);
-    }
+  constructor(
+    private readonly authService: AuthService,
+    private readonly config: ConfigService,
+  ) {}
+  @loginTokenDecorator()
+  @Post('login')
+  async login(
+    @Body() { email, password }: RequestAuthDto,
+    @Res({ passthrough: true }) res: Response,
+  ): Promise<ResponseAuthDto> {
+    const { token, refreshToken } = await this.authService.validateUser(email, password);
+    res.cookie(JWT_CONFIG.REFRESH_NAME, refreshToken, {
+      httpOnly: true,
+      sameSite: 'strict',
+      maxAge: ONE_DAY,
+    });
+    return { token, refreshToken: this.config.get(JWT_CONFIG.REFRESH_EXPIRES_IN) };
+  }
+  @refresTokenDecorator()
+  @Post('refresh')
+  async refreshToken(@Req() request: Request): Promise<ResponseAuthDto> {
+    const refreshToken = (request.cookies as CookieMap)[JWT_CONFIG.REFRESH_NAME];
+    return await this.authService.refreshToken(refreshToken);
+  }
 }

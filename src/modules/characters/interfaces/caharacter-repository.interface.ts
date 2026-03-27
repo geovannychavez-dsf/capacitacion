@@ -1,15 +1,14 @@
-import { Characters } from "../entity/characters";
-
+import { Characters } from '../entity/characters';
 
 export interface CharactersInterface {
-    findAllCharacters(): Promise<Characters[]>;
+  findAllCharacters(): Promise<Characters[]>;
 
-    findByNameCharacter(name: string): Promise<Characters>;
-    findByIdCharacter(id: number): Promise<Characters>;
+  findByNameCharacter(name: string): Promise<Characters>;
+  findByIdCharacter(id: number): Promise<Characters>;
   createCharacter(character: Partial<Characters>): Promise<Characters>;
-    createManyCharacters(characters: Partial<Characters>[]): Promise<Characters[]>;
-    updateCharacter(id: number, character: Partial<Characters>): Promise<Characters>;
-    deleteCharacter(id: number): Promise<Characters[]>;
+  createManyCharacters(characters: Partial<Characters>[]): Promise<Characters[]>;
+  updateCharacter(id: number, character: Partial<Characters>): Promise<Characters>;
+  deleteCharacter(id: number): Promise<Characters[]>;
 }
 
 export interface Info {

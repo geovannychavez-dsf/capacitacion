@@ -3,7 +3,6 @@ import { IUsertransactionPrismarepository } from '../user-repository.interface';
 import { PrismaService } from 'src/config/prisma/prisma.service';
 import { PrismaTransactionManager } from 'src/common/types/type-orm';
 
-
 @Injectable()
 export class UserTransactionRepository implements IUsertransactionPrismarepository {
   constructor(private readonly prisma: PrismaService) {}
