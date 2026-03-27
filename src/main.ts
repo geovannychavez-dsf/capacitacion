@@ -20,25 +20,22 @@ async function bootstrap() {
       transform: true,
     }),
   );
-const allowedOrigins = new Set([
-  'http://localhost:3001',
-  'http://localhost:5173'
-]);
+  const allowedOrigins = new Set(['http://localhost:3001', 'http://localhost:5173']);
 
-const corsOptions: CorsOptions = {
-  origin: (origin: string, callback: (error: Error | null, allowed: boolean) => void) => {
-    if (!origin || allowedOrigins.has(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'), false);
-    }
-  },
-  methods: 'GET,POST,PUT,DELETE',
-  allowedHeaders: 'Content-Type,Authorization',
-  credentials: true,    
-};
+  const corsOptions: CorsOptions = {
+    origin: (origin: string, callback: (error: Error | null, allowed: boolean) => void) => {
+      if (!origin || allowedOrigins.has(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'), false);
+      }
+    },
+    methods: 'GET,POST,PUT,DELETE',
+    allowedHeaders: 'Content-Type,Authorization',
+    credentials: true,
+  };
 
-app.enableCors(corsOptions);
+  app.enableCors(corsOptions);
   app.useGlobalFilters(new HttpExceptionFilter());
   app.enableVersioning({ type: VersioningType.URI });
   swaggerConsfig({
