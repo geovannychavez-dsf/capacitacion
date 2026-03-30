@@ -26,8 +26,8 @@ export class UsersController {
   constructor(private readonly userService: UsuariosService) {}
   @postUserDocs()
   @Post()
-  async createUser(@Body() CreateUserDto: CreateUserDto): Promise<boolean> {
-    return await this.userService.createUser(CreateUserDto);
+  async createUser(@Body() createUserDto: CreateUserDto): Promise<boolean> {
+    return await this.userService.createUser(createUserDto);
   }
 
   @ApiOperation({

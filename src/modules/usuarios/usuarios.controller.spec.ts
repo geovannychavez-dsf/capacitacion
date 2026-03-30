@@ -1,8 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UsersController } from './usuarios.controller';
 import { UsuariosService } from './usuarios.service';
-import { HeaderGuard } from 'src/common/guard/header/header-guard';
 import { TOKENSORM } from 'src/common/types/type-orm';
+import { GuardGuardJWT } from 'src/modules/auth/guard/guard.guard';
 
 describe('UsersController', () => {
   let controller: UsersController;
@@ -24,7 +24,7 @@ describe('UsersController', () => {
         { provide: TOKENSORM.USER_TRANSACTION, useValue: mockTransactionRepo },
       ],
     })
-      .overrideGuard(HeaderGuard)
+      .overrideGuard(GuardGuardJWT)
       .useValue({ canActivate: jest.fn(() => true) })
       .compile();
 

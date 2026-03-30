@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { IUserrepository } from '../user-repository.interface';
-import { User } from 'src/usuarios/entities/user-entity';
-import { CreateUserDto } from 'src/usuarios/dto/user/create-user.dto';
-import { CreateOrderDto } from 'src/usuarios/dto/order/create-order.dto';
-import { UpdateUserDto } from 'src/usuarios/dto/user/update-user.dto';
+import { IUserrepository } from '../../interfaces/user-repository.interface';
 import { PrismaService } from 'src/config/prisma/prisma.service';
+import { User } from '../../entities/user-model.entity';
+import { CreateUserDto } from '../../dto/user/create-user.dto';
+import { UpdateUserDto } from '../../dto/user/update-user.dto';
+import { CreateOrderDto } from '../../dto/order/create-order.dto';
 
 @Injectable()
 export class UserRepository implements IUserrepository {

@@ -2,7 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe, VersioningType } from '@nestjs/common';
 import { swaggerConsfig } from './config/swagger/swagger.confg';
-import { RequestInterceptorInterceptor } from './common/interceptor/request-interceptor.interceptor';
+import { RequestInterceptorInterceptor } from './common/interceptors/request-interceptor.interceptor';
 import { ConfigService } from '@nestjs/config';
 import { TOKENSENV } from './common/types/type-orm';
 import * as cookieParser from 'cookie-parser';
@@ -20,7 +20,7 @@ async function bootstrap() {
       transform: true,
     }),
   );
-  const allowedOrigins = new Set(['http://localhost:3001', 'http://localhost:5173']);
+  const allowedOrigins = new Set(['http://localhost:3008', 'http://localhost:5173']);
 
   const corsOptions: CorsOptions = {
     origin: (origin: string, callback: (error: Error | null, allowed: boolean) => void) => {

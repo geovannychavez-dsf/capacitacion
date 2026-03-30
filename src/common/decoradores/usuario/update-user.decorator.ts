@@ -1,37 +1,38 @@
 import { applyDecorators, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
+  ApiBearerAuth,
   ApiBody,
+  ApiInternalServerErrorResponse,
   ApiOkResponse,
   ApiOperation,
   ApiParam,
   ApiUnauthorizedResponse,
   getSchemaPath,
 } from '@nestjs/swagger';
-import { HeaderGuard } from 'src/common/guard/header/header-guard';
-import { ResponseOrderDto } from 'src/usuarios/dto/order/respose-order.dto';
-import { CreateUserDto } from 'src/usuarios/dto/user/create-user.dto';
+import { HeaderGuard } from 'src/common/guard/header/authorication-header.guard';
+import { CreateUserDto } from 'src/modules/usuarios/dto/user/create-user.dto';
 export function updateUserDocs() {
   return applyDecorators(
     UseGuards(HeaderGuard),
+    ApiBearerAuth(),
     ApiOperation({
-      summary: 'Actualiza Orden',
-      description: 'Este endpoint Actualiza una orden en especifico por id.',
+      summary: 'Actualiza Usuario',
+      description: 'Este endpoint Actualiza un usuario en especifico por id.',
     }),
     UsePipes(new ValidationPipe()),
-
     ApiParam({
       name: 'id',
       type: String,
     }),
     ApiOkResponse({
-      description: 'Orden Actualizada correctamente',
+      description: 'Usuario Actualizado',
       schema: {
         type: 'object',
         properties: {
           status: { type: 'boolean', example: true },
           data: {
-            $ref: getSchemaPath(ResponseOrderDto),
+            $ref: getSchemaPath(CreateUserDto),
           },
           message: { type: 'string', example: 'Operacion exitosa' },
         },
@@ -46,7 +47,7 @@ export function updateUserDocs() {
           statusCode: { type: 'number', example: 400 },
           message: {
             type: 'array',
-            example: ['El formato de la descripción no es válido'],
+            example: ['El formato del correo electrónico no es válido'],
           },
           error: { type: 'string', example: 'Bad Request' },
         },
@@ -63,6 +64,16 @@ export function updateUserDocs() {
             example: 'Credenciales incorrectas',
           },
           error: { type: 'string', example: 'Unauthorized' },
+        },
+      },
+    }),
+    ApiInternalServerErrorResponse({
+      description: 'Error interno del servidor',
+      schema: {
+        example: {
+          statusCode: 500,
+          message: 'Error interno del servidor',
+          error: 'Internal Server Error',
         },
       },
     }),

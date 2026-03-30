@@ -2,15 +2,15 @@ import { Inject, Injectable } from '@nestjs/common';
 import { UpdateUserDto } from './dto/user/update-user.dto';
 import { CreateUserDto } from './dto/user/create-user.dto';
 import { ResponseUserDto } from './dto/user/response-user.dto';
-import { User } from './entities/user-entity';
+import { User } from './entities/user-model.entity';
 import {
   IUserrepository,
   IUsertransactionPrismarepository,
-} from './repository/user-repository.interface';
+} from './interfaces/user-repository.interface';
 import { PrismaTransactionManager, TOKENSORM } from 'src/common/types/type-orm';
 import { CreateOrderDto } from './dto/order/create-order.dto';
 import { ResponseOrderDto } from './dto/order/respose-order.dto';
-import { Order } from './entities/order-entity';
+import { Order } from './entities/order-model.entity';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()

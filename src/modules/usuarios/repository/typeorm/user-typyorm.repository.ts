@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import { IUserrepository } from '../user-repository.interface';
-import { User } from 'src/usuarios/entities/user-entity';
-import { CreateUserDto } from 'src/usuarios/dto/user/create-user.dto';
+import { IUserrepository } from '../../interfaces/user-repository.interface';
 import { Repository, DataSource } from 'typeorm';
-import { CreateOrderDto } from 'src/usuarios/dto/order/create-order.dto';
-import { Order } from 'src/usuarios/entities/order-entity';
-import { UpdateUserDto } from 'src/usuarios/dto/user/update-user.dto';
+import { User } from '../../entities/user-model.entity';
+import { Order } from '../../entities/order-model.entity';
+import { CreateOrderDto } from '../../dto/order/create-order.dto';
+import { CreateUserDto } from '../../dto/user/create-user.dto';
+import { UpdateUserDto } from '../../dto/user/update-user.dto';
 
 @Injectable()
 export class UserRepository implements IUserrepository {

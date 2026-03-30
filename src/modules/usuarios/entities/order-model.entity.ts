@@ -1,4 +1,3 @@
-import { User } from 'src/usuarios/entities/user-entity';
 import {
   Column,
   CreateDateColumn,
@@ -9,6 +8,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { User } from './user-model.entity';
 
 @Entity({ name: 'Order' })
 export class Order {

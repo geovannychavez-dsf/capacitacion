@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { IUsertransactionPrismarepository } from '../user-repository.interface';
+import { IUsertransactionPrismarepository } from '../../interfaces/user-repository.interface';
 import { PrismaService } from 'src/config/prisma/prisma.service';
 import { PrismaTransactionManager } from 'src/common/types/type-orm';
 

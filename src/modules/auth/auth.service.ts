@@ -6,11 +6,11 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { JWT_CONFIG, TOKENSORM } from 'src/common/types/type-orm';
-import { IUserrepository } from 'src/usuarios/repository/user-repository.interface';
 import { ResponseAuthDto } from './dtos/response-auth.dto';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
+import { IUserrepository } from '../usuarios/interfaces/user-repository.interface';
 
 @Injectable()
 export class AuthService {

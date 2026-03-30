@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { CharactersService } from './characters.service';
 import { CharactersController } from './characters.controller';
 import { HttpModule } from '@nestjs/axios';
-import { characterProviders } from './repository/providers/character.provider';
+import { characterProviders } from './providers/character-provider.provider';
 import { DatabaseModule } from 'src/config/database/database.module';
 import { GuardGuardJWT } from '../auth/guard/guard.guard';
 import { JwtModule } from '@nestjs/jwt';

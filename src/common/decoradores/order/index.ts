@@ -1,3 +1,3 @@
-export * from './get-order.docs';
-export * from './post-order.docs';
-export * from './update-order.docs';
+export * from './get-order.decorator';
+export * from './post-order.decorator';
+export * from './update-order.decorator';

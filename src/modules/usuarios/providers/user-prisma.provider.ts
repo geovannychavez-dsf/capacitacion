@@ -1,7 +1,7 @@
 import { TOKENSORM } from 'src/common/types/type-orm';
 import { PrismaService } from 'src/config/prisma/prisma.service';
-import { UserRepository } from '../repository/prisma/user-respository';
-import { UserTransactionRepository } from '../repository/prisma/user-transaction';
+import { UserRepository } from '../repository/prisma/user-prisma.repository';
+import { UserTransactionRepository } from '../repository/prisma/user-transaction.repository';
 
 export const userPrismaProviders = [
   {

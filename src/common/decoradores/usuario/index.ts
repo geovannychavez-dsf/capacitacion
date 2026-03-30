@@ -1,3 +1,3 @@
-export * from './get-user.docs';
-export * from './post-user.docs';
-export * from './update-user.docs';
+export * from './get-user.decorator';
+export * from './post-user.decorator';
+export * from './update-user.decorator';

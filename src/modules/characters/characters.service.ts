@@ -14,7 +14,7 @@ import {
 } from './interfaces/caharacter-repository.interface';
 import { JWT_CONFIG, TOKENSORM } from 'src/common/types/type-orm';
 import { ConfigService } from '@nestjs/config';
-import { Characters } from './entity/characters';
+import { Characters } from './entity/characters.entity';
 import { ResponseCharactersDto } from './dtos';
 
 @Injectable()
@@ -33,6 +33,7 @@ export class CharactersService {
       const characters = await this.characterRepo.createManyCharacters(data.results);
       return characters;
     } catch (error) {
+      console.log(error);
       if (error instanceof HttpException) {
         throw error;
       }

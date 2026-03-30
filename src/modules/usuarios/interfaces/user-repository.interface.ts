@@ -2,7 +2,7 @@ import { EntityManager } from 'typeorm';
 import { CreateOrderDto } from '../dto/order/create-order.dto';
 import { CreateUserDto } from '../dto/user/create-user.dto';
 import { UpdateUserDto } from '../dto/user/update-user.dto';
-import { User } from '../entities/user-entity';
+import { User } from '../entities/user-model.entity';
 
 import { PrismaTransactionManager } from 'src/common/types/type-orm';
 export interface IUserrepository {

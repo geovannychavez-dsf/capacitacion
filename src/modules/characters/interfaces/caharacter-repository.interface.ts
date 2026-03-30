@@ -1,4 +1,4 @@
-import { Characters } from '../entity/characters';
+import { Characters } from '../entity/characters.entity';
 
 export interface CharactersInterface {
   findAllCharacters(): Promise<Characters[]>;

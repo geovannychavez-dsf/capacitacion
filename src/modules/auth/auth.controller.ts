@@ -6,7 +6,7 @@ import { ApiTags } from '@nestjs/swagger';
 import { Response, Request } from 'express';
 import { JWT_CONFIG, ONE_DAY } from 'src/common/types/type-orm';
 import { ConfigService } from '@nestjs/config';
-import { CookieMap } from './interfaces/cookies-interfaces';
+import { CookieMap } from './interfaces/cookies-request.interface';
 import { loginTokenDecorator, refresTokenDecorator } from './decorators';
 
 @ApiTags('auth')

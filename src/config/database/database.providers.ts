@@ -1,9 +1,9 @@
-import { Order } from 'src/usuarios/entities/order-entity';
-import { User } from 'src/usuarios/entities/user-entity';
 import { DataSource } from 'typeorm';
 import { ConfigService } from '@nestjs/config';
 import { TOKENSENV } from 'src/common/types/type-orm';
-import { Characters } from 'src/modules/characters/entity/characters';
+import { Characters } from 'src/modules/characters/entity/characters.entity';
+import { User } from 'src/modules/usuarios/entities/user-model.entity';
+import { Order } from 'src/modules/usuarios/entities/order-model.entity';
 export const databaseProviders = [
   {
     provide: 'DATA_SOURCE',

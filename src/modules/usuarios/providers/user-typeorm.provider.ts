@@ -1,9 +1,9 @@
 import { DataSource, Repository } from 'typeorm';
 import { TOKENSORM } from 'src/common/types/type-orm';
-import { User } from '../entities/user-entity';
-import { Order } from '../entities/order-entity';
-import { UserRepository } from '../repository/typeorm/user-respository';
-import { UserTransactionRepository } from '../repository/typeorm/user-transaction';
+import { User } from '../entities/user-model.entity';
+import { Order } from '../entities/order-model.entity';
+import { UserRepository } from '../repository/typeorm/user-typyorm.repository';
+import { UserTransactionRepository } from '../repository/typeorm/user-transaction.repository';
 
 export const userProviders = [
   {
