@@ -14,8 +14,7 @@ import {
 } from './interfaces/caharacter-repository.interface';
 import { JWT_CONFIG, TOKENSORM } from 'src/common/types/type-orm';
 import { ConfigService } from '@nestjs/config';
-import { Characters } from './entity/characters.entity';
-import { ResponseCharactersDto } from './dtos';
+import { CreateCharactersDto, ResponseCharactersDto } from './dtos';
 
 @Injectable()
 export class CharactersService {
@@ -40,7 +39,7 @@ export class CharactersService {
       throw new InternalServerErrorException('Hubo un error por favor intente mas tarde');
     }
   }
-  async createCharacter(character: Partial<Characters>) {
+  async createCharacter(character: Partial<CreateCharactersDto>) {
     try {
       const characterName = await this.characterRepo.findByNameCharacter(character.name);
       if (characterName) throw new BadRequestException('Personaje con el mismo nombre ya existe');
@@ -89,7 +88,7 @@ export class CharactersService {
   }
   async updateCharacter(
     id: number,
-    character: Partial<Characters>,
+    character: Partial<CreateCharactersDto>,
   ): Promise<ResponseCharactersDto> {
     try {
       const characterById = await this.characterRepo.findByIdCharacter(id);
