@@ -2,7 +2,7 @@ import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards } from '@nes
 import { CharactersService } from './characters.service';
 import { ApiBearerAuth, ApiResponse } from '@nestjs/swagger';
 import { GuardGuardJWT } from '../auth/guard/guard.guard';
-import { ResponseCharactersDto } from './dtos';
+import { ResponseCharactersDto, UpdatCharactersDto } from './dtos';
 import { postCharcterDecorator, putCharacterDecorator } from './decorator';
 
 @Controller('characters')
@@ -37,7 +37,7 @@ export class CharactersController {
 
   @Put(':id')
   @putCharacterDecorator()
-  update(@Param('id') id: number, @Body() character: Partial<ResponseCharactersDto>) {
+  update(@Param('id') id: number, @Body() character: Partial<UpdatCharactersDto>) {
     return this.charactersService.updateCharacter(id, character);
   }
 
