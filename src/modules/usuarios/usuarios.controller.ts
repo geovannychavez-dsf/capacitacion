@@ -11,7 +11,7 @@ import {
 } from '@nestjs/swagger';
 import { UsuariosService } from './usuarios.service';
 import { ResponseUserDto } from './dto/user/response-user.dto';
-import { getUserDocs, postUserDocs, updateUserDocs } from 'src/common/decoradores/usuario';
+import { getUserDocs, postUserDocs, updateUserDocs } from 'src/common/decorators/usuario';
 import { CreateOrderDto } from './dto/order/create-order.dto';
 import { UserOrderDto } from './dto/user/user-order.dto';
 import { ResponseOrderDto } from './dto/order/respose-order.dto';
