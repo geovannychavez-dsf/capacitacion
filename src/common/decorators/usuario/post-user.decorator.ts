@@ -3,7 +3,7 @@ import {
   ApiBadRequestResponse,
   ApiBearerAuth,
   ApiCreatedResponse,
-  ApiOperation
+  ApiOperation,
 } from '@nestjs/swagger';
 export function postUserDocs() {
   return applyDecorators(
@@ -27,19 +27,19 @@ export function postUserDocs() {
         },
       },
     }),
-     ApiBadRequestResponse({
-          description: 'Error de validación en el cuerpo de la petición',
-          schema: {
-            type: 'object',
-            properties: {
-              statusCode: { type: 'number', example: 400 },
-              message: {
-                type: 'array',
-                example: ['El formato del correo electrónico no es válido'],
-              },
-              error: { type: 'string', example: 'Bad Request' },
-            },
+    ApiBadRequestResponse({
+      description: 'Error de validación en el cuerpo de la petición',
+      schema: {
+        type: 'object',
+        properties: {
+          statusCode: { type: 'number', example: 400 },
+          message: {
+            type: 'array',
+            example: ['El formato del correo electrónico no es válido'],
           },
-        }),
+          error: { type: 'string', example: 'Bad Request' },
+        },
+      },
+    }),
   );
 }

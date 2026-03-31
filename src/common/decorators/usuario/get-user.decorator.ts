@@ -1,8 +1,5 @@
 import { applyDecorators, UsePipes, ValidationPipe } from '@nestjs/common';
-import {
-  ApiBearerAuth,
-  ApiUnauthorizedResponse,
-} from '@nestjs/swagger';
+import { ApiBearerAuth, ApiUnauthorizedResponse } from '@nestjs/swagger';
 export function getUserDocs() {
   return applyDecorators(
     UsePipes(new ValidationPipe()),
@@ -20,6 +17,6 @@ export function getUserDocs() {
           error: { type: 'string', example: 'Unauthorized' },
         },
       },
-    })
+    }),
   );
 }

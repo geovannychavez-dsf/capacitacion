@@ -11,8 +11,11 @@ import { ResponseCharactersDto, UpdatCharactersDto } from '../dtos';
 
 export function putCharacterDecorator() {
   return applyDecorators(
-    UsePipes(new ValidationPipe()),       
-    ApiOperation({ summary: 'Actualiza un personaje', description: 'Este endpoint Actualiza un personaje en especifico por id.' }),
+    UsePipes(new ValidationPipe()),
+    ApiOperation({
+      summary: 'Actualiza un personaje',
+      description: 'Este endpoint Actualiza un personaje en especifico por id.',
+    }),
     ApiBearerAuth(),
     ApiBody({ type: UpdatCharactersDto }),
     ApiParam({ name: 'id', type: String }),

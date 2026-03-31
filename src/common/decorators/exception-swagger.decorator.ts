@@ -1,8 +1,8 @@
-import { applyDecorators } from "@nestjs/common";
-import {  ApiInternalServerErrorResponse, ApiUnauthorizedResponse } from "@nestjs/swagger";
+import { applyDecorators } from '@nestjs/common';
+import { ApiInternalServerErrorResponse, ApiUnauthorizedResponse } from '@nestjs/swagger';
 
 export function exceptionSwaggerDecorator() {
-    return applyDecorators(
+  return applyDecorators(
     ApiUnauthorizedResponse({
       description: 'No tiene autorización',
       schema: {
@@ -27,5 +27,5 @@ export function exceptionSwaggerDecorator() {
         },
       },
     }),
-    );
+  );
 }

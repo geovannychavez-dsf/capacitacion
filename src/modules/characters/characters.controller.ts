@@ -39,7 +39,10 @@ export class CharactersController {
 
   @Put(':id')
   @putCharacterDecorator()
-  async update(@Param('id') id: number, @Body() character: Partial<UpdatCharactersDto>) : Promise<ResponseCharactersDto> {
+  async update(
+    @Param('id') id: number,
+    @Body() character: Partial<UpdatCharactersDto>,
+  ): Promise<ResponseCharactersDto> {
     return await this.charactersService.updateCharacter(id, character);
   }
 
