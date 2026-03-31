@@ -4,11 +4,11 @@ import { UsuariosService } from './usuarios.service';
 import { HeaderGuard } from 'src/common/guard/header/authorication-header.guard';
 import { PrismaModule } from 'src/config/prisma/prisma.module';
 import { DatabaseModule } from 'src/config/database/database.module';
-import { userPrismaProviders } from './providers/user-prisma.provider';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { JWT_CONFIG } from 'src/common/types/type-orm';
 import { GuardGuardJWT } from 'src/modules/auth/guard/guard.guard';
+import { userProviders } from './providers/user-typeorm.provider';
 
 @Module({
   imports: [
@@ -23,7 +23,7 @@ import { GuardGuardJWT } from 'src/modules/auth/guard/guard.guard';
     PrismaModule,
   ],
   controllers: [UsersController],
-  providers: [UsuariosService, HeaderGuard, GuardGuardJWT, ...userPrismaProviders],
+  providers: [UsuariosService, HeaderGuard, GuardGuardJWT, ...userProviders],
   exports: [GuardGuardJWT],
 })
 export class UsuariosModule {}

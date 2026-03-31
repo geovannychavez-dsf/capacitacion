@@ -34,6 +34,15 @@ JWT_EXPIRES_IN='1h'
 REFRESH_EXPIRES_IN=1d
 JWT_SECRET='tu_secreto_jwt'
 REFRESH_SECRET='tu_secreto_refresh'
+
+```
+
+### Configuración cors y api externa
+```bash
+ALLOWED_ORIGINS='SWAGGER_URL,RONTENURL'
+ALLOWED_HEADER='Content-Type,Authorization,...'
+METHODS='GET,POST,....'
+RICKMORTY_URL='URl_/api/character'
 ```
 
 ### Configuración de la Base de Datos

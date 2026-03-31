@@ -3,23 +3,21 @@ import { UpdateUserDto } from './dto/user/update-user.dto';
 import { CreateUserDto } from './dto/user/create-user.dto';
 import { ResponseUserDto } from './dto/user/response-user.dto';
 import { User } from './entities/user-model.entity';
-import {
-  IUserrepository,
-  IUsertransactionPrismarepository,
-} from './interfaces/user-repository.interface';
-import { PrismaTransactionManager, TOKENSORM } from 'src/common/types/type-orm';
+import { Userrepository, Usertransactionrepository } from './interfaces/user-repository.interface';
+import { TOKENSORM } from 'src/common/types/type-orm';
 import { CreateOrderDto } from './dto/order/create-order.dto';
 import { ResponseOrderDto } from './dto/order/respose-order.dto';
 import { Order } from './entities/order-model.entity';
 import * as bcrypt from 'bcrypt';
+import { EntityManager } from 'typeorm';
 
 @Injectable()
 export class UsuariosService {
   constructor(
     @Inject(TOKENSORM.USER_SERVICE_REPOSITORY)
-    private readonly userRepository: IUserrepository,
+    private readonly userRepository: Userrepository,
     @Inject(TOKENSORM.USER_TRANSACTION)
-    private readonly userTransactionRepository: IUsertransactionPrismarepository,
+    private readonly userTransactionRepository: Usertransactionrepository,
   ) {}
   /**
    * Crear usuario
@@ -75,24 +73,14 @@ export class UsuariosService {
     userDto: CreateUserDto,
     orderDto: CreateOrderDto,
   ): Promise<ResponseOrderDto> {
-    return await this.userTransactionRepository.execute(
-      async (manager: PrismaTransactionManager) => {
-        const user = (await manager.user.create({
-          data: { ...userDto, birthdate: new Date(userDto.birthdate) },
-        })) as unknown as User;
-
-        if (user.id) {
-          const order = (await manager.order.create({
-            data: {
-              ...orderDto,
-              authorId: user.id,
-            },
-          })) as unknown as Order;
-          return order;
-        }
-        throw new Error('Error al crear el usuario');
+    const { order } = await this.userTransactionRepository.execute(
+      async (manager: EntityManager) => {
+        const user = await manager.save(User, userDto);
+        const order = await manager.save(Order, { user: user, ...orderDto });
+        return { order, user };
       },
     );
+    return order;
   }
   private adaptadorUser(usuarios: User[]): ResponseUserDto[] {
     return usuarios.map((user: User) => ({

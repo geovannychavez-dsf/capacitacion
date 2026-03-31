@@ -10,7 +10,6 @@ import { UsuariosModule } from './modules/usuarios/usuarios.module';
     UsuariosModule,
     CharactersModule,
     AuthModule,
-    CharactersModule,
   ],
 })
 export class AppModule {}

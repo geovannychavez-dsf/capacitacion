@@ -4,10 +4,11 @@ import { ValidationPipe, VersioningType } from '@nestjs/common';
 import { swaggerConsfig } from './config/swagger/swagger.confg';
 import { RequestInterceptorInterceptor } from './common/interceptors/request-interceptor.interceptor';
 import { ConfigService } from '@nestjs/config';
-import { TOKENSENV } from './common/types/type-orm';
+import { ENV } from './common/types/type-orm';
 import * as cookieParser from 'cookie-parser';
 import { HttpExceptionFilter } from './common/exception/http-exception.filter';
-import { CORS_CONFIG } from './config/cors/cors-config.config';
+import { corsOptions } from './config/cors/cors-config.config';
+import * as basicAuth from 'express-basic-auth';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const config = app.get(ConfigService);
@@ -20,8 +21,8 @@ async function bootstrap() {
       transform: true,
     }),
   );
-
-  app.enableCors(CORS_CONFIG);
+  
+  app.enableCors(corsOptions({ app }));
   app.useGlobalFilters(new HttpExceptionFilter());
   app.enableVersioning({ type: VersioningType.URI });
   swaggerConsfig({
@@ -30,7 +31,7 @@ async function bootstrap() {
     version: '1.0',
     app,
   });
-  const port = config.get<number>(TOKENSENV.PORT) ?? 3001;
+  const port = config.get<number>(ENV.PORT) ?? 3001;
   await app.listen(port);
 }
 void bootstrap();

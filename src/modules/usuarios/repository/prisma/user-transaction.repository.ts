@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { IUsertransactionPrismarepository } from '../../interfaces/user-repository.interface';
+import { UsertransactionPrismarepository } from '../../interfaces/user-repository.interface';
 import { PrismaService } from 'src/config/prisma/prisma.service';
 import { PrismaTransactionManager } from 'src/common/types/type-orm';
 
 @Injectable()
-export class UserTransactionRepository implements IUsertransactionPrismarepository {
+export class UserTransactionRepository implements UsertransactionPrismarepository {
   constructor(private readonly prisma: PrismaService) {}
 
   async execute<T>(work: (manager: PrismaTransactionManager) => Promise<T>): Promise<T> {

@@ -10,28 +10,24 @@ import { ResponseAuthDto } from './dtos/response-auth.dto';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-import { IUserrepository } from '../usuarios/interfaces/user-repository.interface';
+import { Userrepository } from '../usuarios/interfaces/user-repository.interface';
+import { ResponseUserDto } from '../usuarios/dto/user/response-user.dto';
 
 @Injectable()
 export class AuthService {
   constructor(
     @Inject(TOKENSORM.USER_SERVICE_REPOSITORY)
-    private readonly userRepository: IUserrepository,
+    private readonly userRepository: Userrepository,
     private readonly jwtService: JwtService,
     private readonly config: ConfigService,
   ) {}
 
-  async validateUser(email: string, password: string): Promise<ResponseAuthDto> {
+  async validateUser(email: string, password: string): Promise<ResponseUserDto> {
     try {
       const user = await this.userRepository.findUserByEmailAndName({ name: '', email });
-      if (user.length > 0) {
-        const { token, refreshToken } = await this.ganerateTokenandRefreshToken({
-          usuario: user[0].id,
-          email: user[0].email,
-          password,
-          passworcompare: user[0].password,
-        });
-        return { token, refreshToken };
+      if (user.length == 1) {
+        await bcrypt.compare(password, user[0].password);
+        return { ...user[0] };
       }
 
       throw new UnauthorizedException('Credenciales incorrectas');
@@ -41,6 +37,10 @@ export class AuthService {
       }
       throw new InternalServerErrorException('Hubo un error por favor intente mas tarde');
     }
+  }
+
+  async login({ email, id }: { email: string; id: number }): Promise<ResponseAuthDto> {
+    return await this.ganerateTokenandRefreshToken({ email, id });
   }
 
   async refreshToken(token: string): Promise<ResponseAuthDto> {
@@ -66,23 +66,17 @@ export class AuthService {
     }
   }
   private async ganerateTokenandRefreshToken(payloaduser: {
-    usuario: number;
+    id: number;
     email: string;
-    password: string;
-    passworcompare: string;
   }): Promise<ResponseAuthDto> {
-    const verificar = await bcrypt.compare(payloaduser.password, payloaduser.passworcompare);
-    if (verificar) {
-      const payload = { usuario: payloaduser.usuario, email: payloaduser.email };
-      const [token, refreshToken] = await Promise.all([
-        this.jwtService.signAsync(payload),
-        this.jwtService.signAsync(payload, {
-          secret: this.config.get(JWT_CONFIG.REFRESH_SECRET),
-          expiresIn: this.config.get(JWT_CONFIG.REFRESH_EXPIRES_IN),
-        }),
-      ]);
-      return { token, refreshToken };
-    }
-    throw new UnauthorizedException('Credenciales incorrectas');
+    const payload = { usuario: payloaduser.id, email: payloaduser.email };
+    const [token, refreshToken] = await Promise.all([
+      this.jwtService.signAsync(payload),
+      this.jwtService.signAsync(payload, {
+        secret: this.config.get(JWT_CONFIG.REFRESH_SECRET),
+        expiresIn: this.config.get(JWT_CONFIG.REFRESH_EXPIRES_IN),
+      }),
+    ]);
+    return { token, refreshToken };
   }
 }

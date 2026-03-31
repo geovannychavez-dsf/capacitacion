@@ -2,7 +2,7 @@ import { Injectable, OnModuleInit } from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
 import { PrismaMssql } from '@prisma/adapter-mssql';
 import { ConfigService } from '@nestjs/config';
-import { TOKENSENV } from 'src/common/types/type-orm';
+import { ENV } from 'src/common/types/type-orm';
 
 @Injectable()
 export class PrismaService implements OnModuleInit {
@@ -10,10 +10,10 @@ export class PrismaService implements OnModuleInit {
   constructor(private readonly config: ConfigService) {}
   async onModuleInit(): Promise<void> {
     const adapter = new PrismaMssql({
-      server: this.config.get(TOKENSENV.HOSTDB),
-      user: this.config.get(TOKENSENV.USERDB),
-      password: this.config.get(TOKENSENV.PASS),
-      database: this.config.get(TOKENSENV.DATABASE),
+      server: this.config.get(ENV.HOSTDB),
+      user: this.config.get(ENV.USERDB),
+      password: this.config.get(ENV.PASS),
+      database: this.config.get(ENV.DATABASE),
       options: {
         encrypt: false,
         trustServerCertificate: true,

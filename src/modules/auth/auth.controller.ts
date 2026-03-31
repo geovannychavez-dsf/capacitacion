@@ -1,13 +1,10 @@
-import { Body, Controller, Post, Req, Res } from '@nestjs/common';
+import { Controller, Post, UseGuards, Request } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { ResponseAuthDto } from './dtos/response-auth.dto';
-import { RequestAuthDto } from './dtos/request-auth.dto';
 import { ApiTags } from '@nestjs/swagger';
-import { Response, Request } from 'express';
-import { JWT_CONFIG, ONE_DAY } from 'src/common/types/type-orm';
-import { ConfigService } from '@nestjs/config';
-import { CookieMap } from './interfaces/cookies-request.interface';
+import { RequestWithUser } from './interfaces/cookies-request.interface';
 import { loginTokenDecorator, refresTokenDecorator } from './decorators';
+import { AuthGuard } from '@nestjs/passport';
 
 @ApiTags('auth')
 @Controller({
@@ -16,26 +13,18 @@ import { loginTokenDecorator, refresTokenDecorator } from './decorators';
 export class AuthController {
   constructor(
     private readonly authService: AuthService,
-    private readonly config: ConfigService,
   ) {}
+
+
+  @UseGuards(AuthGuard('local'))
   @loginTokenDecorator()
-  @Post('login')
-  async login(
-    @Body() { email, password }: RequestAuthDto,
-    @Res({ passthrough: true }) res: Response,
-  ): Promise<ResponseAuthDto> {
-    const { token, refreshToken } = await this.authService.validateUser(email, password);
-    res.cookie(JWT_CONFIG.REFRESH_NAME, refreshToken, {
-      httpOnly: true,
-      sameSite: 'strict',
-      maxAge: ONE_DAY,
-    });
-    return { token, refreshToken: this.config.get(JWT_CONFIG.REFRESH_EXPIRES_IN) };
+  @Post('login')  
+  async login(@Request() req: RequestWithUser) {
+    return this.authService.login(req.user);
   }
   @refresTokenDecorator()
   @Post('refresh')
-  async refreshToken(@Req() request: Request): Promise<ResponseAuthDto> {
-    const refreshToken = (request.cookies as CookieMap)[JWT_CONFIG.REFRESH_NAME];
-    return await this.authService.refreshToken(refreshToken);
+  refreshToken(@Request() token: string): Promise<ResponseAuthDto> {
+    return this.authService.refreshToken(token);
   }
 }

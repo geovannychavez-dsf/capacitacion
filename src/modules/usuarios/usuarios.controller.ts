@@ -15,14 +15,14 @@ import { getUserDocs, postUserDocs, updateUserDocs } from 'src/common/decorators
 import { CreateOrderDto } from './dto/order/create-order.dto';
 import { UserOrderDto } from './dto/user/user-order.dto';
 import { ResponseOrderDto } from './dto/order/respose-order.dto';
-import { GuardGuardJWT } from 'src/modules/auth/guard/guard.guard';
 import { exceptionSwaggerDecorator } from 'src/common/decorators/exception-swagger.decorator';
+import { LocalAuthGuard } from '../auth/guard';
 
 @ApiTags('usuarios')
 @Controller({
   path: 'usuario',
 })
-@UseGuards(GuardGuardJWT)
+@UseGuards(LocalAuthGuard)
 export class UsersController {
   constructor(private readonly userService: UsuariosService) {}
   @postUserDocs()

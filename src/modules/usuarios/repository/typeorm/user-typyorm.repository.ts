@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { IUserrepository } from '../../interfaces/user-repository.interface';
+import { Userrepository } from '../../interfaces/user-repository.interface';
 import { Repository, DataSource } from 'typeorm';
 import { User } from '../../entities/user-model.entity';
 import { Order } from '../../entities/order-model.entity';
@@ -8,7 +8,7 @@ import { CreateUserDto } from '../../dto/user/create-user.dto';
 import { UpdateUserDto } from '../../dto/user/update-user.dto';
 
 @Injectable()
-export class UserRepository implements IUserrepository {
+export class UserRepository implements Userrepository {
   constructor(
     private readonly userRepository: Repository<User>,
     private readonly orderRepository: Repository<Order>,

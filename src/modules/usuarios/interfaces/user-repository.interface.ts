@@ -5,7 +5,7 @@ import { UpdateUserDto } from '../dto/user/update-user.dto';
 import { User } from '../entities/user-model.entity';
 
 import { PrismaTransactionManager } from 'src/common/types/type-orm';
-export interface IUserrepository {
+export interface Userrepository {
   findAllUsers(): Promise<User[]>;
   findByIdUser(id: number): Promise<User>;
   createUser(data: CreateUserDto): Promise<User>;
@@ -14,10 +14,10 @@ export interface IUserrepository {
   createOrder(data: CreateOrderDto): Promise<CreateOrderDto>;
 }
 
-export interface IUsertransactionrepository {
+export interface Usertransactionrepository {
   execute<T>(work: (manager: EntityManager) => Promise<T>): Promise<T>;
 }
 
-export interface IUsertransactionPrismarepository {
+export interface UsertransactionPrismarepository {
   execute<T>(work: (manager: PrismaTransactionManager) => Promise<T>): Promise<T>;
 }
