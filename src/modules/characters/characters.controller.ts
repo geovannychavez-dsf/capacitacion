@@ -1,9 +1,9 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards } from '@nestjs/common';
 import { CharactersService } from './characters.service';
-import { ApiBearerAuth, ApiResponse } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOkResponse, ApiResponse, getSchemaPath } from '@nestjs/swagger';
 import { GuardGuardJWT } from '../auth/guard/guard.guard';
-import { ResponseCharactersDto, UpdatCharactersDto } from './dtos';
-import { postCharcterDecorator, putCharacterDecorator } from './decorator';
+import { CreateCharactersDto, ResponseCharactersDto, UpdatCharactersDto } from './dtos';
+import { getCharacterDecorator, postCharcterDecorator, putCharacterDecorator } from './decorator';
 import { exceptionSwaggerDecorator } from 'src/common/decorators/exception-swagger.decorator';
 
 @Controller('characters')
@@ -20,19 +20,34 @@ export class CharactersController {
   }
   @Post()
   @postCharcterDecorator()
-  async create(@Body() character: Partial<ResponseCharactersDto>): Promise<ResponseCharactersDto> {
+  async create(@Body() character: Partial<CreateCharactersDto>): Promise<ResponseCharactersDto> {
     return await this.charactersService.createCharacter(character);
   }
   @Get()
-  @ApiBearerAuth()
-  @ApiResponse({ status: 200, description: 'Return all characters' })
+  @getCharacterDecorator({
+    summary: 'Obtener todos los personajes',
+    description: 'retorna todos los personajes',
+  })
   async findAll(): Promise<ResponseCharactersDto[]> {
     return await this.charactersService.findAllCharacters();
   }
 
   @Get(':id')
-  @ApiBearerAuth()
-  @ApiResponse({ status: 200, description: 'Return one character' })
+  @ApiOkResponse({
+    description: 'Personaje obtenido correctamente',
+    schema: {
+      type: 'object',
+      properties: {
+        status: { type: 'boolean', example: true },
+        data: { $ref: getSchemaPath(ResponseCharactersDto) },
+        message: { type: 'string', example: 'Operacion exitosa' },
+      },
+    },
+  })
+  @getCharacterDecorator({
+    summary: 'Obtener todos los personajes',
+    description: 'retorna todos los personajes',
+  })
   async findOne(@Param('id') id: number): Promise<ResponseCharactersDto> {
     return await this.charactersService.findByIdCharacter(id);
   }
@@ -48,7 +63,20 @@ export class CharactersController {
 
   @Delete(':id')
   @ApiBearerAuth()
-  @ApiResponse({ status: 200, description: 'Delete one character' })
+  @ApiResponse({ status: 200, description: 'retorna todos los Character restantes', 
+    schema: {
+      type: 'object',
+      properties: {
+        status: { type: 'boolean', example: true },
+        data: {
+          type: 'array',
+          items: { $ref: getSchemaPath(ResponseCharactersDto) },
+        },
+        message: { type: 'string', example: 'Operacion exitosa' },
+      },
+    }
+
+  })
   async delete(@Param('id') id: number): Promise<ResponseCharactersDto[]> {
     return await this.charactersService.deleteCharacter(id);
   }

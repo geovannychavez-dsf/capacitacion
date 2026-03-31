@@ -1,64 +1,78 @@
-import { IsString, IsEmail, IsDate } from 'class-validator';
-import { ApiProperty } from '@nestjs/swagger';
-import { Type } from 'class-transformer';
+import { ApiExtraModels, ApiProperty } from '@nestjs/swagger';
+import { Exclude, Type } from 'class-transformer';
+import { IsString, IsUrl } from 'class-validator';
+@ApiExtraModels()
 export class CreateCharactersDto {
   @ApiProperty({
-    example: 'Pedro Lopez',
-    description: 'Nombres del usuario',
-    required: true,
-    type: String,
-  })
-  @IsString()
-  name: string;
-  @ApiProperty({
-    description: 'Fecha de nacimiento del usuario',
-    default: '1995-06-15',
-    required: true,
-    type: Date,
-  })
-  @Type(() => Date)
-  @IsDate()
-  birthdate: Date;
+    example: '1',
+    description: 'ID del personaje',
 
-  @ApiProperty({
-    description: 'Estado de Verificacion del email',
-    example: false,
-    type: Boolean,
-  })
-  emailVerified: boolean;
-
-  @ApiProperty({
-    description: 'estado del usuario',
-    example: 'active',
-    type: String,
-    required: true,
-  })
-  @IsString()
-  estatus: string;
-
-  @ApiProperty({
-    description: 'Email del usuario',
-    example: 'Beaulah6@yahoo.com',
-    required: true,
-    type: String,
-  })
-  @IsEmail({}, { message: 'El formato del correo electrónico no es válido' })
-  email: string;
-
-  @ApiProperty({
-    description: 'Constraseña del usuario',
-    example: '#@123456@j@$',
-    type: String,
-    required: true,
-  })
-  @IsString()
-  password: string;
-
-  @ApiProperty({
-    example: 10,
     readOnly: true,
-    description: 'id unico del usuario',
-    type: Number,
   })
   id: number;
+
+  @ApiProperty({
+    example: 'Rick Sanchez',
+    description: 'Nombres del personaje',
+  })
+  @IsString({ message: 'Coloque un nombre valido' })
+  name: string;
+
+  @ApiProperty({
+    example: 'Alive',
+    description: 'Estado del personaje',
+  })
+  @IsString({ message: 'Coloque un estado valido tipo texto' })
+  status: string;
+
+  @ApiProperty({
+    example: 'Human',
+    description: 'Especie del personaje',
+  })
+  @IsString({ message: 'Coloque una especie valida tipo texto' })
+  species: string;
+
+  @ApiProperty({
+    example: 'Male',
+    description: 'Genero del personaje',
+  })
+  @IsString({ message: 'Coloque un genero valido' })
+  gender: string;
+
+  @ApiProperty({
+    example: 'Humanoid',
+    description: 'Tipo del personaje',
+    required: false,
+  })
+  @IsString({ message: 'Coloque un tipo valido ' })
+  type?: string;
+
+  @ApiProperty({
+    example: 'https://rickandmortyapi.com/api/character/avatar/1.jpeg',
+    description: 'Imagen del personaje',
+    required: false,
+  })
+  @IsString({ message: 'Coloque una imagen valida' })
+  @IsUrl({}, { message: 'Coloque una url valida' })
+  image: string;
+
+  @ApiProperty({
+    type: Date,
+    description: 'Fecha de actualizacion del personaje',
+    required: false,
+    readOnly: true,
+  })
+  @Exclude()
+  @Type(() => Date)
+  updatedAt?: Date;
+
+  @ApiProperty({
+    type: Date,
+    description: 'Fecha de creacion del personaje',
+    required: false,
+    readOnly: true,
+  })
+  @Exclude()
+  @Type(() => Date)
+  createdAt?: Date;
 }

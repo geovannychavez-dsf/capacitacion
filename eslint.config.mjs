@@ -134,7 +134,7 @@ export default tseslint.config(
     rules: { 'local-filenames/module-filename': 'error' },
   },
   {
-    files: ['**/*.guard.ts', '**/guard/**/*.ts', '**/guards/**/*.ts'],
+    files: ['**/*.guard.ts', '**/guards/**/*.ts'],
     plugins: { 'local-filenames': localFilenamesPlugin },
     rules: { 'local-filenames/guard-filename': 'error' },
   },
@@ -149,12 +149,12 @@ export default tseslint.config(
     rules: { 'local-filenames/filter-filename': 'error' },
   },
   {
-    files: ['**/*.decorator.ts', '**/decorators/**/*.ts', '**/decoradores/**/*.ts'],
+    files: ['**/*.decorator.ts', '**/decorators/**/*.ts'],
     plugins: { 'local-filenames': localFilenamesPlugin },
     rules: { 'local-filenames/decorator-filename': 'error' },
   },
   {
-    files: ['**/*.dto.ts', '**/dto/**/*.ts', '**/dtos/**/*.ts'],
+    files: ['**/*.dto.ts', '**/dtos/**/*.ts'],
     plugins: { 'local-filenames': localFilenamesPlugin },
     rules: { 'local-filenames/dto-filename': 'error' },
   },
@@ -169,12 +169,12 @@ export default tseslint.config(
     rules: { 'local-filenames/interface-filename': 'error' },
   },
   {
-    files: ['**/*.adapter.ts', '**/adapter/**/*.ts', '**/adapters/**/*.ts'],
+    files: ['**/*.adapter.ts', '**/adapters/**/*.ts'],
     plugins: { 'local-filenames': localFilenamesPlugin },
     rules: { 'local-filenames/adapter-filename': 'error' },
   },
   {
-    files: ['**/*.repository.ts', '**/repository/**/*.ts', '**/repositories/**/*.ts'],
+    files: ['**/*.repository.ts', '**/repositories/**/*.ts'],
     ignores: ['**/*.spec.ts'],
     plugins: { 'local-filenames': localFilenamesPlugin },
     rules: { 'local-filenames/repository-filename': 'error' },
@@ -186,7 +186,7 @@ export default tseslint.config(
     rules: { 'local-filenames/provider-filename': 'error' },
   },
   {
-    files: ['**/*.middleware.ts', '**/middleware/**/*.ts', '**/middlewares/**/*.ts'],
+    files: ['**/*.middleware.ts', '**/middlewares/**/*.ts'],
     ignores: ['**/*.spec.ts'],
     plugins: { 'local-filenames': localFilenamesPlugin },
     rules: { 'local-filenames/middleware-filename': 'error' },

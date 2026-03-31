@@ -1,4 +1,5 @@
-import { PartialType } from '@nestjs/mapped-types';
+import { ApiExtraModels, OmitType } from '@nestjs/swagger';
 import { CreateCharactersDto } from '.';
 
-export class UpdatCharactersDto extends PartialType(CreateCharactersDto) {}
+@ApiExtraModels()
+export class UpdatCharactersDto extends OmitType(CreateCharactersDto, ['id']) {}

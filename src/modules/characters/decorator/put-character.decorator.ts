@@ -17,18 +17,18 @@ export function putCharacterDecorator() {
       description: 'Este endpoint Actualiza un personaje en especifico por id.',
     }),
     ApiBearerAuth(),
-    ApiBody({ type: UpdatCharactersDto }),
     ApiParam({ name: 'id', type: String }),
+    ApiBody({ type: UpdatCharactersDto }),
     ApiOkResponse({
-      type: ResponseCharactersDto,
       description: 'Personaje actualizado correctamente',
       schema: {
-        example: {
-          status: true,
+        type: 'object',
+        properties: {
+          status: { type: 'boolean', example: true },
           data: {
             $ref: getSchemaPath(ResponseCharactersDto),
           },
-          message: 'Operacion exitosa',
+          message: { type: 'string', example: 'Operacion exitosa' },
         },
       },
     }),

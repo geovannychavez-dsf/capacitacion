@@ -6,24 +6,26 @@ import {
   ApiOperation,
   getSchemaPath,
 } from '@nestjs/swagger';
-import { ResponseCharactersDto } from '../dtos';
+import { CreateCharactersDto, ResponseCharactersDto } from '../dtos';
 
 export function postCharcterDecorator() {
   return applyDecorators(
     UsePipes(new ValidationPipe()),
     ApiOperation({ summary: 'Crea un personaje' }),
     ApiBearerAuth(),
-    ApiBody({ type: ResponseCharactersDto }),
+    ApiBody({ type: CreateCharactersDto }),
     ApiCreatedResponse({
       type: ResponseCharactersDto,
       description: 'Personaje creado correctamente',
       schema: {
-        example: {
-          status: true,
+        type: 'object',
+        properties: {
+          status: { type: 'boolean', example: true },
           data: {
+            type: 'object',
             $ref: getSchemaPath(ResponseCharactersDto),
           },
-          message: 'Operacion exitosa',
+          message: { type: 'string', example: 'Operacion exitosa' },
         },
       },
     }),
