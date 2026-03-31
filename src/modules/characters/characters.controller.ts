@@ -63,7 +63,9 @@ export class CharactersController {
 
   @Delete(':id')
   @ApiBearerAuth()
-  @ApiResponse({ status: 200, description: 'retorna todos los Character restantes', 
+  @ApiResponse({
+    status: 200,
+    description: 'retorna todos los Character restantes',
     schema: {
       type: 'object',
       properties: {
@@ -74,8 +76,7 @@ export class CharactersController {
         },
         message: { type: 'string', example: 'Operacion exitosa' },
       },
-    }
-
+    },
   })
   async delete(@Param('id') id: number): Promise<ResponseCharactersDto[]> {
     return await this.charactersService.deleteCharacter(id);
