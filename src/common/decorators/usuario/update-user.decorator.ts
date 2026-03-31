@@ -1,13 +1,10 @@
 import { applyDecorators, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import {
-  ApiBadRequestResponse,
   ApiBearerAuth,
   ApiBody,
-  ApiInternalServerErrorResponse,
   ApiOkResponse,
   ApiOperation,
   ApiParam,
-  ApiUnauthorizedResponse,
   getSchemaPath,
 } from '@nestjs/swagger';
 import { HeaderGuard } from 'src/common/guard/header/authorication-header.guard';
@@ -39,43 +36,5 @@ export function updateUserDocs() {
       },
     }),
     ApiBody({ type: CreateUserDto }),
-    ApiBadRequestResponse({
-      description: 'Error de validación en el body',
-      schema: {
-        type: 'object',
-        properties: {
-          statusCode: { type: 'number', example: 400 },
-          message: {
-            type: 'array',
-            example: ['El formato del correo electrónico no es válido'],
-          },
-          error: { type: 'string', example: 'Bad Request' },
-        },
-      },
-    }),
-    ApiUnauthorizedResponse({
-      description: 'No tiene autorización',
-      schema: {
-        type: 'object',
-        properties: {
-          statusCode: { type: 'number', example: 401 },
-          message: {
-            type: 'string',
-            example: 'Credenciales incorrectas',
-          },
-          error: { type: 'string', example: 'Unauthorized' },
-        },
-      },
-    }),
-    ApiInternalServerErrorResponse({
-      description: 'Error interno del servidor',
-      schema: {
-        example: {
-          statusCode: 500,
-          message: 'Error interno del servidor',
-          error: 'Internal Server Error',
-        },
-      },
-    }),
   );
 }

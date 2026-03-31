@@ -55,7 +55,6 @@ export class ResponseCharactersDto {
   image?: string;
 
   @ApiProperty({
-    example: '1',
     type: Date,
     description: 'Fecha de actualizacion del personaje',
     required: false,

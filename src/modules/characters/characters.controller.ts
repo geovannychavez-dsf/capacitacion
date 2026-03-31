@@ -4,9 +4,11 @@ import { ApiBearerAuth, ApiResponse } from '@nestjs/swagger';
 import { GuardGuardJWT } from '../auth/guard/guard.guard';
 import { ResponseCharactersDto, UpdatCharactersDto } from './dtos';
 import { postCharcterDecorator, putCharacterDecorator } from './decorator';
+import { exceptionSwaggerDecorator } from 'src/common/decorators/exception-swagger.decorator';
 
 @Controller('characters')
 @UseGuards(GuardGuardJWT)
+@exceptionSwaggerDecorator()
 export class CharactersController {
   constructor(private readonly charactersService: CharactersService) {}
 
@@ -37,8 +39,8 @@ export class CharactersController {
 
   @Put(':id')
   @putCharacterDecorator()
-  update(@Param('id') id: number, @Body() character: Partial<UpdatCharactersDto>) {
-    return this.charactersService.updateCharacter(id, character);
+  async update(@Param('id') id: number, @Body() character: Partial<UpdatCharactersDto>) : Promise<ResponseCharactersDto> {
+    return await this.charactersService.updateCharacter(id, character);
   }
 
   @Delete(':id')

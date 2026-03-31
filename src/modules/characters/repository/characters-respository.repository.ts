@@ -11,9 +11,7 @@ export class CharactersRepository implements CharactersInterface {
     return await this.characterRepo.save(character);
   }
   async findByNameCharacter(name: string): Promise<Characters> {
-    return await this.characterRepo.findOne({
-      where: { name },
-    });
+    return await this.characterRepo.findOneBy({ name });
   }
   async findAllCharacters(): Promise<Characters[]> {
     return await this.characterRepo.find({

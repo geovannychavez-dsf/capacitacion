@@ -1,8 +1,6 @@
 import { applyDecorators, UsePipes, ValidationPipe } from '@nestjs/common';
 import {
   ApiBearerAuth,
-  ApiInternalServerErrorResponse,
-  ApiNotFoundResponse,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 export function getUserDocs() {
@@ -22,26 +20,6 @@ export function getUserDocs() {
           error: { type: 'string', example: 'Unauthorized' },
         },
       },
-    }),
-    ApiNotFoundResponse({
-      description: 'No se encontró ningún registro.',
-      schema: {
-        example: {
-          statusCode: 404,
-          message: 'Usuario no encontrado',
-          error: 'Not Found',
-        },
-      },
-    }),
-    ApiInternalServerErrorResponse({
-      description: 'Error interno del servidor',
-      schema: {
-        example: {
-          statusCode: 500,
-          message: 'Error interno del servidor',
-          error: 'Internal Server Error',
-        },
-      },
-    }),
+    })
   );
 }

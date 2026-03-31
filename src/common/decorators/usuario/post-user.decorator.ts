@@ -3,9 +3,7 @@ import {
   ApiBadRequestResponse,
   ApiBearerAuth,
   ApiCreatedResponse,
-  ApiInternalServerErrorResponse,
-  ApiOperation,
-  ApiUnauthorizedResponse,
+  ApiOperation
 } from '@nestjs/swagger';
 export function postUserDocs() {
   return applyDecorators(
@@ -29,43 +27,19 @@ export function postUserDocs() {
         },
       },
     }),
-    ApiBadRequestResponse({
-      description: 'Error de validación en el cuerpo de la petición',
-      schema: {
-        type: 'object',
-        properties: {
-          statusCode: { type: 'number', example: 400 },
-          message: {
-            type: 'array',
-            example: ['El formato del correo electrónico no es válido'],
+     ApiBadRequestResponse({
+          description: 'Error de validación en el cuerpo de la petición',
+          schema: {
+            type: 'object',
+            properties: {
+              statusCode: { type: 'number', example: 400 },
+              message: {
+                type: 'array',
+                example: ['El formato del correo electrónico no es válido'],
+              },
+              error: { type: 'string', example: 'Bad Request' },
+            },
           },
-          error: { type: 'string', example: 'Bad Request' },
-        },
-      },
-    }),
-    ApiUnauthorizedResponse({
-      description: 'No tiene autorización',
-      schema: {
-        type: 'object',
-        properties: {
-          statusCode: { type: 'number', example: 401 },
-          message: {
-            type: 'string',
-            example: 'Credenciales incorrectas',
-          },
-          error: { type: 'string', example: 'Unauthorized' },
-        },
-      },
-    }),
-    ApiInternalServerErrorResponse({
-      description: 'Error interno del servidor',
-      schema: {
-        example: {
-          statusCode: 500,
-          message: 'Error interno del servidor',
-          error: 'Internal Server Error',
-        },
-      },
-    }),
+        }),
   );
 }

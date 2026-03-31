@@ -16,6 +16,7 @@ import { CreateOrderDto } from './dto/order/create-order.dto';
 import { UserOrderDto } from './dto/user/user-order.dto';
 import { ResponseOrderDto } from './dto/order/respose-order.dto';
 import { GuardGuardJWT } from 'src/modules/auth/guard/guard.guard';
+import { exceptionSwaggerDecorator } from 'src/common/decorators/exception-swagger.decorator';
 
 @ApiTags('usuarios')
 @Controller({
@@ -73,6 +74,7 @@ export class UsersController {
     },
   })
   @getUserDocs()
+  @exceptionSwaggerDecorator()
   @Get(':id')
   @ApiParam({
     example: 10,
@@ -84,6 +86,7 @@ export class UsersController {
   }
 
   @updateUserDocs()
+  @exceptionSwaggerDecorator()
   @Put(':id')
   updateUser(
     @Param('id') id: string,
@@ -112,6 +115,7 @@ export class UsersController {
       },
     },
   })
+  @exceptionSwaggerDecorator()
   findUserByEmailAndName(
     @Param('name') name: string,
     @Param('email') email: string,
@@ -119,6 +123,7 @@ export class UsersController {
     return this.userService.findUserByEmailAndName(name, email);
   }
   @postUserDocs()
+  @exceptionSwaggerDecorator()
   @ApiBody({ type: UserOrderDto })
   @ApiOkResponse({
     description: 'Orsern creada correctamente',

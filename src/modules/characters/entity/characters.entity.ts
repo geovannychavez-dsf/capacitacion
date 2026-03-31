@@ -13,7 +13,7 @@ export class Characters {
   id: number;
 
   @Column({ length: 100 })
-  @Unique(['name'])
+  @Unique('name', ['name'])
   name: string;
 
   @Column('text')
