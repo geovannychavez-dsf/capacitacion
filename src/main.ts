@@ -26,7 +26,7 @@ async function bootstrap() {
   app.useGlobalFilters(new HttpExceptionFilter());
   app.enableVersioning({ type: VersioningType.URI });
   app.use(
-    [`/${JWT_CONFIG.SWAGGER_ROUTE}`],
+    [`${JWT_CONFIG.SWAGGER_ROUTE}`],
     basicAuth({
       challenge: true,
       users: {

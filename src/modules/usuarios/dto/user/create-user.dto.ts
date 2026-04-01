@@ -1,4 +1,4 @@
-import { IsString, IsEmail, IsDate, IsNotEmpty, MinLength, } from 'class-validator';
+import { IsString, IsEmail, IsDate, IsNotEmpty, MinLength } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 export class CreateUserDto {
@@ -17,7 +17,7 @@ export class CreateUserDto {
     type: Date,
   })
   @Type(() => Date)
-  @IsDate( { message: 'la fecha debe tener el formato yyyy-mm-dd' })
+  @IsDate({ message: 'la fecha debe tener el formato yyyy-mm-dd' })
   birthdate: Date;
 
   @ApiProperty({
@@ -51,8 +51,8 @@ export class CreateUserDto {
     type: String,
     required: true,
   })
-  @IsString({message: 'la contraseña debe tener al menos 6 caracteres, texto y numeros'})
-  @MinLength(6, {message: 'la contraseña debe tener al menos 6 caracteres'})
+  @IsString({ message: 'la contraseña debe tener al menos 6 caracteres, texto y numeros' })
+  @MinLength(6, { message: 'la contraseña debe tener al menos 6 caracteres' })
   @IsNotEmpty({ message: 'no se permite null en el campo' })
   password: string;
 
