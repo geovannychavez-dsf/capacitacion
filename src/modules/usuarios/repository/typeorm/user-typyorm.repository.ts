@@ -47,4 +47,7 @@ export class UserRepository implements Userrepository {
       .orWhere('User.email like :email', { email: `%${email}%` })
       .getMany();
   }
+  async findUserByEmail(email: string): Promise<User | null> {
+    return await this.userRepository.findOne({ where: { email } });
+  }
 }

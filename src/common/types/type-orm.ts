@@ -33,6 +33,9 @@ export const JWT_CONFIG = {
   REFRESH_EXPIRES_IN: 'REFRESH_EXPIRES_IN',
   REFRESH_NAME: 'refreshToken',
   RICKMORTY_URL: 'RICKMORTY_URL',
+  PASSPOT_JWT: 'jwt',
+  PASSPOT_LOCAL: 'local',
+  SWAGGER_ROUTE: '/docs',
 };
 export const ONE_SECOND = 1000;
 export const ONE_MINUTE = 60 * ONE_SECOND;

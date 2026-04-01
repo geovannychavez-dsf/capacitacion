@@ -5,6 +5,7 @@ import { ApiTags } from '@nestjs/swagger';
 import { RequestWithUser } from './interfaces/cookies-request.interface';
 import { loginTokenDecorator, refresTokenDecorator } from './decorators';
 import { AuthGuard } from '@nestjs/passport';
+import { JWT_CONFIG } from 'src/common/types/type-orm';
 
 @ApiTags('auth')
 @Controller({
@@ -16,7 +17,7 @@ export class AuthController {
   ) {}
 
 
-  @UseGuards(AuthGuard('local'))
+  @UseGuards(AuthGuard(JWT_CONFIG.PASSPOT_LOCAL))
   @loginTokenDecorator()
   @Post('login')  
   async login(@Request() req: RequestWithUser) {

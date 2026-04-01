@@ -1,5 +1,6 @@
 import { INestApplication } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { JWT_CONFIG } from 'src/common/types/type-orm';
 interface ISwaggerConfigOptions {
   title: string;
   description: string;
@@ -19,5 +20,5 @@ export function swaggerConsfig({ title, description, version, app }: ISwaggerCon
     })
     .build();
   const documentFactory = () => SwaggerModule.createDocument(app, config);
-  return SwaggerModule.setup('docs', app, documentFactory);
+  return SwaggerModule.setup(JWT_CONFIG.SWAGGER_ROUTE, app, documentFactory);
 }

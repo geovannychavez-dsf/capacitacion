@@ -12,6 +12,7 @@ export interface Userrepository {
   updateUser(id: number, data: UpdateUserDto): Promise<User>;
   findUserByEmailAndName({ name, email }: { name: string; email: string }): Promise<User[]>;
   createOrder(data: CreateOrderDto): Promise<CreateOrderDto>;
+  findUserByEmail(email: string): Promise<User>;
 }
 
 export interface Usertransactionrepository {

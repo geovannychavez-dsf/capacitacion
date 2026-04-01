@@ -24,10 +24,10 @@ export class AuthService {
 
   async validateUser(email: string, password: string): Promise<ResponseUserDto> {
     try {
-      const user = await this.userRepository.findUserByEmailAndName({ name: '', email });
-      if (user.length == 1) {
-        await bcrypt.compare(password, user[0].password);
-        return { ...user[0] };
+      const user = await this.userRepository.findUserByEmail(email);
+      if (user) {
+        await bcrypt.compare(password, user.password);
+        return { password:'', ...user, };
       }
 
       throw new UnauthorizedException('Credenciales incorrectas');

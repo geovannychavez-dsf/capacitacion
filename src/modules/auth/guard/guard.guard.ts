@@ -1,29 +1,8 @@
-import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
-import { Request } from 'express';
+import { Injectable } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
+import { JWT_CONFIG } from 'src/common/types/type-orm';
+
 
 @Injectable()
-export class GuardGuardJWT implements CanActivate {
-  constructor(private readonly jwtService: JwtService) {}
+export class GuardGuardJWT extends AuthGuard(JWT_CONFIG.PASSPOT_JWT) {}
 
-  async canActivate(context: ExecutionContext): Promise<boolean> {
-    const request = context.switchToHttp().getRequest<Request>();
-    const token = this.extractTokenFromHeader(request);
-
-    if (!token) {
-      throw new UnauthorizedException('Credenciales incorrectas');
-    }
-    try {
-      await this.jwtService.verifyAsync<Record<string, unknown>>(token);
-
-      return true;
-    } catch {
-      throw new UnauthorizedException('Credenciales incorrectas');
-    }
-  }
-
-  private extractTokenFromHeader(request: Request): string | undefined {
-    const [type, token] = request.headers.authorization?.split(' ') ?? [];
-    return type === 'Bearer' ? token : undefined;
-  }
-}

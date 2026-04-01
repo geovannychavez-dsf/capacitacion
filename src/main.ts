@@ -4,7 +4,7 @@ import { ValidationPipe, VersioningType } from '@nestjs/common';
 import { swaggerConsfig } from './config/swagger/swagger.confg';
 import { RequestInterceptorInterceptor } from './common/interceptors/request-interceptor.interceptor';
 import { ConfigService } from '@nestjs/config';
-import { ENV } from './common/types/type-orm';
+import { ENV, JWT_CONFIG } from './common/types/type-orm';
 import * as cookieParser from 'cookie-parser';
 import { HttpExceptionFilter } from './common/exception/http-exception.filter';
 import { corsOptions } from './config/cors/cors-config.config';
@@ -21,16 +21,26 @@ async function bootstrap() {
       transform: true,
     }),
   );
-  
+
   app.enableCors(corsOptions({ app }));
   app.useGlobalFilters(new HttpExceptionFilter());
   app.enableVersioning({ type: VersioningType.URI });
+    app.use(
+      [`/${JWT_CONFIG.SWAGGER_ROUTE}`],
+      basicAuth({
+        challenge: true,
+        users: {
+          [config.get<string>(ENV.ADMIN)]: config.get<string>(ENV.PASSWORD_ADMIN),
+        },
+      }),
+    )
   swaggerConsfig({
     title: 'Documento practico Usuarios',
     description: 'API practica de Usuarios',
     version: '1.0',
     app,
   });
+  
   const port = config.get<number>(ENV.PORT) ?? 3001;
   await app.listen(port);
 }
