@@ -27,16 +27,18 @@ export class UserRepository implements Userrepository {
     return await this.userRepository.find();
   }
 
-  async findByIdUser(id: number): Promise<User> {
+  async findByIdUser(id: number): Promise<User | null> {
     return await this.userRepository.findOne({ where: { id } });
   }
 
-  async createUser(user: CreateUserDto): Promise<User | null> {
+  async createUser(user: CreateUserDto): Promise<User> {
     return await this.userRepository.save(user);
   }
 
-  async updateUser(id: number, user: UpdateUserDto): Promise<User> {
-    return await this.userRepository.update({ id }, user).then(() => this.findByIdUser(id));
+  async updateUser(id: number, user: UpdateUserDto): Promise<User | null > {
+    return await this.userRepository.update({ id }, user).then(() => this.userRepository.findOne({ 
+      where: { id }
+    }));
   }
 
   async findUserByEmailAndName({ name, email }: { name: string; email: string }): Promise<User[]> {
