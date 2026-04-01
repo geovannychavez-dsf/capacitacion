@@ -1,6 +1,5 @@
 import { Controller, Get, Post, Body, Put, Param, ParseIntPipe, UseGuards } from '@nestjs/common';
-import { CreateUserDto } from './dto/user/create-user.dto';
-import { UpdateUserDto } from './dto/user/update-user.dto';
+
 import {
   ApiBody,
   ApiOkResponse,
@@ -10,13 +9,12 @@ import {
   getSchemaPath,
 } from '@nestjs/swagger';
 import { UsuariosService } from './usuarios.service';
-import { ResponseUserDto } from './dto/user/response-user.dto';
 import { getUserDocs, postUserDocs, updateUserDocs } from 'src/common/decorators/usuario';
-import { CreateOrderDto } from './dto/order/create-order.dto';
-import { UserOrderDto } from './dto/user/user-order.dto';
-import { ResponseOrderDto } from './dto/order/respose-order.dto';
 import { exceptionSwaggerDecorator } from 'src/common/decorators/exception-swagger.decorator';
 import { GuardGuardJWT } from '../auth/guard';
+import { CreateUserDto, ResponseUserDto, UpdateUserDto, UserOrderDto } from './dtos/user';
+import { CreateOrderDto } from './dtos/order/create-order.dto';
+import { ResponseOrderDto } from './dtos/order/respose-order.dto';
 
 @ApiTags('usuarios')
 @Controller({

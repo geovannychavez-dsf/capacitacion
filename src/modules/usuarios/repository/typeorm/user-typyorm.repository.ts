@@ -1,11 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { Userrepository } from '../../interfaces/user-repository.interface';
 import { Repository, DataSource } from 'typeorm';
-import { User } from '../../entities/user-model.entity';
-import { Order } from '../../entities/order-model.entity';
-import { CreateOrderDto } from '../../dto/order/create-order.dto';
-import { CreateUserDto } from '../../dto/user/create-user.dto';
-import { UpdateUserDto } from '../../dto/user/update-user.dto';
+import { User } from '../../entity/user-model.entity';
+import { Order } from '../../entity/order-model.entity';
+import { CreateUserDto, UpdateUserDto } from '../../dtos/user';
+import { CreateOrderDto } from '../../dtos/order/create-order.dto';
 
 @Injectable()
 export class UserRepository implements Userrepository {
@@ -32,7 +31,7 @@ export class UserRepository implements Userrepository {
     return await this.userRepository.findOne({ where: { id } });
   }
 
-  async createUser(user: CreateUserDto): Promise<User> {
+  async createUser(user: CreateUserDto): Promise<User | null> {
     return await this.userRepository.save(user);
   }
 

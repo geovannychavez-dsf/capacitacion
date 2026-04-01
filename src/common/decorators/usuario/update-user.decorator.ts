@@ -8,7 +8,7 @@ import {
   getSchemaPath,
 } from '@nestjs/swagger';
 import { HeaderGuard } from 'src/common/guard/header/authorication-header.guard';
-import { CreateUserDto } from 'src/modules/usuarios/dto/user/create-user.dto';
+import { CreateUserDto } from 'src/modules/usuarios/dtos/user';
 export function updateUserDocs() {
   return applyDecorators(
     UseGuards(HeaderGuard),

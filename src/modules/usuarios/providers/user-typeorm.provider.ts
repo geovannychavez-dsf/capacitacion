@@ -1,7 +1,7 @@
 import { DataSource, Repository } from 'typeorm';
 import { TOKENSORM } from 'src/common/types/type-orm';
-import { User } from '../entities/user-model.entity';
-import { Order } from '../entities/order-model.entity';
+import { User } from '../entity/user-model.entity';
+import { Order } from '../entity/order-model.entity';
 import { UserRepository } from '../repository/typeorm/user-typyorm.repository';
 import { UserTransactionRepository } from '../repository/typeorm/user-transaction.repository';
 

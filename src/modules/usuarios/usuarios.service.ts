@@ -1,15 +1,13 @@
 import { Inject, Injectable, InternalServerErrorException, HttpException } from '@nestjs/common';
-import { UpdateUserDto } from './dto/user/update-user.dto';
-import { CreateUserDto } from './dto/user/create-user.dto';
-import { ResponseUserDto } from './dto/user/response-user.dto';
-import { User } from './entities/user-model.entity';
+import { User } from './entity/user-model.entity';
 import { Userrepository, Usertransactionrepository } from './interfaces/user-repository.interface';
 import { TOKENSORM } from 'src/common/types/type-orm';
-import { CreateOrderDto } from './dto/order/create-order.dto';
-import { ResponseOrderDto } from './dto/order/respose-order.dto';
-import { Order } from './entities/order-model.entity';
+import { Order } from './entity/order-model.entity';
 import * as bcrypt from 'bcrypt';
 import { EntityManager } from 'typeorm';
+import { CreateUserDto, ResponseUserDto, UpdateUserDto } from './dtos/user';
+import { CreateOrderDto } from './dtos/order/create-order.dto';
+import { ResponseOrderDto } from './dtos/order/respose-order.dto';
 
 @Injectable()
 export class UsuariosService {

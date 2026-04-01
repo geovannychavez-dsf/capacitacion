@@ -2,8 +2,8 @@ import { DataSource } from 'typeorm';
 import { ConfigService } from '@nestjs/config';
 import { ENV } from 'src/common/types/type-orm';
 import { Characters } from 'src/modules/characters/entity/characters.entity';
-import { User } from 'src/modules/usuarios/entities/user-model.entity';
-import { Order } from 'src/modules/usuarios/entities/order-model.entity';
+import { User } from 'src/modules/usuarios/entity/user-model.entity';
+import { Order } from 'src/modules/usuarios/entity/order-model.entity';
 export const databaseProviders = [
   {
     provide: 'DATA_SOURCE',
