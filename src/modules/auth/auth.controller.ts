@@ -17,7 +17,7 @@ export class AuthController {
   @UseGuards(AuthGuard(JWT_CONFIG.PASSPOT_LOCAL))
   @loginTokenDecorator()
   @Post('login')
-  async login(@Request() req: RequestWithUser) {
+  login(@Request() req: RequestWithUser) {
     return this.authService.login(req.user);
   }
   @refresTokenDecorator()

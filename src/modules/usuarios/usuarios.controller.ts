@@ -25,8 +25,8 @@ export class UsersController {
   constructor(private readonly userService: UsuariosService) {}
   @postUserDocs()
   @Post()
-  async createUser(@Body() createUserDto: CreateUserDto): Promise<boolean> {
-    return await this.userService.createUser(createUserDto);
+  createUser(@Body() createUserDto: CreateUserDto): Promise<boolean> {
+    return this.userService.createUser(createUserDto);
   }
 
   @ApiOperation({
@@ -50,8 +50,8 @@ export class UsersController {
   })
   @getUserDocs()
   @Get()
-  async findUsers(): Promise<ResponseUserDto[]> {
-    return await this.userService.findusuarios();
+  findUsers(): Promise<ResponseUserDto[]> {
+    return this.userService.findusuarios();
   }
 
   @ApiOperation({

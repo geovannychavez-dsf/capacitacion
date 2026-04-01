@@ -53,7 +53,7 @@ export class CharactersService {
   async findAllCharacters(): Promise<ResponseCharactersDto[]> {
     try {
       const charcater = await this.characterRepo.findAllCharacters();
-
+      if (charcater.length === 0) throw new NotFoundException('No se encontraron personajes');
       return charcater;
     } catch (error) {
       if (error instanceof HttpException) {
@@ -65,7 +65,10 @@ export class CharactersService {
   async findByIdCharacter(id: number): Promise<ResponseCharactersDto> {
     try {
       const character = await this.characterRepo.findByIdCharacter(id);
-      return character;
+      if (character) {
+        return character;
+      }
+      throw new NotFoundException('Personaje no encontrado');
     } catch (error) {
       if (error instanceof HttpException) {
         throw error;
@@ -76,8 +79,8 @@ export class CharactersService {
   async deleteCharacter(id: number): Promise<ResponseCharactersDto[]> {
     try {
       const character = await this.characterRepo.findByIdCharacter(id);
-      if (!character) throw new NotFoundException('Personaje no encontrado');
-      return await this.characterRepo.deleteCharacter(id);
+      if (character) return await this.characterRepo.deleteCharacter(id);
+      throw new NotFoundException('Personaje no encontrado');
     } catch (error) {
       if (error instanceof HttpException) {
         throw error;
@@ -91,13 +94,13 @@ export class CharactersService {
   ): Promise<ResponseCharactersDto> {
     try {
       const characterById = await this.characterRepo.findByIdCharacter(id);
-      if (!characterById) throw new NotFoundException('Personaje no encontrado');
+      if (characterById == null) throw new NotFoundException('Personaje no encontrado');
       const characterName = await this.characterRepo.findByNameCharacter(character.name);
 
       if (characterName == null || characterName.id === id) {
         return await this.characterRepo.updateCharacter(id, character);
       }
-      throw new BadRequestException('Personaje con el mismo nombre ya existe');
+      throw new BadRequestException('Personaje con el mismo nombre ya existe ');
     } catch (error) {
       if (error instanceof HttpException) {
         throw error;

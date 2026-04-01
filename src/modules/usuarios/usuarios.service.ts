@@ -1,4 +1,11 @@
-import { Inject, Injectable, InternalServerErrorException, HttpException } from '@nestjs/common';
+import {
+  Inject,
+  Injectable,
+  InternalServerErrorException,
+  HttpException,
+  BadRequestException,
+  NotFoundException,
+} from '@nestjs/common';
 import { User } from './entity/user-model.entity';
 import { Userrepository, Usertransactionrepository } from './interfaces/user-repository.interface';
 import { TOKENSORM } from 'src/common/types/type-orm';
@@ -8,6 +15,7 @@ import { EntityManager } from 'typeorm';
 import { CreateUserDto, ResponseUserDto, UpdateUserDto } from './dtos/user';
 import { CreateOrderDto } from './dtos/order/create-order.dto';
 import { ResponseOrderDto } from './dtos/order/respose-order.dto';
+import { adaptadorUser } from './adapter/user-map.adapter';
 
 @Injectable()
 export class UsuariosService {
@@ -23,28 +31,44 @@ export class UsuariosService {
    * @returns boolean
    */
   async createUser(userDto: CreateUserDto): Promise<boolean> {
-    const hasEmailandName = await this.userRepository.findUserByEmailAndName({
-      name: userDto.name,
-      email: userDto.email,
-    });
-    const hasEmailandNameFlag = new Set(hasEmailandName);
-    if (hasEmailandNameFlag.size > 0) {
-      return false;
+    try {
+      const hasEmailandName = await this.userRepository.findUserByEmailAndName({
+        name: userDto.name,
+        email: userDto.email,
+      });
+      const hasEmailandNameFlag = new Set(hasEmailandName);
+      if (hasEmailandNameFlag.size > 0) {
+        throw new BadRequestException('Usuario con el mismo email o nombre ya registrado');
+      }
+
+      userDto.password = await bcrypt.hash(userDto.password, 10);
+      const user = await this.userRepository.createUser(userDto);
+      if (user.id) {
+        return true;
+      }
+      throw new BadRequestException('Error al crear el usuario');
+    } catch (error) {
+      if (error instanceof HttpException) {
+        throw error;
+      }
+      throw new InternalServerErrorException('Hubo un error por favor intente mas tarde');
     }
-    userDto.password = await bcrypt.hash(userDto.password, 10);
-    const user = await this.userRepository.createUser(userDto);
-    if (user.id) {
-      return true;
-    }
-    return false;
   }
   /**
    * Obtener lista de usuarios
    * @returns ResponseUserDto[]
    */
   async findusuarios(): Promise<ResponseUserDto[]> {
-    const users = await this.userRepository.findAllUsers();
-    return this.adaptadorUser(users);
+    try {
+      const users = await this.userRepository.findAllUsers();
+      if (users.length === 0) throw new NotFoundException('No se encontraron usuarios');
+      return adaptadorUser(users);
+    } catch (error) {
+      if (error instanceof HttpException) {
+        throw error;
+      }
+      throw new InternalServerErrorException('Hubo un error por favor intente mas tarde');
+    }
   }
   /**
    * Obtener usuario especifico
@@ -52,7 +76,16 @@ export class UsuariosService {
    * @returns { CreateUserDto }
    */
   async findUser(id: number): Promise<ResponseUserDto> {
-    return await this.userRepository.findByIdUser(id);
+    try {
+      const user = await this.userRepository.findByIdUser(id);
+      if (!user) throw new NotFoundException('Usuario no encontrado');
+      return user;
+    } catch (error) {
+      if (error instanceof HttpException) {
+        throw error;
+      }
+      throw new InternalServerErrorException('Hubo un error por favor intente mas tarde');
+    }
   }
   /**
    * Actualiza datos de un usuario
@@ -61,11 +94,22 @@ export class UsuariosService {
    * @returns ResponseUserDto
    */
   async updateUser(id: number, user: UpdateUserDto): Promise<ResponseUserDto> {
-    return await this.userRepository.updateUser(id, user).then(() => this.findUser(id));
+    try {
+      const userId = await this.userRepository.findByIdUser(id);
+      if (userId) {
+        return await this.userRepository.updateUser(id, user);
+      }
+      throw new NotFoundException('Usuario no encontrado');
+    } catch (error) {
+      if (error instanceof HttpException) {
+        throw error;
+      }
+      throw new InternalServerErrorException('Hubo un error por favor intente mas tarde');
+    }
   }
   async findUserByEmailAndName(name: string, email: string): Promise<ResponseUserDto[]> {
     const users = await this.userRepository.findUserByEmailAndName({ name, email });
-    return this.adaptadorUser(users);
+    return adaptadorUser(users);
   }
   async createUserWithOrder(
     userDto: CreateUserDto,
@@ -75,8 +119,11 @@ export class UsuariosService {
       const { order } = await this.userTransactionRepository.execute(
         async (manager: EntityManager) => {
           const user = await manager.save(User, userDto);
-          const order = await manager.save(Order, { user: user, ...orderDto });
-          return { order, user };
+          if (user) {
+            const order = await manager.save(Order, { user: user, ...orderDto });
+            return { order, user };
+          }
+          throw new BadRequestException('Error al crear el usuario');
         },
       );
       return order;
@@ -86,15 +133,5 @@ export class UsuariosService {
       }
       throw new InternalServerErrorException('Hubo un error por favor intente mas tarde');
     }
-  }
-  private adaptadorUser(usuarios: User[]): ResponseUserDto[] {
-    return usuarios.map((user: User) => ({
-      id: user.id,
-      email: user.email,
-      name: user.name,
-      birthdate: new Date(user.birthdate),
-      emailVerified: Boolean(user.emailVerified),
-      estatus: user.estatus,
-    }));
   }
 }
