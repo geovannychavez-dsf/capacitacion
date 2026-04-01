@@ -73,22 +73,22 @@ export class UsuariosService {
     userDto: CreateUserDto,
     orderDto: CreateOrderDto,
   ): Promise<ResponseOrderDto> {
-    try{
-    const { order } = await this.userTransactionRepository.execute(
-      async (manager: EntityManager) => {
-        const user = await manager.save(User, userDto);
-        const order = await manager.save(Order, { user: user, ...orderDto });
-        return { order, user };
-      },
-    );
-    return order;
-  } catch (error) {
-    if (error instanceof HttpException) {
-      throw error;
+    try {
+      const { order } = await this.userTransactionRepository.execute(
+        async (manager: EntityManager) => {
+          const user = await manager.save(User, userDto);
+          const order = await manager.save(Order, { user: user, ...orderDto });
+          return { order, user };
+        },
+      );
+      return order;
+    } catch (error) {
+      if (error instanceof HttpException) {
+        throw error;
+      }
+      throw new InternalServerErrorException('Hubo un error por favor intente mas tarde');
     }
-    throw new InternalServerErrorException('Hubo un error por favor intente mas tarde');
   }
-}
   private adaptadorUser(usuarios: User[]): ResponseUserDto[] {
     return usuarios.map((user: User) => ({
       id: user.id,
