@@ -12,14 +12,11 @@ import { JWT_CONFIG } from 'src/common/types/type-orm';
   path: 'auth',
 })
 export class AuthController {
-  constructor(
-    private readonly authService: AuthService,
-  ) {}
-
+  constructor(private readonly authService: AuthService) {}
 
   @UseGuards(AuthGuard(JWT_CONFIG.PASSPOT_LOCAL))
   @loginTokenDecorator()
-  @Post('login')  
+  @Post('login')
   async login(@Request() req: RequestWithUser) {
     return this.authService.login(req.user);
   }

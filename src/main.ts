@@ -25,22 +25,22 @@ async function bootstrap() {
   app.enableCors(corsOptions({ app }));
   app.useGlobalFilters(new HttpExceptionFilter());
   app.enableVersioning({ type: VersioningType.URI });
-    app.use(
-      [`/${JWT_CONFIG.SWAGGER_ROUTE}`],
-      basicAuth({
-        challenge: true,
-        users: {
-          [config.get<string>(ENV.ADMIN)]: config.get<string>(ENV.PASSWORD_ADMIN),
-        },
-      }),
-    )
+  app.use(
+    [`/${JWT_CONFIG.SWAGGER_ROUTE}`],
+    basicAuth({
+      challenge: true,
+      users: {
+        [config.get<string>(ENV.ADMIN)]: config.get<string>(ENV.PASSWORD_ADMIN),
+      },
+    }),
+  );
   swaggerConsfig({
     title: 'Documento practico Usuarios',
     description: 'API practica de Usuarios',
     version: '1.0',
     app,
   });
-  
+
   const port = config.get<number>(ENV.PORT) ?? 3001;
   await app.listen(port);
 }

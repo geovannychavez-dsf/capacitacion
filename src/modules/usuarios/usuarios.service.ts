@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, InternalServerErrorException, HttpException } from '@nestjs/common';
 import { UpdateUserDto } from './dto/user/update-user.dto';
 import { CreateUserDto } from './dto/user/create-user.dto';
 import { ResponseUserDto } from './dto/user/response-user.dto';
@@ -73,6 +73,7 @@ export class UsuariosService {
     userDto: CreateUserDto,
     orderDto: CreateOrderDto,
   ): Promise<ResponseOrderDto> {
+    try{
     const { order } = await this.userTransactionRepository.execute(
       async (manager: EntityManager) => {
         const user = await manager.save(User, userDto);
@@ -81,7 +82,13 @@ export class UsuariosService {
       },
     );
     return order;
+  } catch (error) {
+    if (error instanceof HttpException) {
+      throw error;
+    }
+    throw new InternalServerErrorException('Hubo un error por favor intente mas tarde');
   }
+}
   private adaptadorUser(usuarios: User[]): ResponseUserDto[] {
     return usuarios.map((user: User) => ({
       id: user.id,

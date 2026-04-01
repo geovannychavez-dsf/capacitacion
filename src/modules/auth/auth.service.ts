@@ -27,7 +27,7 @@ export class AuthService {
       const user = await this.userRepository.findUserByEmail(email);
       if (user) {
         await bcrypt.compare(password, user.password);
-        return { password:'', ...user, };
+        return { password: '', ...user };
       }
 
       throw new UnauthorizedException('Credenciales incorrectas');

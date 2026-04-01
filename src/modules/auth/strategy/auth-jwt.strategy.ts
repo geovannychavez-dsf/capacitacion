@@ -1,14 +1,10 @@
-
 import { PassportStrategy } from '@nestjs/passport';
 import { Injectable } from '@nestjs/common';
 import { AuthService } from '../auth.service';
-import { Strategy,ExtractJwt } from 'passport-jwt';
-
-
+import { Strategy, ExtractJwt } from 'passport-jwt';
 
 @Injectable()
 export class AuthJwtStrategy extends PassportStrategy(Strategy) {
-
   constructor(private readonly authService: AuthService) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
@@ -17,7 +13,7 @@ export class AuthJwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-   validate({ usuario, email }: { usuario: number; email: string }) {
-        return { id: usuario, email: email };
-    }
+  validate({ usuario, email }: { usuario: number; email: string }) {
+    return { id: usuario, email: email };
+  }
 }

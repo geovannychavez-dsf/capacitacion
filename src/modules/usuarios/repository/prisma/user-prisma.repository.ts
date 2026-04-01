@@ -45,6 +45,4 @@ export class UserRepository implements Userrepository {
   async findUserByEmail(email: string): Promise<User> {
     return (await this.prisma.user.findUnique({ where: { email } })) as unknown as User;
   }
-
-
 }
