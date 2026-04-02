@@ -25,6 +25,7 @@ async function bootstrap() {
   app.enableCors(corsOptions({ app }));
   app.useGlobalFilters(new HttpExceptionFilter());
   app.enableVersioning({ type: VersioningType.URI });
+
   app.use(
     [`${JWT_CONFIG.SWAGGER_ROUTE}`],
     basicAuth({

@@ -35,10 +35,12 @@ export class UserRepository implements Userrepository {
     return await this.userRepository.save(user);
   }
 
-  async updateUser(id: number, user: UpdateUserDto): Promise<User | null > {
-    return await this.userRepository.update({ id }, user).then(() => this.userRepository.findOne({ 
-      where: { id }
-    }));
+  async updateUser(id: number, user: UpdateUserDto): Promise<User | null> {
+    return await this.userRepository.update({ id }, user).then(() =>
+      this.userRepository.findOne({
+        where: { id },
+      }),
+    );
   }
 
   async findUserByEmailAndName({ name, email }: { name: string; email: string }): Promise<User[]> {

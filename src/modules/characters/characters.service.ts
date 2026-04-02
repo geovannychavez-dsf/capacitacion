@@ -27,7 +27,9 @@ export class CharactersService {
   async sync(): Promise<ResponseCharactersDto[]> {
     try {
       const { data } = await firstValueFrom(
-        this.httpService.get<RickAndMortyResponse>(this.config.get(JWT_CONFIG.RICKMORTY_URL)),
+        this.httpService.get<RickAndMortyResponse>(
+          this.config.get<string>(JWT_CONFIG.RICKMORTY_URL),
+        ),
       );
       const characters = await this.characterRepo.createManyCharacters(data.results);
       return characters;

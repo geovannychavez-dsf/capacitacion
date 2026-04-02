@@ -97,7 +97,7 @@ export class UsuariosService {
     try {
       const userId = await this.userRepository.findByIdUser(id);
       if (userId) {
-        return await this.userRepository.updateUser(id, user) as ResponseUserDto;
+        return (await this.userRepository.updateUser(id, user)) as ResponseUserDto;
       }
       throw new NotFoundException('Usuario no encontrado');
     } catch (error) {
