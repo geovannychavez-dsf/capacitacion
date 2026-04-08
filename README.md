@@ -2,6 +2,11 @@
 
 ## Desarrollo
 
+## Requisitos
+
+- Node.js v20 o superior
+
+
 ### Instalación
 
 ```bash
@@ -36,6 +41,17 @@ JWT_SECRET='tu_secreto_jwt'
 REFRESH_SECRET='tu_secreto_refresh'
 
 ```
+### Configuración de la API de WhatsApp
+```bash
+
+URL_WHATSAPP='https://graph.facebook.com' # api oficial de meta
+WA_PHONE_NUMBER_ID=''
+CLOUD_API_ACCESS_TOKEN=''
+CLOUD_API_VERSION='v22.0' # api version default se puede usar v18.0 v21.0 o v22.0
+
+```
+
+
 
 ### Configuración cors y api externa
 ```bash
