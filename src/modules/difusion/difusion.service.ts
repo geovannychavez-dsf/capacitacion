@@ -20,7 +20,7 @@ export class DifusionService {
   async sendTextMessage(createDifusionDto: CreateDifusionDto): Promise<ResponseDifusionDto> {
     let token = '';
     try {
-       token = await this.ganerateTokenUrle({
+      token = await this.ganerateTokenUrle({
         idAgenda: createDifusionDto.idAgenda,
         historia: createDifusionDto.historia,
       });
@@ -35,13 +35,15 @@ export class DifusionService {
       }
       throw new InternalServerErrorException('Hubo un error por favor intente mas tarde');
     } finally {
-       this.logger.log(`Se envio un mensaje a: ${createDifusionDto.recipient}, número: ${createDifusionDto.to}, token: ${token}, resultado: Enviado correctamente)`);
+      this.logger.log(
+        `Se envio un mensaje a: ${createDifusionDto.recipient}, número: ${createDifusionDto.to}, token: ${token}, resultado: Enviado correctamente)`,
+      );
     }
   }
   async sendTemplateText(createDifusionDto: CreateDifusionDto): Promise<ResponseDifusionDto> {
     let token = '';
     try {
-       token = await this.ganerateTokenUrle({
+      token = await this.ganerateTokenUrle({
         idAgenda: createDifusionDto.idAgenda,
         historia: createDifusionDto.historia,
       });
@@ -55,7 +57,9 @@ export class DifusionService {
       }
       throw new InternalServerErrorException('Hubo un error por favor intente mas tarde');
     } finally {
-       this.logger.log(`Se envio un mensaje a: ${createDifusionDto.recipient}, número: ${createDifusionDto.to}, token: ${token}, resultado: Enviado correctamente)`);
+      this.logger.log(
+        `Se envio un mensaje a: ${createDifusionDto.recipient}, número: ${createDifusionDto.to}, token: ${token}, resultado: Enviado correctamente)`,
+      );
     }
   }
   private async ganerateTokenUrle(payloaduser: {

@@ -1,1 +1,1 @@
-"/c/Program Files/nodejs/npm.cmd" run build
+npm run build

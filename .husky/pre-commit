@@ -1,2 +1,2 @@
-"/c/Program Files/nodejs/npm.cmd" run format
-"/c/Program Files/nodejs/npm.cmd" run lint
+npm run format
+npm run lint
