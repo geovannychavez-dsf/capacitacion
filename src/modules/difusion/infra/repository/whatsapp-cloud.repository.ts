@@ -1,12 +1,13 @@
 import { ConfigService } from '@nestjs/config';
 import { DifusionWhatsappInterface } from '../../interfaces/difusion-whatsapp.interface';
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException } from '@nestjs/common';
 import { Difusion } from '../../entities/difusion.entity';
 import { HttpService } from '@nestjs/axios';
 import { TOKEN_PROVIDER, WHATSAPP_ENV } from '../../constants/difusion-whatsapp.constanst';
 import { ResponseWhatsAppCloud } from '../../interfaces/response-whatsappcloud.interface';
-import { firstValueFrom } from 'rxjs';
+import { catchError, firstValueFrom } from 'rxjs';
 import { createMessage } from '../../adapters/whatsapp.adapter';
+import { AxiosError } from "axios";
 
 @Injectable()
 export class WhatsappCloudRepository implements DifusionWhatsappInterface {
@@ -25,10 +26,9 @@ export class WhatsappCloudRepository implements DifusionWhatsappInterface {
   }
   async sendMessage(difusion: Difusion): Promise<ResponseWhatsAppCloud> {
     const messageBody = createMessage(difusion);
-
     const { data } = await firstValueFrom(
       this.httpService.post<ResponseWhatsAppCloud>(
-        `${this.url}/${this.apiVersion}/${TOKEN_PROVIDER.WHATSAPP_ACOUNT}/${this.phoneId}/${TOKEN_PROVIDER.WHATSAPP_MESSAGE}`,
+        `${this.url}/${this.apiVersion}/${this.phoneId}/${TOKEN_PROVIDER.WHATSAPP_MESSAGE}`,
         {
           messaging_product: `${TOKEN_PROVIDER.WHATSAPP}`,
           to: `${difusion.to}`,
@@ -43,36 +43,29 @@ export class WhatsappCloudRepository implements DifusionWhatsappInterface {
             Authorization: `Bearer ${this.accessToken}`,
           },
         },
-      ),
+      ).pipe(catchError((error) => {
+        if( error instanceof AxiosError) {
+          throw new BadRequestException(error.response?.data);
+        }
+        throw new InternalServerErrorException('Hubo un error por favor intente mas tarde');
+      })),
     );
     return { ...data };
   }
   async sendTemplate(difusion: Difusion): Promise<ResponseWhatsAppCloud> {
-    const messageBody = createMessage(difusion);
+    //const messageBody = createMessage(difusion);
     const { data } = await firstValueFrom(
       this.httpService.post<ResponseWhatsAppCloud>(
-        `${this.url}/${this.apiVersion}/${TOKEN_PROVIDER.WHATSAPP_ACOUNT}/${this.phoneId}/${TOKEN_PROVIDER.WHATSAPP}`,
+        `${this.url}/${this.apiVersion}/${this.phoneId}/${TOKEN_PROVIDER.WHATSAPP_MESSAGE}`,
         {
-          messaging_product: `${TOKEN_PROVIDER.WHATSAPP}`,
+          messaging_product: 'whatsapp',
           to: `${difusion.to}`,
           type: 'template',
           template: {
-            name: 'sample_shipping_confirmation',
+            name: 'hello_world',
             language: {
               code: 'en_US',
-              policy: 'deterministic',
             },
-            components: [
-              {
-                type: 'body',
-                parameters: [
-                  {
-                    type: 'text',
-                    text: `${messageBody}`,
-                  },
-                ],
-              },
-            ],
           },
         },
         {
@@ -80,7 +73,12 @@ export class WhatsappCloudRepository implements DifusionWhatsappInterface {
             Authorization: `Bearer ${this.accessToken}`,
           },
         },
-      ),
+      ).pipe(catchError((error) => {
+        if( error instanceof AxiosError) {
+          throw new BadRequestException(error.response?.data);
+        }
+        throw new InternalServerErrorException('Hubo un error por favor intente mas tarde');
+      })),
     );
     return { ...data };
   }

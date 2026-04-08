@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common';
 import { UsersController } from './usuarios.controller';
 import { UsuariosService } from './usuarios.service';
 import { HeaderGuard } from 'src/common/guard/header/authorication-header.guard';
-import { PrismaModule } from 'src/config/prisma/prisma.module';
 import { DatabaseModule } from 'src/config/database/database.module';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
@@ -20,7 +19,6 @@ import { userProviders } from './providers/user-typeorm.provider';
       }),
     }),
     DatabaseModule,
-    PrismaModule,
   ],
   controllers: [UsersController],
   providers: [UsuariosService, HeaderGuard, GuardGuardJWT, ...userProviders],

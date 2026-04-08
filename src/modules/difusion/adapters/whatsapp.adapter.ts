@@ -1,5 +1,5 @@
-import path from 'path';
-import fs from 'fs';
+import * as path from 'path';
+import * as fs from 'fs';
 import { InternalServerErrorException } from '@nestjs/common';
 import Handlebars from 'handlebars';
 import { Difusion } from '../entities/difusion.entity';
@@ -7,10 +7,7 @@ import { TEMPLATE_WHATSAPP } from '../constants/difusion-whatsapp.constanst';
 
 export function findFileTemplate(templateName: string): HandlebarsTemplateDelegate<any> {
   const candidates = [
-    path.join(__dirname, '../../../templates', templateName),
     path.join(process.cwd(), 'dist', 'src', 'modules', 'difusion', 'templates', templateName),
-    path.join(process.cwd(), 'src', 'templates', templateName),
-    path.join(process.cwd(), 'templates', templateName),
   ];
   const templatePath = candidates.find((p) => fs.existsSync(p));
   if (!templatePath) {

@@ -8,7 +8,7 @@ export const TOKEN_PROVIDER = {
   WHATSAPP: 'whatsapp',
   WHATSAPP_SERVICE: 'WHATSAPP_SERVICE',
   WHATSAPP_ACOUNT: 'account',
-  WHATSAPP_MESSAGE: 'message',
+  WHATSAPP_MESSAGE: 'messages',
   WHATSAPP_TEMPLATE: 'template',
 };
 

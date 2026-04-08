@@ -4,18 +4,18 @@ import { CreateDifusionDto } from './dtos';
 
 import { postDifusoDecorator } from './decorators/post-difuso.decorator';
 import { exceptionSwaggerDecorator } from 'src/common/decorators/exception-swagger.decorator';
-@Controller('difusion')
+@Controller('notificaciones')
 export class DifusionController {
   constructor(private readonly difusionService: DifusionService) {}
 
-  @Post()
+  @Post('whatsapp')
   @postDifusoDecorator()
   @exceptionSwaggerDecorator()
   sendTextMessage(@Body() createDifusionDto: CreateDifusionDto) {
     return this.difusionService.sendTextMessage(createDifusionDto);
   }
 
-  @Post()
+  @Post('sendTemplateText')
   @postDifusoDecorator()
   @exceptionSwaggerDecorator()
   sendTemplateText(@Body() createDifusionDto: CreateDifusionDto) {
