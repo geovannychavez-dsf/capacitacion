@@ -16,7 +16,35 @@ model User {
   estatus       String    @default("active")
   createdAt     DateTime  @default(now())
   updatedAt     DateTime? @default(now()) @updatedAt()
+  rol           String    @default("paciente")
   order         Order[]
+}
+
+model Users {
+  id Int @id @default(autoincrement())
+  nombres String
+  cedula  String
+  password String
+  telefono String
+  email String
+  direccion String
+  rol String @default("paciente")
+  isFirstLogin Boolean
+  studies Studies []
+}
+
+model Studies {
+  id Int @id @default(autoincrement())
+  fecha DateTime 
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime @default(now()) @updatedAt()
+  description String
+  laboratorio Boolean
+  pdf String
+  url String
+  userId Int
+  studies Users @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
 }
 
 model Perfil {

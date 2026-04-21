@@ -37,7 +37,7 @@ import localFilenamesPlugin from './eslint-plugins/local-filenames-plugin.mjs';
  */
 export default tseslint.config(
   {
-    ignores: ['eslint.config.mjs', 'eslint-plugins/**', 'dist', 'node_modules', 'prisma', 'src/migrations', '**/*.spec.ts'],
+    ignores: ['coverage','eslint.config.mjs', 'eslint-plugins/**', 'dist', 'node_modules', 'prisma', 'src/migrations', '**/*.spec.ts'],
   },
   eslint.configs.recommended,
   ...tseslint.configs.recommendedTypeChecked,

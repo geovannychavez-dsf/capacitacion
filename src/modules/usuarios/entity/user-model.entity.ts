@@ -31,6 +31,9 @@ export class User {
   @Column('datetime')
   birthdate: Date;
 
+  @Column()
+  rol: string;
+
   @CreateDateColumn()
   createdAt: Date;
 

@@ -36,6 +36,13 @@ export class ResponseUserDto {
   email: string;
 
   @ApiProperty({
+    description: 'Rol del usuario',
+    example: 'paciente',
+    type: String,
+  })
+  rol: string;
+
+  @ApiProperty({
     example: 10,
     description: 'id unico del usuario',
     type: Number,

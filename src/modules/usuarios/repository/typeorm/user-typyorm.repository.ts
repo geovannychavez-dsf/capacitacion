@@ -28,7 +28,7 @@ export class UserRepository implements Userrepository {
   }
 
   async findByIdUser(id: number): Promise<User | null> {
-    return await this.userRepository.findOne({ where: { id } });
+    return await this.userRepository.findOne({ where: { id }, select: ['id', 'name', 'email', 'emailVerified', 'birthdate', 'estatus'] });
   }
 
   async createUser(user: CreateUserDto): Promise<User> {

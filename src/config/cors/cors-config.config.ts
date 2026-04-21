@@ -16,5 +16,6 @@ export const corsOptions = ({ app }: { app: INestApplication }) => {
     methods: config.get<string>(ENV.METHODS),
     allowedHeaders: config.get<string>(ENV.ALLOWED_HEADER),
     credentials: true,
+    secure: false,
   };
 };

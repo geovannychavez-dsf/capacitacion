@@ -12,6 +12,8 @@ import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { Userrepository } from '../usuarios/interfaces/user-repository.interface';
 import { ResponseUserDto } from '../usuarios/dtos/user';
+import { Response } from 'express';
+import { RequestWithCookies } from './interfaces/cookies-request.interface';
 
 @Injectable()
 export class AuthService {
@@ -27,7 +29,8 @@ export class AuthService {
       const user = await this.userRepository.findUserByEmail(email);
       if (user) {
         await bcrypt.compare(password, user.password);
-        return { password: '', ...user };
+        return { id: user.id, email: user.email, name: user.name , birthdate: user.birthdate, emailVerified: user.emailVerified, estatus: user.estatus, rol: user.rol };
+
       }
 
       throw new UnauthorizedException('Credenciales incorrectas');
@@ -39,23 +42,32 @@ export class AuthService {
     }
   }
 
-  async login({ email, id }: { email: string; id: number }): Promise<ResponseAuthDto> {
-    return await this.ganerateTokenandRefreshToken({ email, id });
+  async login(user: ResponseUserDto, res: Response): Promise<ResponseAuthDto> {
+    const { email, id } = user;
+    const tokens = await this.ganerateTokenandRefreshToken({ email, id });
+
+    this.setCookies(res, tokens.token, tokens.refreshToken);
+    return {  ...tokens, user: { id, email, nombres: user.name, cedula: user.email, telefono: '', direccion: '', isFirstLogin: user.emailVerified, rol:user.rol} };
   }
 
-  async refreshToken(token: string): Promise<ResponseAuthDto> {
+  async refreshToken(req: RequestWithCookies, res: Response): Promise<ResponseAuthDto> {
     try {
+       const token = req.cookies?.refreshToken;
+       if (!token) {
+        throw new UnauthorizedException('Credenciales incorrectas');
+      }
       const verifyrefreshtoken = await this.jwtService.verifyAsync<Record<string, unknown>>(token, {
         secret: this.config.get(JWT_CONFIG.REFRESH_SECRET),
       });
-      if (verifyrefreshtoken)
-        return {
-          token: await this.jwtService.signAsync({
-            email: verifyrefreshtoken.email,
-            usuario: verifyrefreshtoken.usuario,
-          }),
-          refreshToken: token,
-        };
+      if (verifyrefreshtoken) {
+        const { email, usuario } = verifyrefreshtoken;
+        const refresToken = await this.ganerateTokenandRefreshToken({
+          email: email as string,
+          id: usuario as number,
+        });
+        this.setCookies(res, refresToken.token, refresToken.refreshToken);
+        return refresToken;
+      }
 
       throw new UnauthorizedException('Credenciales incorrectas');
     } catch (error: unknown) {
@@ -64,6 +76,11 @@ export class AuthService {
       }
       throw new InternalServerErrorException('Hubo un error por favor intente mas tarde');
     }
+  }
+  logout(res: Response): string {    
+    res.clearCookie('accessToken');
+    res.clearCookie('refreshToken');
+    return 'Cierre de sesión exitoso';
   }
   private async ganerateTokenandRefreshToken(payloaduser: {
     id: number;
@@ -78,5 +95,21 @@ export class AuthService {
       }),
     ]);
     return { token, refreshToken };
+  }
+
+  private setCookies(res: Response, accessToken: string, refreshToken: string) {
+    res.cookie('accessToken', accessToken, {
+      httpOnly: true,
+      secure: false, // true en producción (HTTPS)
+      sameSite: 'strict',
+      maxAge: 3600000, // 1 hora
+    });
+
+    res.cookie('refreshToken', refreshToken, {
+      httpOnly: true,
+      secure: false,
+      sameSite: 'strict',
+      maxAge: 86400000, // 1 día
+    });
   }
 }
