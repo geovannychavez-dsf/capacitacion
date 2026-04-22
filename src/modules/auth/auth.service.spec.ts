@@ -60,7 +60,7 @@ describe('AuthService', () => {
         direccion: 'Address',
         birthdate: new Date(),
         emailVerified: true,
-        estatus: 'true'
+        estatus: 'true',
       };
 
       userRepository.findUserByEmail.mockResolvedValue(mockUser);
@@ -68,7 +68,14 @@ describe('AuthService', () => {
 
       const result = await service.validateUser('test@test.com', 'password123');
 
-      expect(result).toEqual({id: mockUser.id, email: mockUser.email, name: mockUser.name , birthdate: mockUser.birthdate, emailVerified: mockUser.emailVerified, estatus: mockUser.estatus});
+      expect(result).toEqual({
+        id: mockUser.id,
+        email: mockUser.email,
+        name: mockUser.name,
+        birthdate: mockUser.birthdate,
+        emailVerified: mockUser.emailVerified,
+        estatus: mockUser.estatus,
+      });
     });
 
     it('mostrar UnauthorizedException cuando el usuario no se encuentra', async () => {
@@ -89,7 +96,7 @@ describe('AuthService', () => {
         emailVerified: true,
         birthdate: new Date(),
         estatus: 'true',
-        rol: 'paciente'
+        rol: 'paciente',
       };
 
       jwtService.signAsync.mockResolvedValue('mock-token');
@@ -130,9 +137,7 @@ describe('AuthService', () => {
       const mockReq: any = { cookies: {} };
       const mockRes: any = { cookie: jest.fn() };
 
-      await expect(service.refreshToken(mockReq, mockRes)).rejects.toThrow(
-        UnauthorizedException,
-      );
+      await expect(service.refreshToken(mockReq, mockRes)).rejects.toThrow(UnauthorizedException);
     });
   });
 
@@ -143,7 +148,7 @@ describe('AuthService', () => {
       };
 
       const result = service.logout(mockRes);
-      console.log("result",result);
+      console.log('result', result);
       expect(mockRes.clearCookie).toHaveBeenCalledWith('accessToken');
       expect(mockRes.clearCookie).toHaveBeenCalledWith('refreshToken');
     });

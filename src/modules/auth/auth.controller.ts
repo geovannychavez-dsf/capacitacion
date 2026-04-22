@@ -24,7 +24,10 @@ export class AuthController {
   }
   @refresTokenDecorator()
   @Post('refresh')
-  refreshToken(@Request() req: RequestWithCookies, @Res({ passthrough: true }) res: Response): Promise<ResponseAuthDto> {
+  refreshToken(
+    @Request() req: RequestWithCookies,
+    @Res({ passthrough: true }) res: Response,
+  ): Promise<ResponseAuthDto> {
     return this.authService.refreshToken(req, res);
   }
 

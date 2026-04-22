@@ -33,7 +33,15 @@ export class AuthService {
       if (user) {
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) throw new UnauthorizedException('Credenciales incorrectas');
-        return { id: user.id, email: user.email, name: user.name, birthdate: user.birthdate, emailVerified: user.emailVerified, estatus: user.estatus, rol: user.rol };
+        return {
+          id: user.id,
+          email: user.email,
+          name: user.name,
+          birthdate: user.birthdate,
+          emailVerified: user.emailVerified,
+          estatus: user.estatus,
+          rol: user.rol,
+        };
       }
 
       throw new UnauthorizedException('Credenciales incorrectas');
@@ -53,7 +61,18 @@ export class AuthService {
     await this.refreshTokenRepository.save(id, tokens.refreshToken, expiresAt);
 
     this.setCookies(res, tokens.token, tokens.refreshToken);
-    return { ...tokens, user: { id, email, nombres: user.name, cedula: user.email, telefono: '', direccion: '', isFirstLogin: user.emailVerified, rol: user.rol } };
+    return {
+      user: {
+        id,
+        email,
+        nombres: user.name,
+        cedula: user.email,
+        telefono: '',
+        direccion: '',
+        isFirstLogin: user.emailVerified,
+        rol: user.rol,
+      },
+    };
   }
 
   async refreshToken(req: RequestWithCookies, res: Response): Promise<ResponseAuthDto> {
@@ -87,7 +106,7 @@ export class AuthService {
       await this.refreshTokenRepository.save(usuario as number, newTokens.refreshToken, expiresAt);
 
       this.setCookies(res, newTokens.token, newTokens.refreshToken);
-      return newTokens;
+      return { message: 'Token renovado' };
     } catch (error: unknown) {
       if (error instanceof HttpException) {
         throw error;
@@ -102,15 +121,7 @@ export class AuthService {
       if (!user) {
         throw new UnauthorizedException('Usuario no encontrado');
       }
-      return {
-        id: user.id,
-        email: user.email,
-        nombres: user.name,
-        rol: user.rol,
-        isFirstLogin: user.emailVerified,
-        estatus: user.estatus,
-        birthdate: user.birthdate,
-      };
+      return user;
     } catch (error: unknown) {
       if (error instanceof HttpException) {
         throw error;
@@ -132,7 +143,7 @@ export class AuthService {
   private async ganerateTokenandRefreshToken(payloaduser: {
     id: number;
     email: string;
-  }): Promise<ResponseAuthDto> {
+  }): Promise<{ token: string; refreshToken: string }> {
     const payload = { usuario: payloaduser.id, email: payloaduser.email };
     const [token, refreshToken] = await Promise.all([
       this.jwtService.signAsync(payload),
@@ -145,18 +156,19 @@ export class AuthService {
   }
 
   private setCookies(res: Response, accessToken: string, refreshToken: string) {
+    const isProduction = process.env.NODE_ENV === 'production';
     res.cookie('accessToken', accessToken, {
       httpOnly: true,
-      secure: false, // true en producción (HTTPS)
+      secure: isProduction,
       sameSite: 'strict',
-      maxAge: 3600000, // 1 hora
+      maxAge: 3600000,
     });
 
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
-      secure: false,
+      secure: isProduction,
       sameSite: 'strict',
-      maxAge: 86400000, // 1 día
+      maxAge: 86400000,
     });
   }
 }

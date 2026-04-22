@@ -36,7 +36,13 @@ describe('AuthController', () => {
   describe('login', () => {
     it('llamar al servicio login y retornar el token y el refresh', async () => {
       const mockReq: any = {
-        user: { id: 1, email: 'test@test.com', nombres: 'Test', telefono: '123', direccion: 'Addr' },
+        user: {
+          id: 1,
+          email: 'test@test.com',
+          nombres: 'Test',
+          telefono: '123',
+          direccion: 'Addr',
+        },
       };
       const mockRes: any = { cookie: jest.fn() };
 
