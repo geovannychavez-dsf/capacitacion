@@ -1,4 +1,4 @@
-import { Controller, Post, UseGuards, Request, Res } from '@nestjs/common';
+import { Controller, Post, UseGuards, Request, Res, Get } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { ResponseAuthDto } from './dtos/response-auth.dto';
 import { ApiTags } from '@nestjs/swagger';
@@ -22,7 +22,7 @@ export class AuthController {
     return this.authService.login(req.user, res);
   }
   @refresTokenDecorator()
-  @Post('refresh')
+  @Get('refresh') 
   refreshToken(@Request() req: RequestWithCookies, @Res({ passthrough: true }) res: Response): Promise<ResponseAuthDto> {
     return this.authService.refreshToken(req, res);
   }
