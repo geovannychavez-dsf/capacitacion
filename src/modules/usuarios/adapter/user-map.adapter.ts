@@ -9,6 +9,6 @@ export function adaptadorUser(usuarios: User[]): ResponseUserDto[] {
     birthdate: new Date(user.birthdate),
     emailVerified: Boolean(user.emailVerified),
     estatus: user.estatus,
-    rol: user.rol
+    rol: user.rol,
   }));
 }

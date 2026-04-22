@@ -5,6 +5,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { JWT_CONFIG } from 'src/common/types/type-orm';
 import { userProviders } from '../usuarios/providers/user-typeorm.provider';
+import { authProviders } from './providers/auth-refresh.provider';
 import { DatabaseModule } from 'src/config/database/database.module';
 import { AuthJwtStrategy, LocalStrategy } from './strategy';
 import { PassportModule } from '@nestjs/passport';
@@ -22,6 +23,6 @@ import { PassportModule } from '@nestjs/passport';
     DatabaseModule,
   ],
   controllers: [AuthController],
-  providers: [AuthService, ...userProviders, LocalStrategy, AuthJwtStrategy],
+  providers: [AuthService, ...userProviders, ...authProviders, LocalStrategy, AuthJwtStrategy],
 })
 export class AuthModule {}

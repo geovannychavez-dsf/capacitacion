@@ -18,6 +18,7 @@ model User {
   updatedAt     DateTime? @default(now()) @updatedAt()
   rol           String    @default("paciente")
   order         Order[]
+  refreshToken  RefreshTokens[]
 }
 
 model Users {
@@ -30,21 +31,18 @@ model Users {
   direccion String
   rol String @default("paciente")
   isFirstLogin Boolean
-  studies Studies []
 }
 
-model Studies {
-  id Int @id @default(autoincrement())
-  fecha DateTime 
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime @default(now()) @updatedAt()
-  description String
-  laboratorio Boolean
-  pdf String
-  url String
-  userId Int
-  studies Users @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
+model RefreshTokens {
+  id        Int       @id @default(autoincrement())
+  tokenHash String
+  userId    Int
+  expiresAt DateTime
+  revoked   Boolean   @default(false)
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @default(now()) @updatedAt()
+
 }
 
 model Perfil {
